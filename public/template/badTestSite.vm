@@ -1,4 +1,4 @@
-package eu.factorx.awac.buisness.bad.household;
+package $PACKAGE;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import eu.factorx.awac.controllers.SecuredController;
@@ -15,7 +15,7 @@ import eu.factorx.awac.service.PeriodService;
 import eu.factorx.awac.service.QuestionSetAnswerService;
 import eu.factorx.awac.service.ScopeService;
 import eu.factorx.awac.service.SiteService;
-import eu.factorx.awac.service.knowledge.activity.contributor.household.*;
+import $BAD_PACKAGE.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -56,7 +56,7 @@ public class BAD_${bad.getBaseActivityDataCode()}Test{
 
     private final static Long FORM_ID = 2L;
     private final static Long PERIOD_ID = 1L;
-    private String identifier = "user1";
+    private String identifier = "${user}";
     private String identifierPassword = "password";
 
     /**
@@ -81,8 +81,10 @@ public class BAD_${bad.getBaseActivityDataCode()}Test{
         List<AnswerLineDTO> answerLineDTOList = new ArrayList<>();
 
         //add answers
-                answerLineDTOList.addAll(buildAnswerAM179());
-        
+        #foreach($question in $questions)
+        answerLineDTOList.addAll(buildAnswer${question.questionCode}());
+        #end
+
         questionAnswersDTO.setListAnswers(answerLineDTOList);
 
         //
@@ -119,8 +121,10 @@ public class BAD_${bad.getBaseActivityDataCode()}Test{
         //control content
         //map mapResult
         Map<Double, Boolean> mapResult = new HashMap<>();
-                mapResult.put(5.0, false);
-        
+        #foreach($testValue in $testValues)
+        mapResult.put(${testValue.value}, false);
+        #end
+
         String valueGenerated = "";
 
         for(BaseActivityData bad : bads){
@@ -145,21 +149,29 @@ public class BAD_${bad.getBaseActivityDataCode()}Test{
 
     }
 
-        /**
+    #foreach($question in $questions)
+    /**
      * build the AnswerLineDTO
-     * question : AM179
+     * question : $question.questionCode
      */
-    private List<AnswerLineDTO> buildAnswerAM179(){
+    private List<AnswerLineDTO> buildAnswer${question.questionCode}(){
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
-                 //add repetition
-        Map<String, Integer> mapRepetition1 = new HashMap<>();
-                list.add(new AnswerLineDTO("AM179",1000000.0,  mapRepetition1 ));
-        
+         #foreach($answerLine in $question.answerLines)
+         #set($repetitionCount = $foreach.count)
+        //add repetition
+        Map<String, Integer> mapRepetition${repetitionCount} = new HashMap<>();
+        #foreach ($repetition in $answerLine.mapRepetition.entrySet())
+        mapRepetition${repetitionCount}.put("$repetition.key",$repetition.value);
+        #end
+        list.add(new AnswerLineDTO("$question.questionCode",$answerLine.value,  mapRepetition${repetitionCount} #if( ${answerLine.unit} ) , UnitCode.${answerLine.unit.unitCode.key}.getKey()  #end));
+        #end
+
         return list;
     }
-    
+    #end
+
 
     /**
      * control all except value
@@ -167,8 +179,8 @@ public class BAD_${bad.getBaseActivityDataCode()}Test{
      */
     private void controlGlobalBad(BaseActivityData bad){
         /*
-        assertTrue("BaseActivityDataCode error. Expected : ActivityCategoryCode.AC_8, founded : "+bad.getKey(),bad.getKey().equals(BaseActivityDataCode.ActivityCategoryCode.AC_8));
-        assertTrue("Rank error : Expected : 0, founded : "+bad.getRank(),bad.getRank().equals(0));
+        assertTrue("BaseActivityDataCode error. Expected : ${bad.getActivityCategoryCode()}, founded : "+bad.getKey(),bad.getKey().equals(BaseActivityDataCode.${bad.getActivityCategoryCode()}));
+        assertTrue("Rank error : Expected : ${bad.getRank()}, founded : "+bad.getRank(),bad.getRank().equals(${bad.getRank()}));
         assertTrue("SpecificPurpose error : Expected : {}, founded : "+bad.getSpecificPurpose(),bad.getSpecificPurpose() == null);
         assertTrue("ActivityCategory error : Expected : {}, founded : "+bad.getActivityCategory(),bad.getActivityCategory().equals(ActivityCategoryCode.AC_1));
         assertTrue("ActivitySubCategory error : Expected : {}, founded : "+bad.getActivitySubCategory(),bad.getActivitySubCategory().equals(ActivitySubCategoryCode.ASC_1));

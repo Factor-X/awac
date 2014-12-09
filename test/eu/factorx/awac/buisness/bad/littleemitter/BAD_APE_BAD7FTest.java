@@ -6,7 +6,7 @@ import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
 import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.models.business.Scope;
-import eu.factorx.awac.models.business.Site;
+import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.knowledge.Period;
@@ -14,7 +14,7 @@ import eu.factorx.awac.models.reporting.BaseActivityData;
 import eu.factorx.awac.service.PeriodService;
 import eu.factorx.awac.service.QuestionSetAnswerService;
 import eu.factorx.awac.service.ScopeService;
-import eu.factorx.awac.service.SiteService;
+import eu.factorx.awac.service.OrganizationService;
 import eu.factorx.awac.service.knowledge.activity.contributor.littleemitter.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public class BAD_APE_BAD7FTest{
     private QuestionSetAnswerService questionSetAnswerService;
 
     @Autowired
-    private SiteService siteService;
+    private OrganizationService organizationService;
 
     @Autowired
     private ScopeService scopeService;
@@ -56,17 +56,17 @@ public class BAD_APE_BAD7FTest{
 
     private final static Long FORM_ID = 2L;
     private final static Long PERIOD_ID = 1L;
-    private String identifier = "user1";
+    private String identifier = "user20";
     private String identifierPassword = "password";
 
     /**
      * run test
-     * need an id of a scope (site)
-     * @param siteId
+     * need an id of a scope (organization)
+     * @param organizationId
      */
-    public void test(long siteId){
+    public void test(long organizationId){
 
-        Site site = siteService.findById(siteId);
+        Organization organization= organizationService.findById(organizationId);
         Period period = periodService.findById(PERIOD_ID);
 
         //
@@ -75,7 +75,7 @@ public class BAD_APE_BAD7FTest{
         QuestionAnswersDTO questionAnswersDTO = new QuestionAnswersDTO();
         questionAnswersDTO.setFormId(FORM_ID);
         questionAnswersDTO.setPeriodId(PERIOD_ID);
-        questionAnswersDTO.setScopeId(site.getId());
+        questionAnswersDTO.setScopeId(organization.getId());
         questionAnswersDTO.setLastUpdateDate(new Date().toString());
 
         List<AnswerLineDTO> answerLineDTOList = new ArrayList<>();
@@ -116,7 +116,7 @@ public class BAD_APE_BAD7FTest{
         //TODO temporary
         JPA.em().clear();
         JPA.em().flush();
-        Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(site, period);
+        Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(organization, period);
         List<BaseActivityData> bads = baseActivityDataAPE_BAD7F.getBaseActivityData(questionSetAnswers);
 
         //control content

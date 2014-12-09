@@ -48,6 +48,9 @@ public class BADTestGenerator {
 
             Logger.info("questionAndAnswerList for " + bad.getBaseActivityDataCode() + "->" + questionAndAnswerList.toString());
 
+            //insert user
+            badTemplate.addParameter("user", templateName.getUserIdentifier());
+
             //path
             badTemplate.addParameter("PACKAGE", templateName.getPackageTest());
 

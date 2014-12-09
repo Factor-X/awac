@@ -6,7 +6,7 @@ import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
 import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.models.business.Scope;
-import eu.factorx.awac.models.business.Site;
+import eu.factorx.awac.models.business.Product;
 import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.knowledge.Period;
@@ -14,7 +14,7 @@ import eu.factorx.awac.models.reporting.BaseActivityData;
 import eu.factorx.awac.service.PeriodService;
 import eu.factorx.awac.service.QuestionSetAnswerService;
 import eu.factorx.awac.service.ScopeService;
-import eu.factorx.awac.service.SiteService;
+import eu.factorx.awac.service.ProductService;
 import $BAD_PACKAGE.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public class BAD_${bad.getBaseActivityDataCode()}Test{
     private QuestionSetAnswerService questionSetAnswerService;
 
     @Autowired
-    private SiteService siteService;
+    private ProductService ProductService;
 
     @Autowired
     private ScopeService scopeService;
@@ -56,17 +56,17 @@ public class BAD_${bad.getBaseActivityDataCode()}Test{
 
     private final static Long FORM_ID = 2L;
     private final static Long PERIOD_ID = 1L;
-    private String identifier = "user1";
+    private String identifier = "${user}";
     private String identifierPassword = "password";
 
     /**
      * run test
-     * need an id of a scope (site)
-     * @param siteId
+     * need an id of a scope (product)
+     * @param productId
      */
-    public void test(long siteId){
+    public void test(long productId){
 
-        Site site = siteService.findById(siteId);
+        Product product = productService.findById(productId);
         Period period = periodService.findById(PERIOD_ID);
 
         //
@@ -75,7 +75,7 @@ public class BAD_${bad.getBaseActivityDataCode()}Test{
         QuestionAnswersDTO questionAnswersDTO = new QuestionAnswersDTO();
         questionAnswersDTO.setFormId(FORM_ID);
         questionAnswersDTO.setPeriodId(PERIOD_ID);
-        questionAnswersDTO.setScopeId(site.getId());
+        questionAnswersDTO.setScopeId(product.getId());
         questionAnswersDTO.setLastUpdateDate(new Date().toString());
 
         List<AnswerLineDTO> answerLineDTOList = new ArrayList<>();
@@ -115,7 +115,7 @@ public class BAD_${bad.getBaseActivityDataCode()}Test{
         //TODO temporary
         JPA.em().clear();
         JPA.em().flush();
-        Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(site, period);
+        Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(product, period);
         List<BaseActivityData> bads = baseActivityData${bad.getBaseActivityDataCode()}.getBaseActivityData(questionSetAnswers);
 
         //control content

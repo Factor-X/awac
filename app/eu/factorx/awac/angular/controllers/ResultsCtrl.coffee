@@ -230,6 +230,49 @@ angular
                         $scope.o.reportCEFDTOs.R_4 = $scope.o.reportCEFDTOs.REv_4
                         $scope.o.reportCEFDTOs.R_5 = $scope.o.reportCEFDTOs.REv_5
 
+                    if $scope.$root.instanceName == 'household'
+                        $scope.o.reportDTOs.R_1 = $scope.o.reportDTOs.RMe_1
+                        $scope.o.reportDTOs.R_2 = $scope.o.reportDTOs.RMe_2
+                        $scope.o.reportDTOs.R_3 = $scope.o.reportDTOs.RMe_3
+                        $scope.o.reportDTOs.R_4 = $scope.o.reportDTOs.RMe_4
+                        $scope.o.reportDTOs.R_5 = $scope.o.reportDTOs.RMe_5
+
+                        $scope.o.leftSvgDonuts.R_1 = $scope.o.leftSvgDonuts.RMe_1
+                        $scope.o.leftSvgDonuts.R_2 = $scope.o.leftSvgDonuts.RMe_2
+                        $scope.o.leftSvgDonuts.R_3 = $scope.o.leftSvgDonuts.RMe_3
+                        $scope.o.leftSvgDonuts.R_4 = $scope.o.leftSvgDonuts.RMe_4
+                        $scope.o.leftSvgDonuts.R_5 = $scope.o.leftSvgDonuts.RMe_5
+
+                        $scope.o.rightSvgDonuts.R_1 = $scope.o.rightSvgDonuts.RMe_1
+                        $scope.o.rightSvgDonuts.R_2 = $scope.o.rightSvgDonuts.RMe_2
+                        $scope.o.rightSvgDonuts.R_3 = $scope.o.rightSvgDonuts.RMe_3
+                        $scope.o.rightSvgDonuts.R_4 = $scope.o.rightSvgDonuts.RMe_4
+                        $scope.o.rightSvgDonuts.R_5 = $scope.o.rightSvgDonuts.RMe_5
+
+                        $scope.o.svgWebs.R_1 = $scope.o.svgWebs.RMe_1
+                        $scope.o.svgWebs.R_2 = $scope.o.svgWebs.RMe_2
+                        $scope.o.svgWebs.R_3 = $scope.o.svgWebs.RMe_3
+                        $scope.o.svgWebs.R_4 = $scope.o.svgWebs.RMe_4
+                        $scope.o.svgWebs.R_5 = $scope.o.svgWebs.RMe_5
+
+                        $scope.o.svgHistograms.R_1 = $scope.o.svgHistograms.RMe_1
+                        $scope.o.svgHistograms.R_2 = $scope.o.svgHistograms.RMe_2
+                        $scope.o.svgHistograms.R_3 = $scope.o.svgHistograms.RMe_3
+                        $scope.o.svgHistograms.R_4 = $scope.o.svgHistograms.RMe_4
+                        $scope.o.svgHistograms.R_5 = $scope.o.svgHistograms.RMe_5
+
+                        $scope.o.svgHistogramsCEF.R_1 = $scope.o.svgHistogramsCEF.RMe_1
+                        $scope.o.svgHistogramsCEF.R_2 = $scope.o.svgHistogramsCEF.RMe_2
+                        $scope.o.svgHistogramsCEF.R_3 = $scope.o.svgHistogramsCEF.RMe_3
+                        $scope.o.svgHistogramsCEF.R_4 = $scope.o.svgHistogramsCEF.RMe_4
+                        $scope.o.svgHistogramsCEF.R_5 = $scope.o.svgHistogramsCEF.RMe_5
+
+                        $scope.o.reportCEFDTOs.R_1 = $scope.o.reportCEFDTOs.RMe_1
+                        $scope.o.reportCEFDTOs.R_2 = $scope.o.reportCEFDTOs.RMe_2
+                        $scope.o.reportCEFDTOs.R_3 = $scope.o.reportCEFDTOs.RMe_3
+                        $scope.o.reportCEFDTOs.R_4 = $scope.o.reportCEFDTOs.RMe_4
+                        $scope.o.reportCEFDTOs.R_5 = $scope.o.reportCEFDTOs.RMe_5
+
 
                     $scope.leftTotalEmissions = 0;
                     $scope.leftTotalScope1 = 0;

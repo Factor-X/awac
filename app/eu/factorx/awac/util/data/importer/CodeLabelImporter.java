@@ -29,7 +29,7 @@ public class CodeLabelImporter extends WorkbookDataImporter {
     private static final String CODES_TO_IMPORT_ENTERPRISE_WORKBOOK_PATH = "data_importer_resources/codes/codes_to_import_Enterprise.generated.xls";
     private static final String CODES_TO_IMPORT_MUNICIPALITY_WORKBOOK_PATH = "data_importer_resources/codes/codes_to_import_Municipality.generated.xls";
 	private static final String CODES_TO_IMPORT_HOUSEHOLD_WORKBOOK_PATH = "data_importer_resources/codes/codes_to_import_Household.generated.xls";
-	private static final String CODES_TO_IMPORT_SMALL_EMITTER_WORKBOOK_PATH = "data_importer_resources/codes/codes_to_import_SmallEmitter.generated.xls";
+	private static final String CODES_TO_IMPORT_SMALL_EMITTER_WORKBOOK_PATH = "data_importer_resources/codes/codes_to_import_LittleEmitter.generated.xls";
 	private static final String CODES_TO_IMPORT_EVENT_WORKBOOK_PATH = "data_importer_resources/codes/codes_to_import_Event.generated.xls";
 
     //use the original excel file
