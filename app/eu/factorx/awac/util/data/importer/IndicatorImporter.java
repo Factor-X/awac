@@ -1,9 +1,6 @@
 package eu.factorx.awac.util.data.importer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import jxl.Cell;
 import jxl.Sheet;
@@ -154,6 +151,28 @@ public class IndicatorImporter extends WorkbookDataImporter {
 				EVENT_REPORTS_REFERENCE,
 				EVENT_INDICATOR_REPORTS_REFERENCE);
 
+		updateCodeLabelsOrderIndex(CodeList.INDICATOR);
+		updateCodeLabelsOrderIndex(CodeList.BASE_INDICATOR);
+	}
+
+	private void updateCodeLabelsOrderIndex(CodeList codeList) {
+		Map<String, List<CodeLabel>> codeLabelsByCalculator = new LinkedHashMap<>();
+		for (CodeLabel codeLabel : codeLabelService.findCodeLabelsByList(codeList).values()) {
+			String calcPrefix = StringUtils.split(codeLabel.getKey(), '_')[0];
+			if (!codeLabelsByCalculator.containsKey(calcPrefix)) {
+				codeLabelsByCalculator.put(calcPrefix, new ArrayList<CodeLabel>());
+			}
+			codeLabelsByCalculator.get(calcPrefix).add(codeLabel);
+		}
+
+		int i = 1;
+		for (Map.Entry<String, List<CodeLabel>> entry : codeLabelsByCalculator.entrySet()) {
+			for (CodeLabel codeLabel : entry.getValue()) {
+				codeLabel.setOrderIndex(i);
+				codeLabelService.saveOrUpdate(codeLabel);
+				i++;
+			}
+		}
 	}
 
 	private void importData(InterfaceTypeCode interfaceTypeCode, String baseIndicatorsReference, String indicatorsReference, String baseIndicatorIndicatorsReference,

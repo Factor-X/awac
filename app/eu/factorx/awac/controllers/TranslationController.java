@@ -82,16 +82,9 @@ public class TranslationController extends AbstractController {
     @Transactional(readOnly = true)
     public Result getAvailableLanguages(String calculatorName) {
 
-
         AwacCalculator awacCalculator = awacCalculatorService.findByCode(new InterfaceTypeCode(calculatorName));
 
-        Logger.error("calculatorName:"+calculatorName);
-        Logger.error("InterfaceTypeCode:"+new InterfaceTypeCode(calculatorName));
-        Logger.error("awacCalculatorService:"+awacCalculator);
-
         AvailableLanguagesDTO result = new AvailableLanguagesDTO(awacCalculator.isFrEnabled(), awacCalculator.isNlEnabled(), awacCalculator.isEnEnabled());
-
-        Logger.error("result:"+result);
 
         return ok(result);
     }
