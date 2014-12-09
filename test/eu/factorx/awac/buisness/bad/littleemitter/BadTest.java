@@ -37,160 +37,160 @@ public class BadTest extends AbstractBaseModelTest {
 
     private static Long scopeId = null;
 
-    
+
     @Autowired
     private BAD_APE_BAD1ATest bad_APE_BAD1ATest;
-    
+
     @Autowired
     private BAD_APE_BAD1BTest bad_APE_BAD1BTest;
-    
+
     @Autowired
     private BAD_APE_BAD1CTest bad_APE_BAD1CTest;
-    
+
     @Autowired
     private BAD_APE_BAD1DTest bad_APE_BAD1DTest;
-    
+
     @Autowired
     private BAD_APE_BAD1GTest bad_APE_BAD1GTest;
-    
+
     @Autowired
     private BAD_APE_BAD1HTest bad_APE_BAD1HTest;
-    
+
     @Autowired
     private BAD_APE_BAD1ITest bad_APE_BAD1ITest;
-    
+
     @Autowired
     private BAD_APE_BAD1JTest bad_APE_BAD1JTest;
-    
+
     @Autowired
     private BAD_APE_BAD1KTest bad_APE_BAD1KTest;
-    
+
     @Autowired
     private BAD_APE_BAD2BTest bad_APE_BAD2BTest;
-    
+
     @Autowired
     private BAD_APE_BAD3Test bad_APE_BAD3Test;
-    
+
     @Autowired
     private BAD_APE_BAD4Test bad_APE_BAD4Test;
-    
+
     @Autowired
     private BAD_APE_BAD5ATest bad_APE_BAD5ATest;
-    
+
     @Autowired
     private BAD_APE_BAD5BTest bad_APE_BAD5BTest;
-    
+
     @Autowired
     private BAD_APE_BAD5CTest bad_APE_BAD5CTest;
-    
+
     @Autowired
     private BAD_APE_BAD6Test bad_APE_BAD6Test;
-    
+
     @Autowired
     private BAD_APE_BAD7ATest bad_APE_BAD7ATest;
-    
+
     @Autowired
     private BAD_APE_BAD7BTest bad_APE_BAD7BTest;
-    
+
     @Autowired
     private BAD_APE_BAD7CTest bad_APE_BAD7CTest;
-    
+
     @Autowired
     private BAD_APE_BAD7ETest bad_APE_BAD7ETest;
-    
+
     @Autowired
     private BAD_APE_BAD7FTest bad_APE_BAD7FTest;
-    
+
     @Autowired
     private BAD_APE_BAD7GTest bad_APE_BAD7GTest;
-    
+
     @Autowired
     private BAD_APE_BAD7HTest bad_APE_BAD7HTest;
-    
+
     @Autowired
     private BAD_APE_BAD8ATest bad_APE_BAD8ATest;
-    
+
     @Autowired
     private BAD_APE_BAD8BTest bad_APE_BAD8BTest;
-    
+
     @Autowired
     private BAD_APE_BAD8ETest bad_APE_BAD8ETest;
-    
+
     @Autowired
     private BAD_APE_BAD8FTest bad_APE_BAD8FTest;
-    
+
     @Autowired
     private BAD_APE_BAD8GTest bad_APE_BAD8GTest;
-    
+
     @Autowired
     private BAD_APE_BAD8HTest bad_APE_BAD8HTest;
-    
+
     @Autowired
     private BAD_APE_BAD9Test bad_APE_BAD9Test;
-    
+
     @Autowired
     private BAD_APE_BAD10Test bad_APE_BAD10Test;
-    
+
     @Autowired
     private BAD_APE_BAD11Test bad_APE_BAD11Test;
-    
+
     @Autowired
     private BAD_APE_BAD12Test bad_APE_BAD12Test;
-    
+
     @Autowired
     private BAD_APE_BAD13Test bad_APE_BAD13Test;
-    
+
     @Autowired
     private BAD_APE_BAD14Test bad_APE_BAD14Test;
-    
+
     @Autowired
     private BAD_APE_BAD15Test bad_APE_BAD15Test;
-    
+
     @Autowired
     private BAD_APE_BAD16ATest bad_APE_BAD16ATest;
-    
+
     @Autowired
     private BAD_APE_BAD16BTest bad_APE_BAD16BTest;
-    
+
     @Autowired
     private BAD_APE_BAD16CTest bad_APE_BAD16CTest;
-    
+
     @Autowired
     private BAD_APE_BAD17ATest bad_APE_BAD17ATest;
-    
+
     @Autowired
     private BAD_APE_BAD17BTest bad_APE_BAD17BTest;
-    
+
     @Autowired
     private BAD_APE_BAD17CTest bad_APE_BAD17CTest;
-    
+
     @Autowired
     private BAD_APE_BAD18ATest bad_APE_BAD18ATest;
-    
+
     @Autowired
     private BAD_APE_BAD18BTest bad_APE_BAD18BTest;
-    
+
     @Autowired
     private BAD_APE_BAD18CTest bad_APE_BAD18CTest;
-    
+
     @Autowired
     private BAD_APE_BAD19ATest bad_APE_BAD19ATest;
-    
+
     @Autowired
     private BAD_APE_BAD19BTest bad_APE_BAD19BTest;
-    
+
     @Autowired
     private BAD_APE_BAD19CTest bad_APE_BAD19CTest;
-    
+
     @Autowired
     private BAD_APE_BAD19DTest bad_APE_BAD19DTest;
-    
+
     @Autowired
     private BAD_APE_BAD19ETest bad_APE_BAD19ETest;
-    
+
     @Autowired
     private BAD_APE_BAD19FTest bad_APE_BAD19FTest;
-    
+
     @Test
     public void _000_initialize() {
         // ConnectionFormDTO
@@ -226,6 +226,11 @@ public class BadTest extends AbstractBaseModelTest {
         scopeId = resultDTO.getId();
 
     }
+    @Test
+    public void __007_badAPE_BAD1I() {
+        bad_APE_BAD1ITest.test(scopeId);
+    }
+
         @Test
     public void _001_badAPE_BAD1A() {
         bad_APE_BAD1ATest.test(scopeId);
@@ -249,10 +254,6 @@ public class BadTest extends AbstractBaseModelTest {
         @Test
     public void _006_badAPE_BAD1H() {
         bad_APE_BAD1HTest.test(scopeId);
-    }
-        @Test
-    public void _007_badAPE_BAD1I() {
-        bad_APE_BAD1ITest.test(scopeId);
     }
         @Test
     public void _008_badAPE_BAD1J() {
