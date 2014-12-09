@@ -1,8 +1,10 @@
 package eu.factorx.awac.converter;
 
 import eu.factorx.awac.dto.awac.get.*;
+import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.knowledge.BaseIndicator;
 import eu.factorx.awac.models.knowledge.Factor;
+import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.models.reporting.BaseActivityData;
 import eu.factorx.awac.models.reporting.BaseActivityResult;
 import eu.factorx.awac.service.BaseActivityResultService;
@@ -50,16 +52,23 @@ public class ReportLogEntryToReportLogEntryDTOConverter implements Converter<Rep
 
             BaseActivityData activityData = ((NoSuitableFactor) entry).getBad();
             BaseIndicator baseIndicator = ((NoSuitableFactor) entry).getBaseIndicator();
+            ActivityCategoryCode activityCategory = baseIndicator.getActivityCategory();
+            ActivitySubCategoryCode activitySubCategory = baseIndicator.getActivitySubCategory();
+            Unit biUnit = baseIndicator.getUnit();
+            Unit adUnit = activityData.getUnit();
+            IndicatorCategoryCode icIndicatorCategory = baseIndicator.getIndicatorCategory();
+            ActivityTypeCode adActivityTypeCode = activityData.getActivityType();
+            ActivitySourceCode adActivitySource = activityData.getActivitySource();
 
             return new ReportLogNoSuitableFactorEntryDTO(
-                baseIndicator.getActivityCategory().getKey(),
-                baseIndicator.getActivitySubCategory().getKey(),
-                baseIndicator.getUnit().getSymbol(),
+                activityCategory.getKey(),
+                activitySubCategory.getKey(),
+                biUnit.getSymbol(),
                 activityData.getValue(),
-                activityData.getUnit().getSymbol(),
-                baseIndicator.getIndicatorCategory().getKey(),
-                activityData.getActivityType().getKey(),
-                activityData.getActivitySource().getKey());
+                adUnit.getSymbol(),
+                icIndicatorCategory.getKey(),
+                adActivityTypeCode.getKey(),
+                adActivitySource.getKey());
 
         }
 
