@@ -13,7 +13,7 @@ public class QuestionCode extends Code {
 	/* BEGIN GENERATED QUESTION_CODES ENTERPRISE */
 
 
-/* Generated the 2014-12-08 12:45:39 +0100 */
+/* Generated the 2014-12-08 21:40:48 +0100 */
 
 public static final QuestionCode A1 = new QuestionCode("A1");
 public static final QuestionCode A2 = new QuestionCode("A2");
@@ -407,7 +407,7 @@ public static final QuestionCode A8000 = new QuestionCode("A8000");
 	/* BEGIN GENERATED QUESTION_CODES MUNICIPALITY */
 
 
-/* Generated the 2014-12-08 12:45:44 +0100 */
+/* Generated the 2014-12-08 21:40:55 +0100 */
 
 public static final QuestionCode AC1 = new QuestionCode("AC1");
 public static final QuestionCode AC2 = new QuestionCode("AC2");
@@ -586,7 +586,7 @@ public static final QuestionCode AC5002 = new QuestionCode("AC5002");
     /* BEGIN GENERATED QUESTION_CODES HOUSEHOLD */
 
 
-/* Generated the 2014-12-08 12:45:48 +0100 */
+/* Generated the 2014-12-08 21:41:04 +0100 */
 
 public static final QuestionCode AM2 = new QuestionCode("AM2");
 public static final QuestionCode AM3 = new QuestionCode("AM3");
@@ -769,7 +769,7 @@ public static final QuestionCode AM600 = new QuestionCode("AM600");
     /* BEGIN GENERATED QUESTION_CODES SMALLEMITTER */
 
 
-/* Generated the 2014-12-08 12:45:52 +0100 */
+/* Generated the 2014-12-08 21:41:13 +0100 */
 
 public static final QuestionCode AP2 = new QuestionCode("AP2");
 public static final QuestionCode AP5 = new QuestionCode("AP5");
@@ -938,7 +938,7 @@ public static final QuestionCode AP600 = new QuestionCode("AP600");
     /* BEGIN GENERATED QUESTION_CODES EVENT */
 
 
-/* Generated the 2014-12-08 12:45:56 +0100 */
+/* Generated the 2014-12-08 21:41:19 +0100 */
 
 public static final QuestionCode AEV2 = new QuestionCode("AEV2");
 public static final QuestionCode AEV3 = new QuestionCode("AEV3");
