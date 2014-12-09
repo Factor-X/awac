@@ -136,10 +136,10 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
             data = excelReader.readFile(FILE_PATH, EVENT_METHOD);
             templateName = TemplateName.BAD_EVENT;
             Logger.info("EVENT !!");
-        } else if (interfaceTypeCode.equals(InterfaceTypeCode.LITTLE_EMITTER)) {
+        } else if (interfaceTypeCode.equals(InterfaceTypeCode.LITTLEEMITTER)) {
             data = excelReader.readFile(FILE_PATH, LITTLEEMITTER_METHOD);
-            templateName = TemplateName.BAD_LITTLE_EMITTER;
-            Logger.info("LITTLE_EMITTER !!");
+            templateName = TemplateName.BAD_LITTLEEMITTER;
+            Logger.info("LITTLEEMITTER !!");
         } else if (interfaceTypeCode.equals(InterfaceTypeCode.HOUSEHOLD)) {
             data = excelReader.readFile(FILE_PATH, HOUSEHOLD_METHOD);
             templateName = TemplateName.BAD_HOUSEHOLD;

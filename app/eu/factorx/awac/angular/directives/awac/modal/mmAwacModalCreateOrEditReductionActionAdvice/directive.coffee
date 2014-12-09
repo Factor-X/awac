@@ -15,7 +15,7 @@ angular
         baseIndicatorCodeLabels = $scope.getParams().baseIndicatorCodeLabels
         actionAdvice = $scope.getParams().actionAdvice
 
-        interfaceTypeKeys = ['enterprise', 'municipality', 'household', 'event', 'littleEmitter']
+        interfaceTypeKeys = ['enterprise', 'municipality', 'household', 'event', 'littleemitter']
         $scope.interfaceTypeOptions = _.filter(interfaceTypeCodeLabels, (codeLabel) ->
             return _.contains(interfaceTypeKeys, codeLabel.key)
         )
@@ -30,11 +30,11 @@ angular
             household: _.filter(baseIndicatorCodeLabels, (codeLabel) ->
                 return codeLabel.key.startsWith("BIMe_")
             )
-            littleEmitter: _.filter(baseIndicatorCodeLabels, (codeLabel) ->
+            littleemitter: _.filter(baseIndicatorCodeLabels, (codeLabel) ->
                 return codeLabel.key.startsWith("BIPE_")
             )
             event: _.filter(baseIndicatorCodeLabels, (codeLabel) ->
-                return codeLabel.key.startsWith("BiEV_")
+                return codeLabel.key.startsWith("BIEv_")
             )
 
         $scope.editMode = !!actionAdvice

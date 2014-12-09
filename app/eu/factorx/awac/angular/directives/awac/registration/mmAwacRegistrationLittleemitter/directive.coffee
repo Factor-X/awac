@@ -1,9 +1,9 @@
 angular
 .module('app.directives')
-.directive "mmAwacRegistrationLittleEmitter", (directiveService,downloadService,messageFlash,translationService,modalService) ->
+.directive "mmAwacRegistrationLittleemitter", (directiveService,downloadService,messageFlash,translationService,modalService) ->
     restrict: "E"
     scope:{}
-    templateUrl: "$/angular/templates/mm-awac-registration-little-emitter.html"
+    templateUrl: "$/angular/templates/mm-awac-registration-littleemitter.html"
     replace:true
     controller: ($scope) ->
 
@@ -100,7 +100,7 @@ angular
                 data.person.defaultLanguage = $scope.$root.language
 
                 #send request
-                downloadService.postJson '/awac/registration/little-emitter', data, (result) ->
+                downloadService.postJson '/awac/registration/littleemitter', data, (result) ->
                     if result.success
                         $scope.$root.loginSuccess(result.data)
                         messageFlash.displaySuccess translationService.get "CONNECTION_MESSAGE_SUCCESS"

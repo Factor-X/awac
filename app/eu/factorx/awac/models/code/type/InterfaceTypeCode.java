@@ -2,10 +2,6 @@ package eu.factorx.awac.models.code.type;
 
 import javax.persistence.*;
 
-import eu.factorx.awac.models.business.Organization;
-import eu.factorx.awac.models.business.Product;
-import eu.factorx.awac.models.business.Scope;
-import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.Code;
 import eu.factorx.awac.models.code.CodeList;
 
@@ -19,7 +15,7 @@ public class InterfaceTypeCode extends Code {
 	public static final InterfaceTypeCode MUNICIPALITY = new InterfaceTypeCode("municipality");
 	public static final InterfaceTypeCode HOUSEHOLD = new InterfaceTypeCode("household");
     public static final InterfaceTypeCode EVENT = new InterfaceTypeCode("event");
-    public static final InterfaceTypeCode LITTLE_EMITTER = new InterfaceTypeCode("little-emitter");
+    public static final InterfaceTypeCode LITTLEEMITTER = new InterfaceTypeCode("littleemitter");
     public static final InterfaceTypeCode VERIFICATION = new InterfaceTypeCode("verification");
     public static final InterfaceTypeCode ADMIN = new InterfaceTypeCode("admin");
 
@@ -43,7 +39,7 @@ public class InterfaceTypeCode extends Code {
         else if(key.equals(HOUSEHOLD.getKey())){
             return ScopeTypeCode.ORG;
         }
-        else if(key.equals(LITTLE_EMITTER.getKey())){
+        else if(key.equals(LITTLEEMITTER.getKey())){
             return ScopeTypeCode.ORG;
         }
         else if(key.equals(MUNICIPALITY.getKey())){
@@ -67,8 +63,8 @@ public class InterfaceTypeCode extends Code {
             interfaceTypeCode = InterfaceTypeCode.HOUSEHOLD;
         } else if (interfaceTypeCodeKey.equals(InterfaceTypeCode.EVENT.getKey())) {
             interfaceTypeCode = InterfaceTypeCode.EVENT;
-        } else if (interfaceTypeCodeKey.equals(InterfaceTypeCode.LITTLE_EMITTER.getKey())) {
-            interfaceTypeCode = InterfaceTypeCode.LITTLE_EMITTER;
+        } else if (interfaceTypeCodeKey.equals(InterfaceTypeCode.LITTLEEMITTER.getKey())) {
+            interfaceTypeCode = InterfaceTypeCode.LITTLEEMITTER;
         }else if (interfaceTypeCodeKey.equals(InterfaceTypeCode.VERIFICATION.getKey())) {
             interfaceTypeCode = InterfaceTypeCode.VERIFICATION;
         }else if (interfaceTypeCodeKey.equals(InterfaceTypeCode.ADMIN.getKey())) {

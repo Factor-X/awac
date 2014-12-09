@@ -158,7 +158,7 @@ public class AwacLittleEmitterInitialData {
         moneyUnits   = getUnitCategoryByCode(UnitCategoryCode.CURRENCY);
         timeUnits    = getUnitCategoryByCode(UnitCategoryCode.DURATION);
 
-        awacCalculator = awacCalculatorService.findByCode(new InterfaceTypeCode("littleEmitter"));
+        awacCalculator = awacCalculatorService.findByCode(new InterfaceTypeCode("littleemitter"));
 
         // delete old questions
 		{

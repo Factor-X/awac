@@ -21,7 +21,7 @@ public enum TemplateName {
             "test/eu/factorx/awac/buisness/bad/municipality/",
             "eu.factorx.awac.buisness.bad.municipality"),
 
-    BAD_LITTLE_EMITTER("public/template/bad.vm",
+    BAD_LITTLEEMITTER("public/template/bad.vm",
             "app/eu/factorx/awac/service/knowledge/activity/contributor/littleEmitter/",
             "eu.factorx.awac.service.knowledge.activity.contributor.littleEmitter",
             //test

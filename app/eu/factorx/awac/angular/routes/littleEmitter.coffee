@@ -18,7 +18,7 @@ initializeLittleEmitterRoutes = (defaultResolve) ->
         $routeProvider
         .when('/form/:form/:period/:scope', {
                 templateUrl: ($routeParams) ->
-                    '$/angular/views/littleEmitter/' + $routeParams.form + '.html'
+                    '$/angular/views/littleemitter/' + $routeParams.form + '.html'
                 controller: 'FormCtrl'
                 resolve: angular.extend({
                     helpPage: () ->

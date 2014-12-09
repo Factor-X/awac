@@ -138,7 +138,7 @@ public class IndicatorImporter extends WorkbookDataImporter {
 
 		// SMALL EMITTERS DATA
 		Logger.info("== Importing Small Emitters Data");
-		importData(InterfaceTypeCode.LITTLE_EMITTER,
+		importData(InterfaceTypeCode.LITTLEEMITTER,
 				SMALL_EMITTERS_BASE_INDICATORS_REFERENCE,
 				SMALL_EMITTERS_INDICATORS_REFERENCE,
 				SMALL_EMITTERS_BASE_INDICATOR_INDICATORS_REFERENCE,

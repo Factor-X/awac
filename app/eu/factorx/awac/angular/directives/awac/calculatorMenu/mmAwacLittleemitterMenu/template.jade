@@ -1,0 +1,35 @@
+.nav_tabs(ng-show='displayMenu===true')
+    .nav_entreprise
+        .site_menu
+            .menu.menu_enterprise
+                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_P1\') == true}', ng-click='navTo(\'/form/TAB_P1\')')
+                    .tab-title(ng-bind-html='\'TAB_P1\' | translate')
+                    mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_P1\')')
+                    .menu_arrow
+                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_P2\')  == true}', ng-click='navTo(\'/form/TAB_P2\')')
+                    .tab-title(ng-bind-html='\'TAB_P2\' | translate')
+                    mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_P2\')')
+                    .menu_arrow
+                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_P3\') == true}', ng-click='navTo(\'/form/TAB_P3\')')
+                    .tab-title(ng-bind-html='\'TAB_P3\' | translate')
+                    mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_P3\')')
+                    .menu_arrow
+                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_P4\') == true}', ng-click='navTo(\'/form/TAB_P4\')')
+                    .tab-title(ng-bind-html='\'TAB_P4\' | translate')
+                    mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_P4\')')
+                    .menu_arrow
+                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_P5\') == true}', ng-click='navTo(\'/form/TAB_P5\')')
+                    .tab-title(ng-bind-html='\'TAB_P5\' | translate')
+                    mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_P5\')')
+                    .menu_arrow
+                button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_P6\') == true}', ng-click='navTo(\'/form/TAB_P6\')')
+                    .tab-title(ng-bind-html='\'TAB_P6\' | translate')
+                    mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_P6\')')
+                    .menu_arrow
+        .last_menu
+            button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/results\') == true}', ng-click='navTo(\'/results\')')
+                .tab-title(ng-bind-html="'SURVEY_INTERFACE_RESULT' | translate")
+            button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/actions\') == true}',
+            ng-click='isDisabled || navTo(\'/actions\')',
+            ng-show="$root.instanceName != 'verification'")
+                .tab-title(ng-bind-html="'SURVEY_INTERFACE_REDUCTION' | translate")
