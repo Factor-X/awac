@@ -54,7 +54,7 @@ angular
             frEnabled: false
             nlEnabled: false
             enEnabled: false
-        littleEmitter:
+        littleemitter:
             total: 0
             shareData: 0
             sites: 0

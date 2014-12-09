@@ -20,7 +20,7 @@ files :
   question_regex : AM[0-9]+
 -
   name           : LittleEmitter
-  calculator     : littleEmitter
+  calculator     : littleemitter
   xls            : awac_data_09-08-2014/AWAC-tous-calcul_FE.xls
   sheet          : petit emetteur-activityData
   question_regex : AP[0-9]+

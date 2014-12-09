@@ -114,14 +114,14 @@ public class RegistrationController extends AbstractController {
 	 * @return
 	 */
 	@Transactional(readOnly = false)
-	public Result littleEmitterRegistration() {
+	public Result littleemitterRegistration() {
 
 		LittleEmitterAccountCreationDTO dto = extractDTOFromRequest(LittleEmitterAccountCreationDTO.class);
 
 		// control organization name
 
 		//create organization
-		Organization organization = new Organization(dto.getOrganizationName(), InterfaceTypeCode.LITTLE_EMITTER, dto.getOrganizationStatisticsAllowed());
+		Organization organization = new Organization(dto.getOrganizationName(), InterfaceTypeCode.LITTLEEMITTER, dto.getOrganizationStatisticsAllowed());
 		organizationService.saveOrUpdate(organization);
 
 		//create administrator
@@ -136,7 +136,7 @@ public class RegistrationController extends AbstractController {
 		securedController.storeIdentifier(account);
 
 		// email submission
-		handleEmailSubmission(account, InterfaceTypeCode.LITTLE_EMITTER);
+		handleEmailSubmission(account, InterfaceTypeCode.LITTLEEMITTER);
 
 		//create ConnectionFormDTO
 		LoginResultDTO resultDto = conversionService.convert(account, LoginResultDTO.class);

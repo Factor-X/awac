@@ -61,8 +61,8 @@ public class OrganizationDataController extends AbstractController {
             interfaceTypeCode = InterfaceTypeCode.HOUSEHOLD;
         } else if (dto.getCalculatorKey().equals(InterfaceTypeCode.MUNICIPALITY.getKey())) {
             interfaceTypeCode = InterfaceTypeCode.MUNICIPALITY;
-        } else if (dto.getCalculatorKey().equals(InterfaceTypeCode.LITTLE_EMITTER.getKey())) {
-            interfaceTypeCode = InterfaceTypeCode.LITTLE_EMITTER;
+        } else if (dto.getCalculatorKey().equals(InterfaceTypeCode.LITTLEEMITTER.getKey())) {
+            interfaceTypeCode = InterfaceTypeCode.LITTLEEMITTER;
         } else {
             throw new MyrmexRuntimeException(BusinessErrorType.WRONG_INTERFACE_FOR_USER);
         }

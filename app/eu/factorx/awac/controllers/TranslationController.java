@@ -14,6 +14,7 @@ import eu.factorx.awac.service.CodeLabelService;
 import eu.factorx.awac.service.WysiwygDocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.Http.Context;
 import play.mvc.Result;
@@ -80,8 +81,19 @@ public class TranslationController extends AbstractController {
 
     @Transactional(readOnly = true)
     public Result getAvailableLanguages(String calculatorName) {
+
+
         AwacCalculator awacCalculator = awacCalculatorService.findByCode(new InterfaceTypeCode(calculatorName));
-        return ok(new AvailableLanguagesDTO(awacCalculator.isFrEnabled(), awacCalculator.isNlEnabled(), awacCalculator.isEnEnabled()));
+
+        Logger.error("calculatorName:"+calculatorName);
+        Logger.error("InterfaceTypeCode:"+new InterfaceTypeCode(calculatorName));
+        Logger.error("awacCalculatorService:"+awacCalculator);
+
+        AvailableLanguagesDTO result = new AvailableLanguagesDTO(awacCalculator.isFrEnabled(), awacCalculator.isNlEnabled(), awacCalculator.isEnEnabled());
+
+        Logger.error("result:"+result);
+
+        return ok(result);
     }
 
 

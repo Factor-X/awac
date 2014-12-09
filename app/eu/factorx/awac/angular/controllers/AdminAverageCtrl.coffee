@@ -35,7 +35,7 @@ angular
         "municipality"
         "household"
         "event"
-        "littleEmitter"
+        "littleemitter"
     ]
 
     $scope.results =

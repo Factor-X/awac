@@ -78,7 +78,7 @@ angular
         if codeKey.startsWith("IMe_") || codeKey.startsWith("BIMe_")
             return "household"
         if codeKey.startsWith("IPE_") || codeKey.startsWith("BIPE_")
-            return "littleEmitter"
+            return "littleemitter"
         if codeKey.startsWith("IEv_") || codeKey.startsWith("BIEv_")
             return "event"
         return

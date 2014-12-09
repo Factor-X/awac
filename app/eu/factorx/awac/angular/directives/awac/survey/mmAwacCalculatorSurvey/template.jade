@@ -60,9 +60,9 @@ div
                         ng-click='isDisabled || $root.nav(\'/product_manager\')',
                         ng-class='{\'selected\': isMenuCurrentlySelected(\'/product_manager\') == true}',
                         ng-disabled='$root.currentPerson.isAdmin === false')
-                        // user manager button => not for little_emitter or household
+                        // user manager button => not for littleemitter or household
                         button.button.user_manage(
-                        ng-hide="$root.instanceName == 'household' || $root.instanceName == 'little-emitter'"
+                        ng-hide="$root.instanceName == 'household' || $root.instanceName == 'littleemitter'"
                         type='button',
                         ng-bind-html='\'USER_MANAGER_BUTTON\' | translate',
                         ng-click='isDisabled || $root.nav(\'/user_manager\')',

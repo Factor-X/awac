@@ -6,7 +6,7 @@
         h1(ng-show="$root.instanceName == 'municipality'", ng-bind-html="'TITLE_MUNICIPALITY' | translate")
         h1(ng-show="$root.instanceName == 'household'", ng-bind-html="'TITLE_HOUSEHOLD' | translate")
         h1(ng-show="$root.instanceName == 'event'", ng-bind-html="'TITLE_EVENT' | translate")
-        h1(ng-show="$root.instanceName == 'littleEmitter'", ng-bind-html="'TITLE_LITTLE_EMITTER' | translate")
+        h1(ng-show="$root.instanceName == 'littleemitter'", ng-bind-html="'TITLE_LITTLE_EMITTER' | translate")
         h1(ng-show="$root.instanceName == 'verification'", ng-bind-html="'TITLE_VERIFICATION' | translate")
         h1(ng-show="$root.instanceName == 'admin'", ng-bind-html="'TITLE_ADMIN' | translate")
 
@@ -33,7 +33,7 @@
                             ng-disabled="!connectionFieldValid()")
 
                         button.button(
-                            ng-show="$root.instanceName == 'littleEmitter' || $root.instanceName == 'household'",
+                            ng-show="$root.instanceName == 'littleemitter' || $root.instanceName == 'household'",
                             ng-disabled="connectionFieldValid()",
                             type="button",
                             class="btn btn-primary",
