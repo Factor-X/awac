@@ -2,26 +2,31 @@ log_level : INFO
 files :
 -
   name           : Enterprise
+  calculator     : enterprise
   xls            : awac_data_09-08-2014/AWAC-tous-calcul_FE.xls
   sheet          : site entreprise-activityData
   question_regex : A[0-9]+
 -
   name           : Municipality
+  calculator     : municipality
   xls            : awac_data_09-08-2014/AWAC-tous-calcul_FE.xls
   sheet          : commune-activityData
   question_regex : AC[0-9]+
 -
   name           : Household
+  calculator     : household
   xls            : awac_data_09-08-2014/AWAC-tous-calcul_FE.xls
   sheet          : menage-activityData
   question_regex : AM[0-9]+
 -
-  name           : SmallEmitter
+  name           : LittleEmitter
+  calculator     : littleEmitter
   xls            : awac_data_09-08-2014/AWAC-tous-calcul_FE.xls
   sheet          : petit emetteur-activityData
   question_regex : AP[0-9]+
 -
   name           : Event
+  calculator     : event
   xls            : awac_data_09-08-2014/AWAC-tous-calcul_FE.xls
   sheet          : evenement - activityData
   question_regex : AEV[0-9]+

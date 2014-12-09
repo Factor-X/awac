@@ -2,12 +2,14 @@ package eu.factorx.awac.generated;
 
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.data.answer.QuestionAnswer;
+import eu.factorx.awac.models.forms.AwacCalculator;
 import eu.factorx.awac.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import eu.factorx.awac.models.data.question.Driver;
 import eu.factorx.awac.models.data.question.DriverValue;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 
 import play.Logger;
 import eu.factorx.awac.models.Notification;
@@ -29,7 +31,7 @@ import play.db.jpa.JPA;
 import java.util.*;
 
 @Component
-public class AwacSmallEmitterInitialData {
+public class AwacLittleEmitterInitialData {
 
     @Autowired
     private UnitCategoryService unitCategoryService;
@@ -58,6 +60,9 @@ public class AwacSmallEmitterInitialData {
     @Autowired
     private PeriodService periodService;
 
+    @Autowired
+    private AwacCalculatorService awacCalculatorService;
+
     private Form form1,form2,form3,form4,form5,form6;
     private QuestionSet ap2,ap14,ap15,ap17,ap41,ap51,ap53,ap56,ap58,ap61,ap62,ap65,ap69,ap70,ap78,ap81,ap91,ap93,ap95,ap106,ap108,ap109,ap121,ap123,ap124,ap600,ap134,ap140,ap142,ap143,ap144,ap151,ap152,ap159,ap161,ap187,ap189;
     private Question ap5,ap6,ap7,ap8,ap9,ap10,ap11,ap12,ap13,ap16,ap18,ap19,ap20,ap21,ap22,ap23,ap24,ap25,ap500,ap501,ap26,ap27,ap28,ap29,ap30,ap31,ap32,ap33,ap34,ap35,ap36,ap37,ap38,ap42,ap43,ap44,ap45,ap46,ap47,ap48,ap49,ap50,ap52,ap54,ap55,ap57,ap59,ap60,ap63,ap64,ap66,ap67,ap68,ap71,ap73,ap76,ap77,ap79,ap80,ap82,ap83,ap84,ap85,ap86,ap87,ap90,ap92,ap94,ap96,ap97,ap98,ap99,ap100,ap101,ap102,ap103,ap104,ap105,ap107,ap110,ap112,ap116,ap117,ap118,ap119,ap120,ap122,ap125,ap127,ap131,ap132,ap133,ap135,ap136,ap137,ap138,ap139,ap141,ap145,ap146,ap147,ap148,ap149,ap150,ap153,ap154,ap155,ap156,ap157,ap158,ap160,ap162,ap163,ap164,ap165,ap166,ap188,ap190,ap191,ap192,ap193,ap194,ap195,ap196;
@@ -70,6 +75,8 @@ public class AwacSmallEmitterInitialData {
     private UnitCategory powerUnits;
     private UnitCategory moneyUnits;
     private UnitCategory timeUnits;
+
+    private AwacCalculator awacCalculator;
 
 
 	private void deleteQuestion(Question question, int indent) {
@@ -138,7 +145,7 @@ public class AwacSmallEmitterInitialData {
 
     public void createOrUpdateSurvey() {
 
-        Logger.info("===> CREATE AWAC SmallEmitter INITIAL DATA -- START");
+        Logger.info("===> CREATE AWAC LittleEmitter INITIAL DATA -- START");
 
         long startTime = System.currentTimeMillis();
 
@@ -151,6 +158,7 @@ public class AwacSmallEmitterInitialData {
         moneyUnits   = getUnitCategoryByCode(UnitCategoryCode.CURRENCY);
         timeUnits    = getUnitCategoryByCode(UnitCategoryCode.DURATION);
 
+        awacCalculator = awacCalculatorService.findByCode(new InterfaceTypeCode("littleEmitter"));
 
         // delete old questions
 		{
@@ -354,7 +362,7 @@ public class AwacSmallEmitterInitialData {
         createQuestionAP196();
 
 
-        Logger.info("===> CREATE AWAC SmallEmitter INITIAL DATA -- END (Took {} milliseconds)", (System.currentTimeMillis() - startTime));
+        Logger.info("===> CREATE AWAC LittleEmitter INITIAL DATA -- END (Took {} milliseconds)", (System.currentTimeMillis() - startTime));
     }
 
     // =========================================================================
@@ -367,6 +375,7 @@ public class AwacSmallEmitterInitialData {
         form1 = formService.findByIdentifier("TAB_P1");
         if (form1 == null) {
             form1 = new Form("TAB_P1");
+            form1.setAwacCalculator(awacCalculator);
             JPA.em().persist(form1);
         }
     }
@@ -376,6 +385,7 @@ public class AwacSmallEmitterInitialData {
         form2 = formService.findByIdentifier("TAB_P2");
         if (form2 == null) {
             form2 = new Form("TAB_P2");
+            form2.setAwacCalculator(awacCalculator);
             JPA.em().persist(form2);
         }
     }
@@ -385,6 +395,7 @@ public class AwacSmallEmitterInitialData {
         form3 = formService.findByIdentifier("TAB_P3");
         if (form3 == null) {
             form3 = new Form("TAB_P3");
+            form3.setAwacCalculator(awacCalculator);
             JPA.em().persist(form3);
         }
     }
@@ -394,6 +405,7 @@ public class AwacSmallEmitterInitialData {
         form4 = formService.findByIdentifier("TAB_P4");
         if (form4 == null) {
             form4 = new Form("TAB_P4");
+            form4.setAwacCalculator(awacCalculator);
             JPA.em().persist(form4);
         }
     }
@@ -403,6 +415,7 @@ public class AwacSmallEmitterInitialData {
         form5 = formService.findByIdentifier("TAB_P5");
         if (form5 == null) {
             form5 = new Form("TAB_P5");
+            form5.setAwacCalculator(awacCalculator);
             JPA.em().persist(form5);
         }
     }
@@ -412,6 +425,7 @@ public class AwacSmallEmitterInitialData {
         form6 = formService.findByIdentifier("TAB_P6");
         if (form6 == null) {
             form6 = new Form("TAB_P6");
+            form6.setAwacCalculator(awacCalculator);
             JPA.em().persist(form6);
         }
     }

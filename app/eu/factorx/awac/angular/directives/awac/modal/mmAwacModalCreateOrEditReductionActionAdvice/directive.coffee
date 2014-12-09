@@ -27,9 +27,15 @@ angular
             municipality: _.filter(baseIndicatorCodeLabels, (codeLabel) ->
                 return codeLabel.key.startsWith("BICo_")
             )
-            household: []       # No BaseIndicators! TODO Fix this
-            event: []           # No BaseIndicators! TODO Fix this
-            littleEmitter: []   # No BaseIndicators! TODO Fix this
+            household: _.filter(baseIndicatorCodeLabels, (codeLabel) ->
+                return codeLabel.key.startsWith("BIMe_")
+            )
+            littleEmitter: _.filter(baseIndicatorCodeLabels, (codeLabel) ->
+                return codeLabel.key.startsWith("BIPE_")
+            )
+            event: _.filter(baseIndicatorCodeLabels, (codeLabel) ->
+                return codeLabel.key.startsWith("BiEV_")
+            )
 
         $scope.editMode = !!actionAdvice
         if $scope.editMode
