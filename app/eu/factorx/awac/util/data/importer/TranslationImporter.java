@@ -21,7 +21,7 @@ public class TranslationImporter extends WorkbookDataImporter {
 	private static final String TRANSLATIONS_ENTERPRISES_PATH = "data_importer_resources/translations/translations_Enterprise.generated.xls";
 	private static final String TRANSLATIONS_MUNICIPALITY_PATH = "data_importer_resources/translations/translations_Municipality.generated.xls";
 	private static final String TRANSLATIONS_HOUSEHOLD_PATH = "data_importer_resources/translations/translations_Household.generated.xls";
-	private static final String TRANSLATIONS_SMALL_EMITTER_PATH = "data_importer_resources/translations/translations_SmallEmitter.generated.xls";
+	private static final String TRANSLATIONS_SMALL_EMITTER_PATH = "data_importer_resources/translations/translations_LittleEmitter.generated.xls";
 	private static final String TRANSLATIONS_EVENT_PATH = "data_importer_resources/translations/translations_Event.generated.xls";
 
 	@Autowired
