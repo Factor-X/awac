@@ -54,7 +54,7 @@ div
                         ng-bind-html='\'SITE_MANAGER_BUTTON\' | translate',
                         ng-click='isDisabled || $root.nav(\'/site_manager\')',
                         ng-class='{\'selected\': isMenuCurrentlySelected(\'/site_manager\') == true}',
-                        ng-hide="$root.instanceName == 'household'",
+                        ng-hide="$root.instanceName == 'household' || $root.instanceName == 'event'",
                         ng-disabled='$root.currentPerson.isAdmin === false')
                         //  product manager button => only for event
                         button.button.user_manage(
@@ -97,7 +97,7 @@ div
             .big_separator(ng-show="$root.instanceName == 'enterprise'")
             .data_date_compare(ng-show="$root.instanceName == 'enterprise' || $root.instanceName == 'event'")
                 div(ng-bind-html="'SURVEY_INTERFACE_SELECTED_SITE' | translate",ng-show="$root.instanceName == 'enterprise'")
-                div(ng-bind-html="'SURVEY_INTERFACE_SELECTED_PRODUCT' | translate",ng-show="$root.instanceName == 'event'")
+                div(ng-bind-html="'SURVEY_INTERFACE_SELECTED_EVENT' | translate",ng-show="$root.instanceName == 'event'")
                 select(ng-options='s.id as s.name for s in $root.mySites', ng-model='$root.scopeSelectedId')
 
             .big_separator
