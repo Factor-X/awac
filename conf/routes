@@ -129,8 +129,12 @@ POST        /awac/user/activeAccount                                            
 #
 GET         /awac/admin/codelabels/reset                                         @eu.factorx.awac.controllers.AdminController.resetCodeLabels()
 GET         /awac/admin/indicators_factors/reset                                 @eu.factorx.awac.controllers.AdminController.resetIndicatorsAndFactors()
-GET         /awac/admin/municipality_survey/create                               @eu.factorx.awac.controllers.AdminController.createMunicipalitySurveyData()
 GET         /awac/admin/enterprise_survey/create                                 @eu.factorx.awac.controllers.AdminController.createEnterpriseSurveyData()
+GET         /awac/admin/municipality_survey/create                               @eu.factorx.awac.controllers.AdminController.createMunicipalitySurveyData()
+GET         /awac/admin/household_survey/create                                  @eu.factorx.awac.controllers.AdminController.createHouseholdSurveyData()
+GET         /awac/admin/little_emitter_survey/create                             @eu.factorx.awac.controllers.AdminController.createLittleEmitterSurveyData()
+GET         /awac/admin/event_survey/create                                      @eu.factorx.awac.controllers.AdminController.createEventSurveyData()
+
 GET         /awac/admin/badImporter/:interfaceString                             @eu.factorx.awac.controllers.AdminController.runBADImporter(interfaceString:String)
 
 #
@@ -228,4 +232,4 @@ GET         /awac/admin/organizationData/toggleLanguage/:calculator/:lang       
 GET         /awac/admin/translations/wysiwyg/all                                 @eu.factorx.awac.controllers.AdminController.allWysiwygDocuments()
 POST        /awac/admin/translations/wysiwyg/update                              @eu.factorx.awac.controllers.AdminController.updateWysiwygDocument()
 GET         /awac/admin/translations/wysiwyg/get/:category/:name                 @eu.factorx.awac.controllers.TranslationController.getWysiwygDocument(category:String,name:String)
-GET         /awac/translations/available/:calculator                       @eu.factorx.awac.controllers.TranslationController.getAvailableLanguages(calculator:String)
+GET         /awac/translations/available/:calculator                             @eu.factorx.awac.controllers.TranslationController.getAvailableLanguages(calculator:String)

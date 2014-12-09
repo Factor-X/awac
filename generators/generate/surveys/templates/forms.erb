@@ -9,6 +9,7 @@
         form<%= f.number %> = formService.findByIdentifier("<%= f.code %>");
         if (form<%= f.number %> == null) {
             form<%= f.number %> = new Form("<%= f.code %>");
+            form<%= f.number %>.setAwacCalculator(awacCalculator);
             JPA.em().persist(form<%= f.number %>);
         }
     }

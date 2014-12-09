@@ -20,7 +20,7 @@ require_relative 'survey_class_writer_bindings.rb'
 
 class SurveyClassWriter
 
-    def self.execute(name, question_regex, forms, question_sets, questions)
+    def self.execute(name, calculator, question_regex, forms, question_sets, questions)
 
         @logger = Log.new(Code.for_static_class(self))
 
@@ -32,6 +32,7 @@ class SurveyClassWriter
         begin
             result = eruby.evaluate(SurveyClassWriterBindings.new(filename, {
                 :name           => name,
+                :calculator     => calculator,
                 :question_regex => question_regex,
                 :forms          => forms,
                 :question_sets  => question_sets,
