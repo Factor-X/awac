@@ -736,7 +736,7 @@ public class AwacLittleEmitterInitialData {
         // Créez autant de marchandises que nécessaire
         ap144 = questionSetService.findByCode(QuestionCode.AP144);
         if( ap144 == null ) {
-            ap144 = new QuestionSet(QuestionCode.AP144, true, ap108);
+            ap144 = new QuestionSet(QuestionCode.AP144, true, ap140);
             JPA.em().persist(ap144);
         }
     }
@@ -754,7 +754,7 @@ public class AwacLittleEmitterInitialData {
         // Créez autant de marchandises que nécessaire
         ap152 = questionSetService.findByCode(QuestionCode.AP152);
         if( ap152 == null ) {
-            ap152 = new QuestionSet(QuestionCode.AP152, true, ap108);
+            ap152 = new QuestionSet(QuestionCode.AP152, true, ap151);
             JPA.em().persist(ap152);
         }
     }
