@@ -48,7 +48,7 @@ public class BadTest extends AbstractBaseModelTest {
 
 
         // ConnectionFormDTO
-        ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password", InterfaceTypeCode.ENTERPRISE.getKey(), "");
+        ConnectionFormDTO cfDto = new ConnectionFormDTO("${user}", "password", InterfaceTypeCode.${calculatorType}.getKey(), "");
 
         /*
         start with a percentage too big => except an error

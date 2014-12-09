@@ -114,7 +114,7 @@ public class RegistrationController extends AbstractController {
 	 * @return
 	 */
 	@Transactional(readOnly = false)
-	public Result littleEmitterRegistration() {
+	public Result littleemitterRegistration() {
 
 		LittleEmitterAccountCreationDTO dto = extractDTOFromRequest(LittleEmitterAccountCreationDTO.class);
 
