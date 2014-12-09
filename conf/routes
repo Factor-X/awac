@@ -39,7 +39,7 @@ POST        /awac/registration/enterprise                                       
 POST        /awac/registration/municipality                                      @eu.factorx.awac.controllers.RegistrationController.municipalityRegistration()
 POST        /awac/registration/household                                         @eu.factorx.awac.controllers.RegistrationController.householdRegistration()
 POST        /awac/registration/validator                                         @eu.factorx.awac.controllers.RegistrationController.verificationRegistration()
-POST        /awac/registration/littleemitter                                     @eu.factorx.awac.controllers.RegistrationController.littleEmitterRegistration()
+POST        /awac/registration/littleemitter                                     @eu.factorx.awac.controllers.RegistrationController.littleemitterRegistration()
 POST        /awac/registration/event                                             @eu.factorx.awac.controllers.RegistrationController.eventRegistration()
 
 

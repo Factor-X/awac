@@ -1376,7 +1376,7 @@ if (ap23 == null) {
         
 ap24 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP24);
 if (ap24 == null) {
-    ap24 = new DoubleQuestion( ap17, 0, QuestionCode.AP24, moneyUnits, getUnitBySymbol("€") );
+    ap24 = new DoubleQuestion( ap17, 0, QuestionCode.AP24, moneyUnits, getUnitBySymbol("EUR") );
     JPA.em().persist(ap24);
 
     // cleanup the driver
@@ -1396,7 +1396,7 @@ if (ap24 == null) {
     }
     ((NumericQuestion)ap24).setUnitCategory(moneyUnits);
     ap24.setOrderIndex(0);
-    ((NumericQuestion)ap24).setDefaultUnit(getUnitBySymbol("€"));
+    ((NumericQuestion)ap24).setDefaultUnit(getUnitBySymbol("EUR"));
 
     // cleanup the driver
     Driver ap24_driver = driverService.findByName("AP24");
@@ -1550,7 +1550,7 @@ if (ap501 == null) {
         
 ap26 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP26);
 if (ap26 == null) {
-    ap26 = new DoubleQuestion( ap17, 0, QuestionCode.AP26, moneyUnits, getUnitBySymbol("€") );
+    ap26 = new DoubleQuestion( ap17, 0, QuestionCode.AP26, moneyUnits, getUnitBySymbol("EUR") );
     JPA.em().persist(ap26);
 
     // cleanup the driver
@@ -1581,7 +1581,7 @@ if (ap26 == null) {
     }
     ((NumericQuestion)ap26).setUnitCategory(moneyUnits);
     ap26.setOrderIndex(0);
-    ((NumericQuestion)ap26).setDefaultUnit(getUnitBySymbol("€"));
+    ((NumericQuestion)ap26).setDefaultUnit(getUnitBySymbol("EUR"));
 
     // cleanup the driver
     Driver ap26_driver = driverService.findByName("AP26");
@@ -1613,7 +1613,7 @@ if (ap26 == null) {
         
 ap27 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP27);
 if (ap27 == null) {
-    ap27 = new DoubleQuestion( ap17, 0, QuestionCode.AP27, moneyUnits, getUnitBySymbol("€") );
+    ap27 = new DoubleQuestion( ap17, 0, QuestionCode.AP27, moneyUnits, getUnitBySymbol("EUR") );
     JPA.em().persist(ap27);
 
     // cleanup the driver
@@ -1644,7 +1644,7 @@ if (ap27 == null) {
     }
     ((NumericQuestion)ap27).setUnitCategory(moneyUnits);
     ap27.setOrderIndex(0);
-    ((NumericQuestion)ap27).setDefaultUnit(getUnitBySymbol("€"));
+    ((NumericQuestion)ap27).setDefaultUnit(getUnitBySymbol("EUR"));
 
     // cleanup the driver
     Driver ap27_driver = driverService.findByName("AP27");
@@ -1676,7 +1676,7 @@ if (ap27 == null) {
         
 ap28 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP28);
 if (ap28 == null) {
-    ap28 = new DoubleQuestion( ap17, 0, QuestionCode.AP28, moneyUnits, getUnitBySymbol("€") );
+    ap28 = new DoubleQuestion( ap17, 0, QuestionCode.AP28, moneyUnits, getUnitBySymbol("EUR") );
     JPA.em().persist(ap28);
 
     // cleanup the driver
@@ -1707,7 +1707,7 @@ if (ap28 == null) {
     }
     ((NumericQuestion)ap28).setUnitCategory(moneyUnits);
     ap28.setOrderIndex(0);
-    ((NumericQuestion)ap28).setDefaultUnit(getUnitBySymbol("€"));
+    ((NumericQuestion)ap28).setDefaultUnit(getUnitBySymbol("EUR"));
 
     // cleanup the driver
     Driver ap28_driver = driverService.findByName("AP28");
@@ -1739,7 +1739,7 @@ if (ap28 == null) {
         
 ap29 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP29);
 if (ap29 == null) {
-    ap29 = new DoubleQuestion( ap17, 0, QuestionCode.AP29, moneyUnits, getUnitBySymbol("€") );
+    ap29 = new DoubleQuestion( ap17, 0, QuestionCode.AP29, moneyUnits, getUnitBySymbol("EUR") );
     JPA.em().persist(ap29);
 
     // cleanup the driver
@@ -1770,7 +1770,7 @@ if (ap29 == null) {
     }
     ((NumericQuestion)ap29).setUnitCategory(moneyUnits);
     ap29.setOrderIndex(0);
-    ((NumericQuestion)ap29).setDefaultUnit(getUnitBySymbol("€"));
+    ((NumericQuestion)ap29).setDefaultUnit(getUnitBySymbol("EUR"));
 
     // cleanup the driver
     Driver ap29_driver = driverService.findByName("AP29");
@@ -1802,7 +1802,7 @@ if (ap29 == null) {
         
 ap30 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP30);
 if (ap30 == null) {
-    ap30 = new DoubleQuestion( ap17, 0, QuestionCode.AP30, moneyUnits, getUnitBySymbol("€") );
+    ap30 = new DoubleQuestion( ap17, 0, QuestionCode.AP30, moneyUnits, getUnitBySymbol("EUR") );
     JPA.em().persist(ap30);
 
     // cleanup the driver
@@ -1833,7 +1833,7 @@ if (ap30 == null) {
     }
     ((NumericQuestion)ap30).setUnitCategory(moneyUnits);
     ap30.setOrderIndex(0);
-    ((NumericQuestion)ap30).setDefaultUnit(getUnitBySymbol("€"));
+    ((NumericQuestion)ap30).setDefaultUnit(getUnitBySymbol("EUR"));
 
     // cleanup the driver
     Driver ap30_driver = driverService.findByName("AP30");
@@ -2326,7 +2326,7 @@ if (ap45 == null) {
         
 ap46 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP46);
 if (ap46 == null) {
-    ap46 = new DoubleQuestion( ap41, 0, QuestionCode.AP46, moneyUnits, getUnitBySymbol("€") );
+    ap46 = new DoubleQuestion( ap41, 0, QuestionCode.AP46, moneyUnits, getUnitBySymbol("EUR") );
     JPA.em().persist(ap46);
 
     // cleanup the driver
@@ -2346,7 +2346,7 @@ if (ap46 == null) {
     }
     ((NumericQuestion)ap46).setUnitCategory(moneyUnits);
     ap46.setOrderIndex(0);
-    ((NumericQuestion)ap46).setDefaultUnit(getUnitBySymbol("€"));
+    ((NumericQuestion)ap46).setDefaultUnit(getUnitBySymbol("EUR"));
 
     // cleanup the driver
     Driver ap46_driver = driverService.findByName("AP46");
@@ -2369,7 +2369,7 @@ if (ap46 == null) {
         
 ap47 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP47);
 if (ap47 == null) {
-    ap47 = new DoubleQuestion( ap41, 0, QuestionCode.AP47, moneyUnits, getUnitBySymbol("€") );
+    ap47 = new DoubleQuestion( ap41, 0, QuestionCode.AP47, moneyUnits, getUnitBySymbol("EUR") );
     JPA.em().persist(ap47);
 
     // cleanup the driver
@@ -2400,7 +2400,7 @@ if (ap47 == null) {
     }
     ((NumericQuestion)ap47).setUnitCategory(moneyUnits);
     ap47.setOrderIndex(0);
-    ((NumericQuestion)ap47).setDefaultUnit(getUnitBySymbol("€"));
+    ((NumericQuestion)ap47).setDefaultUnit(getUnitBySymbol("EUR"));
 
     // cleanup the driver
     Driver ap47_driver = driverService.findByName("AP47");
