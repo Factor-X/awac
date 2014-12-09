@@ -55,7 +55,7 @@ public class BaseActivityDataAM_BAD11 extends ActivityResultContributor {
 
             baseActivityData.setActivityOwnership(true);
             baseActivityData.setUnit(baseActivityDataUnit);
-            baseActivityData.setValue(24*52/1000);
+            baseActivityData.setValue(24.0*52.0/1000.0);
             res.add(baseActivityData);
 
             
