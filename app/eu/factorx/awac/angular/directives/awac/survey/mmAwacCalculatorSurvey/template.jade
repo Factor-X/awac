@@ -13,7 +13,7 @@ div
                         .calculateur_type(ng-bind-html='\'TITLE_MUNICIPALITY\' | translate', ng-if="$root.instanceName == 'municipality'")
                         .calculateur_type(ng-bind-html='\'TITLE_HOUSEHOLD\' | translate', ng-if="$root.instanceName == 'household'")
                         .calculateur_type(ng-bind-html='\'TITLE_EVENT\' | translate', ng-if="$root.instanceName == 'event'")
-                        .calculateur_type(ng-bind-html='\'TITLE_LITTLEEMITTER\' | translate', ng-if="$root.instanceName == 'littleemitter'")
+                        .calculateur_type(ng-bind-html='\'TITLE_LITTLE_EMITTER\' | translate', ng-if="$root.instanceName == 'littleemitter'")
 
                     td
                         select.language-chooser(ng-options='l.value as l.label for l in $root.languages', ng-model='$root.language')

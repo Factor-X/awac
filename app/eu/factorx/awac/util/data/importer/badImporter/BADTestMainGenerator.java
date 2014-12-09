@@ -35,7 +35,13 @@ public class BADTestMainGenerator {
 
 
         //create template
-        BADTemplate badTemplate = new BADTemplate("public/template/badTestMain.vm", "BadTest.java");
+        BADTemplate badTemplate = new BADTemplate(templateName.getTestMainTemplate(), "BadTest.java");
+
+        //insert user
+        badTemplate.addParameter("user", templateName.getUserIdentifier());
+
+        //insert calculator type
+        badTemplate.addParameter("calculatorType",templateName.getInterfaceTypeCode().getKey().toUpperCase());
 
         //inset questions
         badTemplate.addParameter("bads", result);

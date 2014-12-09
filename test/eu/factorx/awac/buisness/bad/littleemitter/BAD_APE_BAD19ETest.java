@@ -1,4 +1,4 @@
-package eu.factorx.awac.buisness.bad.household;
+package eu.factorx.awac.buisness.bad.littleemitter;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import eu.factorx.awac.controllers.SecuredController;
@@ -6,7 +6,7 @@ import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
 import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.models.business.Scope;
-import eu.factorx.awac.models.business.Site;
+import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.knowledge.Period;
@@ -14,8 +14,8 @@ import eu.factorx.awac.models.reporting.BaseActivityData;
 import eu.factorx.awac.service.PeriodService;
 import eu.factorx.awac.service.QuestionSetAnswerService;
 import eu.factorx.awac.service.ScopeService;
-import eu.factorx.awac.service.SiteService;
-import eu.factorx.awac.service.knowledge.activity.contributor.household.*;
+import eu.factorx.awac.service.OrganizationService;
+import eu.factorx.awac.service.knowledge.activity.contributor.littleemitter.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,10 +32,10 @@ import static play.test.Helpers.callAction;
 import static play.test.Helpers.status;
 
 /*
- * Test for bad ${bad.getBaseActivityDataCode()}
+ * Test for bad APE_BAD19E
 */
 @Component
-public class BAD_${bad.getBaseActivityDataCode()}Test{
+public class BAD_APE_BAD19ETest{
 
     private static final Double ERROR_MARGE = 0.0001;
 
@@ -43,7 +43,7 @@ public class BAD_${bad.getBaseActivityDataCode()}Test{
     private QuestionSetAnswerService questionSetAnswerService;
 
     @Autowired
-    private SiteService siteService;
+    private OrganizationService organizationService;
 
     @Autowired
     private ScopeService scopeService;
@@ -52,21 +52,21 @@ public class BAD_${bad.getBaseActivityDataCode()}Test{
     private PeriodService periodService;
 
     @Autowired
-    private BaseActivityData${bad.getBaseActivityDataCode()} baseActivityData${bad.getBaseActivityDataCode()};
+    private BaseActivityDataAPE_BAD19E baseActivityDataAPE_BAD19E;
 
     private final static Long FORM_ID = 2L;
     private final static Long PERIOD_ID = 1L;
-    private String identifier = "user1";
+    private String identifier = "user20";
     private String identifierPassword = "password";
 
     /**
      * run test
-     * need an id of a scope (site)
-     * @param siteId
+     * need an id of a scope (organization)
+     * @param organizationId
      */
-    public void test(long siteId){
+    public void test(long organizationId){
 
-        Site site = siteService.findById(siteId);
+        Organization organization= organizationService.findById(organizationId);
         Period period = periodService.findById(PERIOD_ID);
 
         //
@@ -75,13 +75,13 @@ public class BAD_${bad.getBaseActivityDataCode()}Test{
         QuestionAnswersDTO questionAnswersDTO = new QuestionAnswersDTO();
         questionAnswersDTO.setFormId(FORM_ID);
         questionAnswersDTO.setPeriodId(PERIOD_ID);
-        questionAnswersDTO.setScopeId(site.getId());
+        questionAnswersDTO.setScopeId(organization.getId());
         questionAnswersDTO.setLastUpdateDate(new Date().toString());
 
         List<AnswerLineDTO> answerLineDTOList = new ArrayList<>();
 
         //add answers
-                answerLineDTOList.addAll(buildAnswerAM179());
+                answerLineDTOList.addAll(buildAnswerAP194());
         
         questionAnswersDTO.setListAnswers(answerLineDTOList);
 
@@ -113,13 +113,13 @@ public class BAD_${bad.getBaseActivityDataCode()}Test{
         //TODO temporary
         JPA.em().clear();
         JPA.em().flush();
-        Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(site, period);
-        List<BaseActivityData> bads = baseActivityData${bad.getBaseActivityDataCode()}.getBaseActivityData(questionSetAnswers);
+        Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(organization, period);
+        List<BaseActivityData> bads = baseActivityDataAPE_BAD19E.getBaseActivityData(questionSetAnswers);
 
         //control content
         //map mapResult
         Map<Double, Boolean> mapResult = new HashMap<>();
-                mapResult.put(5.0, false);
+                mapResult.put(500.0, false);
         
         String valueGenerated = "";
 
@@ -147,15 +147,15 @@ public class BAD_${bad.getBaseActivityDataCode()}Test{
 
         /**
      * build the AnswerLineDTO
-     * question : AM179
+     * question : AP194
      */
-    private List<AnswerLineDTO> buildAnswerAM179(){
+    private List<AnswerLineDTO> buildAnswerAP194(){
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
-                list.add(new AnswerLineDTO("AM179",1000000.0,  mapRepetition1 ));
+                list.add(new AnswerLineDTO("AP194",500.0,  mapRepetition1  , UnitCode.U5135.getKey()  ));
         
         return list;
     }
