@@ -8,7 +8,7 @@ initializeEventRoutes = (defaultResolve) ->
         $rootScope.onFormPath = (period, scope) ->
             $location.path($rootScope.getFormPath() + '/' + period + '/' + scope)
         $rootScope.getFormPath = ()->
-            return '/form/TAB_E1'
+            return '/form/TAB_EV1'
         $rootScope.getDefaultRoute = ()->
             return $rootScope.getFormPath()
 
