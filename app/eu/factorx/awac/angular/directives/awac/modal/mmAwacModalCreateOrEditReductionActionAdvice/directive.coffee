@@ -34,7 +34,7 @@ angular
                 return codeLabel.key.startsWith("BIPE_")
             )
             event: _.filter(baseIndicatorCodeLabels, (codeLabel) ->
-                return codeLabel.key.startsWith("BiEV_")
+                return codeLabel.key.startsWith("BIEv_")
             )
 
         $scope.editMode = !!actionAdvice
