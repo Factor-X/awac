@@ -9,7 +9,7 @@ GET         /                                                                   
 GET         /enterprise                                                          @eu.factorx.awac.controllers.ApplicationController.calculator(app= "enterprise")
 GET         /municipality                                                        @eu.factorx.awac.controllers.ApplicationController.calculator(app= "municipality")
 GET         /event                                                               @eu.factorx.awac.controllers.ApplicationController.calculator(app= "event")
-GET         /little_emitter                                                      @eu.factorx.awac.controllers.ApplicationController.calculator(app= "little-emitter")
+GET         /little-emitter                                                      @eu.factorx.awac.controllers.ApplicationController.calculator(app= "little-emitter")
 GET         /household                                                           @eu.factorx.awac.controllers.ApplicationController.calculator(app= "household")
 GET         /verification                                                        @eu.factorx.awac.controllers.ApplicationController.verification()
 GET         /admin                                                               @eu.factorx.awac.controllers.ApplicationController.admin()
@@ -39,7 +39,7 @@ POST        /awac/registration/enterprise                                       
 POST        /awac/registration/municipality                                      @eu.factorx.awac.controllers.RegistrationController.municipalityRegistration()
 POST        /awac/registration/household                                         @eu.factorx.awac.controllers.RegistrationController.householdRegistration()
 POST        /awac/registration/validator                                         @eu.factorx.awac.controllers.RegistrationController.verificationRegistration()
-POST        /awac/registration/little_emitter                                    @eu.factorx.awac.controllers.RegistrationController.littleEmitterRegistration()
+POST        /awac/registration/little-emitter                                    @eu.factorx.awac.controllers.RegistrationController.littleEmitterRegistration()
 POST        /awac/registration/event                                             @eu.factorx.awac.controllers.RegistrationController.eventRegistration()
 
 
@@ -132,7 +132,7 @@ GET         /awac/admin/indicators_factors/reset                                
 GET         /awac/admin/enterprise_survey/create                                 @eu.factorx.awac.controllers.AdminController.createEnterpriseSurveyData()
 GET         /awac/admin/municipality_survey/create                               @eu.factorx.awac.controllers.AdminController.createMunicipalitySurveyData()
 GET         /awac/admin/household_survey/create                                  @eu.factorx.awac.controllers.AdminController.createHouseholdSurveyData()
-GET         /awac/admin/little_emitter_survey/create                             @eu.factorx.awac.controllers.AdminController.createLittleEmitterSurveyData()
+GET         /awac/admin/little-emitter_survey/create                             @eu.factorx.awac.controllers.AdminController.createLittleEmitterSurveyData()
 GET         /awac/admin/event_survey/create                                      @eu.factorx.awac.controllers.AdminController.createEventSurveyData()
 
 GET         /awac/admin/badImporter/:interfaceString                             @eu.factorx.awac.controllers.AdminController.runBADImporter(interfaceString:String)

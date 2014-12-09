@@ -1,0 +1,1 @@
+update awaccalculator set fr_enabled = true;

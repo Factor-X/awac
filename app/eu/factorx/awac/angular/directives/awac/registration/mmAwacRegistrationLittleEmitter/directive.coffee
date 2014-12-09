@@ -100,7 +100,7 @@ angular
                 data.person.defaultLanguage = $scope.$root.language
 
                 #send request
-                downloadService.postJson '/awac/registration/little_emitter', data, (result) ->
+                downloadService.postJson '/awac/registration/little-emitter', data, (result) ->
                     if result.success
                         $scope.$root.loginSuccess(result.data)
                         messageFlash.displaySuccess translationService.get "CONNECTION_MESSAGE_SUCCESS"

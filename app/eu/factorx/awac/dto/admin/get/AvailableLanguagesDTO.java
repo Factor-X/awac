@@ -38,6 +38,15 @@ public class AvailableLanguagesDTO extends DTO {
     public void setEnEnabled(boolean enEnabled) {
         this.enEnabled = enEnabled;
     }
+
+    @Override
+    public String toString() {
+        return "AvailableLanguagesDTO{" +
+                "frEnabled=" + frEnabled +
+                ", nlEnabled=" + nlEnabled +
+                ", enEnabled=" + enEnabled +
+                '}';
+    }
 }
 
 
