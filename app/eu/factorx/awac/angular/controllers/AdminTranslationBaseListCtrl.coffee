@@ -75,8 +75,13 @@ angular
             return "enterprise"
         if codeKey.startsWith("ICo_") || codeKey.startsWith("BICo_")
             return "municipality"
+        if codeKey.startsWith("IMe_") || codeKey.startsWith("BIMe_")
+            return "household"
+        if codeKey.startsWith("IPE_") || codeKey.startsWith("BIPE_")
+            return "littleEmitter"
+        if codeKey.startsWith("IEV_") || codeKey.startsWith("BiEV_")
+            return "event"
         return
-
 
     $scope.sortItems = (baseLists) ->
         res = _.sortBy(baseLists, "codeList")
