@@ -11,7 +11,7 @@ div
             
             mm-awac-question(question-code="AEV6")
 
-            mm-awac-question(question-code="AEV7")
+            mm-awac-question(question-code="AEV7", ng-aggregation="(getAnswer('AEV5').value | nullToZero)-(getAnswer('AEV6').value | nullToZero)")
 
             mm-awac-question(question-code="AEV8")
 
