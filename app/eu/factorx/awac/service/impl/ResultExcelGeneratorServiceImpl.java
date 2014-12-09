@@ -523,6 +523,18 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 
                 }
 
+                // DATE
+                if (answerValue instanceof DateTimeAnswerValue) {
+                    DateTimeAnswerValue value = (DateTimeAnswerValue) answerValue;
+
+                    sheet.addCell(new DateTime(
+                        cell.getX() + col,
+                        cell.getY(),
+                        value.getDateTime().toDate()
+                    ));
+
+                }
+
                 col++;
             }
 
