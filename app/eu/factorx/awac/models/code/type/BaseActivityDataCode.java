@@ -248,6 +248,162 @@ public class BaseActivityDataCode extends Code {
     public static final BaseActivityDataCode AC_BAD27 = new BaseActivityDataCode("AC_BAD27");
 
 
+    /**
+     * BAD household
+     */
+    public static final BaseActivityDataCode AM_BAD1A = new BaseActivityDataCode("AM_BAD1A");
+    public static final BaseActivityDataCode AM_BAD1B = new BaseActivityDataCode("AM_BAD1B");
+    public static final BaseActivityDataCode AM_BAD1C = new BaseActivityDataCode("AM_BAD1C");
+    public static final BaseActivityDataCode AM_BAD1D = new BaseActivityDataCode("AM_BAD1D");
+    public static final BaseActivityDataCode AM_BAD1E = new BaseActivityDataCode("AM_BAD1E");
+    public static final BaseActivityDataCode AM_BAD1F = new BaseActivityDataCode("AM_BAD1F");
+    public static final BaseActivityDataCode AM_BAD1G = new BaseActivityDataCode("AM_BAD1G");
+    public static final BaseActivityDataCode AM_BAD1H = new BaseActivityDataCode("AM_BAD1H");
+    public static final BaseActivityDataCode AM_BAD1I = new BaseActivityDataCode("AM_BAD1I");
+    public static final BaseActivityDataCode AM_BAD1J = new BaseActivityDataCode("AM_BAD1J");
+    public static final BaseActivityDataCode AM_BAD2A = new BaseActivityDataCode("AM_BAD2A");
+    public static final BaseActivityDataCode AM_BAD2B = new BaseActivityDataCode("AM_BAD2B");
+    public static final BaseActivityDataCode AM_BAD2C = new BaseActivityDataCode("AM_BAD2C");
+    public static final BaseActivityDataCode AM_BAD2D = new BaseActivityDataCode("AM_BAD2D");
+    public static final BaseActivityDataCode AM_BAD2E = new BaseActivityDataCode("AM_BAD2E");
+    public static final BaseActivityDataCode AM_BAD2F = new BaseActivityDataCode("AM_BAD2F");
+    public static final BaseActivityDataCode AM_BAD3A = new BaseActivityDataCode("AM_BAD3A");
+    public static final BaseActivityDataCode AM_BAD3B = new BaseActivityDataCode("AM_BAD3B");
+    public static final BaseActivityDataCode AM_BAD3C = new BaseActivityDataCode("AM_BAD3C");
+    public static final BaseActivityDataCode AM_BAD3D = new BaseActivityDataCode("AM_BAD3D");
+    public static final BaseActivityDataCode AM_BAD4 = new BaseActivityDataCode("AM_BAD4");
+    public static final BaseActivityDataCode AM_BAD5 = new BaseActivityDataCode("AM_BAD5");
+    public static final BaseActivityDataCode AM_BAD6 = new BaseActivityDataCode("AM_BAD6");
+    public static final BaseActivityDataCode AM_BAD7 = new BaseActivityDataCode("AM_BAD7");
+    public static final BaseActivityDataCode AM_BAD8 = new BaseActivityDataCode("AM_BAD8");
+    public static final BaseActivityDataCode AM_BAD9 = new BaseActivityDataCode("AM_BAD9");
+    public static final BaseActivityDataCode AM_BAD10 = new BaseActivityDataCode("AM_BAD10");
+    public static final BaseActivityDataCode AM_BAD11 = new BaseActivityDataCode("AM_BAD11");
+    public static final BaseActivityDataCode AM_BAD12A = new BaseActivityDataCode("AM_BAD12A");
+    public static final BaseActivityDataCode AM_BAD12B = new BaseActivityDataCode("AM_BAD12B");
+    public static final BaseActivityDataCode AM_BAD12C = new BaseActivityDataCode("AM_BAD12C");
+    public static final BaseActivityDataCode AM_BAD12D = new BaseActivityDataCode("AM_BAD12D");
+    public static final BaseActivityDataCode AM_BAD12E = new BaseActivityDataCode("AM_BAD12E");
+    public static final BaseActivityDataCode AM_BAD12F = new BaseActivityDataCode("AM_BAD12F");
+    public static final BaseActivityDataCode AM_BAD13A = new BaseActivityDataCode("AM_BAD13A");
+    public static final BaseActivityDataCode AM_BAD13B = new BaseActivityDataCode("AM_BAD13B");
+    public static final BaseActivityDataCode AM_BAD13C = new BaseActivityDataCode("AM_BAD13C");
+    public static final BaseActivityDataCode AM_BAD14A = new BaseActivityDataCode("AM_BAD14A");
+    public static final BaseActivityDataCode AM_BAD14B = new BaseActivityDataCode("AM_BAD14B");
+    public static final BaseActivityDataCode AM_BAD14C = new BaseActivityDataCode("AM_BAD14C");
+
+
+    /**
+     * BAD little emitters
+     */
+    public static final BaseActivityDataCode APE_BAD1A = new BaseActivityDataCode("APE_BAD1A");
+    public static final BaseActivityDataCode APE_BAD1B = new BaseActivityDataCode("APE_BAD1B");
+    public static final BaseActivityDataCode APE_BAD1C = new BaseActivityDataCode("APE_BAD1C");
+    public static final BaseActivityDataCode APE_BAD1D = new BaseActivityDataCode("APE_BAD1D");
+    public static final BaseActivityDataCode APE_BAD1E = new BaseActivityDataCode("APE_BAD1E");
+    public static final BaseActivityDataCode APE_BAD1F = new BaseActivityDataCode("APE_BAD1F");
+    public static final BaseActivityDataCode APE_BAD1G = new BaseActivityDataCode("APE_BAD1G");
+    public static final BaseActivityDataCode APE_BAD1H = new BaseActivityDataCode("APE_BAD1H");
+    public static final BaseActivityDataCode APE_BAD1I = new BaseActivityDataCode("APE_BAD1I");
+    public static final BaseActivityDataCode APE_BAD1J = new BaseActivityDataCode("APE_BAD1J");
+    public static final BaseActivityDataCode APE_BAD1K = new BaseActivityDataCode("APE_BAD1K");
+    public static final BaseActivityDataCode APE_BAD2A = new BaseActivityDataCode("APE_BAD2A");
+    public static final BaseActivityDataCode APE_BAD2B = new BaseActivityDataCode("APE_BAD2B");
+    public static final BaseActivityDataCode APE_BAD2C = new BaseActivityDataCode("APE_BAD2C");
+    public static final BaseActivityDataCode APE_BAD2D = new BaseActivityDataCode("APE_BAD2D");
+    public static final BaseActivityDataCode APE_BAD2E = new BaseActivityDataCode("APE_BAD2E");
+    public static final BaseActivityDataCode APE_BAD2F = new BaseActivityDataCode("APE_BAD2F");
+    public static final BaseActivityDataCode APE_BAD3 = new BaseActivityDataCode("APE_BAD3");
+    public static final BaseActivityDataCode APE_BAD4 = new BaseActivityDataCode("APE_BAD4");
+    public static final BaseActivityDataCode APE_BAD5A = new BaseActivityDataCode("APE_BAD5A");
+    public static final BaseActivityDataCode APE_BAD5B = new BaseActivityDataCode("APE_BAD5B");
+    public static final BaseActivityDataCode APE_BAD5C = new BaseActivityDataCode("APE_BAD5C");
+    public static final BaseActivityDataCode APE_BAD6 = new BaseActivityDataCode("APE_BAD6");
+    public static final BaseActivityDataCode APE_BAD7A = new BaseActivityDataCode("APE_BAD7A");
+    public static final BaseActivityDataCode APE_BAD7B = new BaseActivityDataCode("APE_BAD7B");
+    public static final BaseActivityDataCode APE_BAD7C = new BaseActivityDataCode("APE_BAD7C");
+    public static final BaseActivityDataCode APE_BAD7D = new BaseActivityDataCode("APE_BAD7D");
+    public static final BaseActivityDataCode APE_BAD7E = new BaseActivityDataCode("APE_BAD7E");
+    public static final BaseActivityDataCode APE_BAD7F = new BaseActivityDataCode("APE_BAD7F");
+    public static final BaseActivityDataCode APE_BAD7G = new BaseActivityDataCode("APE_BAD7G");
+    public static final BaseActivityDataCode APE_BAD7H = new BaseActivityDataCode("APE_BAD7H");
+    public static final BaseActivityDataCode APE_BAD8A = new BaseActivityDataCode("APE_BAD8A");
+    public static final BaseActivityDataCode APE_BAD8B = new BaseActivityDataCode("APE_BAD8B");
+    public static final BaseActivityDataCode APE_BAD8C = new BaseActivityDataCode("APE_BAD8C");
+    public static final BaseActivityDataCode APE_BAD8D = new BaseActivityDataCode("APE_BAD8D");
+    public static final BaseActivityDataCode APE_BAD8E = new BaseActivityDataCode("APE_BAD8E");
+    public static final BaseActivityDataCode APE_BAD8F = new BaseActivityDataCode("APE_BAD8F");
+    public static final BaseActivityDataCode APE_BAD8G = new BaseActivityDataCode("APE_BAD8G");
+    public static final BaseActivityDataCode APE_BAD8H = new BaseActivityDataCode("APE_BAD8H");
+    public static final BaseActivityDataCode APE_BAD9 = new BaseActivityDataCode("APE_BAD9");
+    public static final BaseActivityDataCode APE_BAD10 = new BaseActivityDataCode("APE_BAD10");
+    public static final BaseActivityDataCode APE_BAD11 = new BaseActivityDataCode("APE_BAD11");
+    public static final BaseActivityDataCode APE_BAD12 = new BaseActivityDataCode("APE_BAD12");
+    public static final BaseActivityDataCode APE_BAD13 = new BaseActivityDataCode("APE_BAD13");
+    public static final BaseActivityDataCode APE_BAD14 = new BaseActivityDataCode("APE_BAD14");
+    public static final BaseActivityDataCode APE_BAD15 = new BaseActivityDataCode("APE_BAD15");
+    public static final BaseActivityDataCode APE_BAD16A = new BaseActivityDataCode("APE_BAD16A");
+    public static final BaseActivityDataCode APE_BAD16B = new BaseActivityDataCode("APE_BAD16B");
+    public static final BaseActivityDataCode APE_BAD16C = new BaseActivityDataCode("APE_BAD16C");
+    public static final BaseActivityDataCode APE_BAD17A = new BaseActivityDataCode("APE_BAD17A");
+    public static final BaseActivityDataCode APE_BAD17B = new BaseActivityDataCode("APE_BAD17B");
+    public static final BaseActivityDataCode APE_BAD17C = new BaseActivityDataCode("APE_BAD17C");
+    public static final BaseActivityDataCode APE_BAD18A = new BaseActivityDataCode("APE_BAD18A");
+    public static final BaseActivityDataCode APE_BAD18B = new BaseActivityDataCode("APE_BAD18B");
+    public static final BaseActivityDataCode APE_BAD18C = new BaseActivityDataCode("APE_BAD18C");
+    public static final BaseActivityDataCode APE_BAD19A = new BaseActivityDataCode("APE_BAD19A");
+    public static final BaseActivityDataCode APE_BAD19B = new BaseActivityDataCode("APE_BAD19B");
+    public static final BaseActivityDataCode APE_BAD19C = new BaseActivityDataCode("APE_BAD19C");
+    public static final BaseActivityDataCode APE_BAD19D = new BaseActivityDataCode("APE_BAD19D");
+    public static final BaseActivityDataCode APE_BAD19E = new BaseActivityDataCode("APE_BAD19E");
+    public static final BaseActivityDataCode APE_BAD19F = new BaseActivityDataCode("APE_BAD19F");
+
+    /**
+     * BAD event
+     */
+    public static final BaseActivityDataCode AEV_BAD1A = new BaseActivityDataCode("AEV_BAD1A");
+    public static final BaseActivityDataCode AEV_BAD1B = new BaseActivityDataCode("AEV_BAD1B");
+    public static final BaseActivityDataCode AEV_BAD1C = new BaseActivityDataCode("AEV_BAD1C");
+    public static final BaseActivityDataCode AEV_BAD1D = new BaseActivityDataCode("AEV_BAD1D");
+    public static final BaseActivityDataCode AEV_BAD1E = new BaseActivityDataCode("AEV_BAD1E");
+    public static final BaseActivityDataCode AEV_BAD1F = new BaseActivityDataCode("AEV_BAD1F");
+    public static final BaseActivityDataCode AEV_BAD2A = new BaseActivityDataCode("AEV_BAD2A");
+    public static final BaseActivityDataCode AEV_BAD2B = new BaseActivityDataCode("AEV_BAD2B");
+    public static final BaseActivityDataCode AEV_BAD3A = new BaseActivityDataCode("AEV_BAD3A");
+    public static final BaseActivityDataCode AEV_BAD3B = new BaseActivityDataCode("AEV_BAD3B");
+    public static final BaseActivityDataCode AEV_BAD4A = new BaseActivityDataCode("AEV_BAD4A");
+    public static final BaseActivityDataCode AEV_BAD4B = new BaseActivityDataCode("AEV_BAD4B");
+    public static final BaseActivityDataCode AEV_BAD4C = new BaseActivityDataCode("AEV_BAD4C");
+    public static final BaseActivityDataCode AEV_BAD4D = new BaseActivityDataCode("AEV_BAD4D");
+    public static final BaseActivityDataCode AEV_BAD4E = new BaseActivityDataCode("AEV_BAD4E");
+    public static final BaseActivityDataCode AEV_BAD4F = new BaseActivityDataCode("AEV_BAD4F");
+    public static final BaseActivityDataCode AEV_BAD4G = new BaseActivityDataCode("AEV_BAD4G");
+    public static final BaseActivityDataCode AEV_BAD5 = new BaseActivityDataCode("AEV_BAD5");
+    public static final BaseActivityDataCode AEV_BAD6 = new BaseActivityDataCode("AEV_BAD6");
+    public static final BaseActivityDataCode AEV_BAD7A = new BaseActivityDataCode("AEV_BAD7A");
+    public static final BaseActivityDataCode AEV_BAD7B = new BaseActivityDataCode("AEV_BAD7B");
+    public static final BaseActivityDataCode AEV_BAD7C = new BaseActivityDataCode("AEV_BAD7C");
+    public static final BaseActivityDataCode AEV_BAD7D = new BaseActivityDataCode("AEV_BAD7D");
+    public static final BaseActivityDataCode AEV_BAD7E = new BaseActivityDataCode("AEV_BAD7E");
+    public static final BaseActivityDataCode AEV_BAD8 = new BaseActivityDataCode("AEV_BAD8");
+    public static final BaseActivityDataCode AEV_BAD9 = new BaseActivityDataCode("AEV_BAD9");
+    public static final BaseActivityDataCode AEV_BAD10A = new BaseActivityDataCode("AEV_BAD10A");
+    public static final BaseActivityDataCode AEV_BAD10B = new BaseActivityDataCode("AEV_BAD10B");
+    public static final BaseActivityDataCode AEV_BAD10C = new BaseActivityDataCode("AEV_BAD10C");
+    public static final BaseActivityDataCode AEV_BAD10D = new BaseActivityDataCode("AEV_BAD10D");
+    public static final BaseActivityDataCode AEV_BAD10E = new BaseActivityDataCode("AEV_BAD10E");
+    public static final BaseActivityDataCode AEV_BAD10F = new BaseActivityDataCode("AEV_BAD10F");
+    public static final BaseActivityDataCode AEV_BAD11A = new BaseActivityDataCode("AEV_BAD11A");
+    public static final BaseActivityDataCode AEV_BAD11B = new BaseActivityDataCode("AEV_BAD11B");
+    public static final BaseActivityDataCode AEV_BAD11C = new BaseActivityDataCode("AEV_BAD11C");
+    public static final BaseActivityDataCode AEV_BAD11D = new BaseActivityDataCode("AEV_BAD11D");
+    public static final BaseActivityDataCode AEV_BAD12 = new BaseActivityDataCode("AEV_BAD12");
+    public static final BaseActivityDataCode AEV_BAD13A = new BaseActivityDataCode("AEV_BAD13A");
+    public static final BaseActivityDataCode AEV_BAD13B = new BaseActivityDataCode("AEV_BAD13B");
+    public static final BaseActivityDataCode AEV_BAD13C = new BaseActivityDataCode("AEV_BAD13C");
+
+
+
     private static final long serialVersionUID = 1L;
 
 	protected BaseActivityDataCode() {
