@@ -154,7 +154,10 @@ public class BAD_AM_BAD2ATest{
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
-         
+                 //add repetition
+        Map<String, Integer> mapRepetition1 = new HashMap<>();
+                list.add(new AnswerLineDTO("AM49","AS_3",  mapRepetition1 ));
+        
         return list;
     }
         /**
@@ -165,7 +168,10 @@ public class BAD_AM_BAD2ATest{
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
-         
+                 //add repetition
+        Map<String, Integer> mapRepetition1 = new HashMap<>();
+                list.add(new AnswerLineDTO("AM52",2.5,  mapRepetition1  , UnitCode.U5122.getKey()  ));
+        
         return list;
     }
     

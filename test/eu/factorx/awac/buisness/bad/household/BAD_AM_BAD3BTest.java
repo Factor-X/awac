@@ -183,7 +183,10 @@ public class BAD_AM_BAD3BTest{
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
-         
+                 //add repetition
+        Map<String, Integer> mapRepetition1 = new HashMap<>();
+                list.add(new AnswerLineDTO("AM66","2",  mapRepetition1 ));
+        
         return list;
     }
     
