@@ -1,7 +1,14 @@
-a.oneelement.dropdown-toggle(id="{{id}}",role='button', data-toggle='dropdown', data-target='#', href='')
-    .input-group
-        input.form-control(type='text', ng-model="getAnswer().value",input-date)
-        span.input-group-addon
-            i.glyphicon.glyphicon-calendar
-    ul.dropdown-menu.date_input(role='menu', aria-labelledby='dLabel')
-        datetimepicker(data-ng-model='result', data-datetimepicker-config="{ dropdownSelector: '{{idHtag}}',minView:'hour'}")
+div.oneelement
+    a.dropdown-toggle(id="{{id}}",role='button', data-toggle='dropdown', data-target='#', href='', ng-hide="ngIsAggregation")
+        .input-group
+            input.form-control(type='text', ng-model="getAnswer().value",input-date)
+            span.input-group-addon
+                i.glyphicon.glyphicon-calendar
+        ul.dropdown-menu.date_input(role='menu', aria-labelledby='dLabel')
+            datetimepicker(data-ng-model='result', data-datetimepicker-config="{ dropdownSelector: '{{idHtag}}',minView:'hour'}")
+
+    span(ng-show="ngIsAggregation")
+        span {{ (getAnswer().value / 3600000) | number:0 }}
+        span &nbsp;
+        span(ng-bind-html="'HOURS' | translate")
+
