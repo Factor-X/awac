@@ -10,7 +10,7 @@ div
 
             mm-awac-sub-title(question-code="AEV97")
 
-            mm-awac-repetition-name(question-code="AEV98", ng-condition="getAnswer('AEV80').value == '1'")
+            mm-awac-repetition-name(question-code="AEV98")
             mm-awac-repetition-question(question-set-code="AEV98", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionmapByQuestionSet('AEV98')")
                 mm-awac-question(question-code="AEV99",ng-repetition-map="itLevel1",ng-map-index="{'AEV98':$index}")
                 mm-awac-question(question-code="AEV100",ng-repetition-map="itLevel1",ng-map-index="{'AEV98':$index}")
