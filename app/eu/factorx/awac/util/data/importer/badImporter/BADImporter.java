@@ -32,8 +32,8 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
     private final static String FILE_PATH = "data_importer_resources/awac_data_09-08-2014/AWAC-tous-calcul_FE.xls";
     public static final String ENTERPRISE_METHOD = "site entreprise-activityData";
     public static final String MUNICIPALIT_METHOD = "commune-activityData";
-    private static final String EVENT_METHOD = "evenement-activityData";
-    private static final String LITTLEEMITTER_METHOD ="petit emetteur-activityData";
+    private static final String EVENT_METHOD = "evenement - activityData";
+    private static final String LITTLEEMITTER_METHOD = "petit emetteur-activityData";
     private static final String HOUSEHOLD_METHOD = "menage-activityData";
 
     private final static boolean DEBUG = false;
@@ -166,6 +166,8 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
         List<BAD> bads = new ArrayList<>();
 
 
+        int badCounter = 0;
+
         for (int line = 1; line < data.getNbRows() + 1; line++) {
 
             //escape the first line : presentation
@@ -202,6 +204,8 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
                     !data.getData(ExcelEquivalenceColumn.B, line).contains("BAD-KEY") &&
                     data.getData(ExcelEquivalenceColumn.B, line).contains("BAD")) {
 
+                badCounter++;
+
                 //create logLine
                 BADLog.LogLine logLine = badLog.getLogLine(line, BADLog.LogCat.BAD, data.getData(ExcelEquivalenceColumn.B, line) + " - " + data.getData(ExcelEquivalenceColumn.C, line));
                 badControlElement.setBadLog(logLine);
@@ -209,7 +213,7 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
                 // activity data founded
 
                 //create the bad
-                BAD bad = new BAD();
+                BAD bad = new BAD(convertOrderToString(badCounter));
 
                 bad.setLine(line);
 
@@ -274,6 +278,73 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
         //generate main test
         BADTestMainGenerator badTestMainGenerator = new BADTestMainGenerator();
         badTestMainGenerator.generateBAD(bads, templateName);
+    }
+
+    private String convertOrderToString(int badCounter) {
+        return ValueToLetter.getByValue(badCounter);
+    }
+
+
+    public enum ValueToLetter {
+        A(0),
+        B(1),
+        C(2),
+        D(3),
+        E(4),
+        F(5),
+        G(6),
+        H(7),
+        I(8),
+        J(9),
+        K(10),
+        L(11),
+        M(12),
+        N(13),
+        O(14),
+        P(15),
+        Q(16),
+        R(17),
+        S(18),
+        T(19),
+        U(20),
+        V(21),
+        W(22),
+        X(23),
+        Y(24),
+        Z(25);
+
+        private int value;
+
+        ValueToLetter(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        private static char getCharByValue(int value) {
+            for (ValueToLetter valueToLetter : ValueToLetter.values()) {
+                if (valueToLetter.value == value) {
+                    return valueToLetter.name().charAt(0);
+                }
+            }
+            return 'a';
+        }
+
+        public static String getByValue(int value) {
+            int vvv = value / 625;
+            int vv = (value - (625 * vvv)) / 25;
+            int v = ((value - (625 * vvv)) - (vv * 25));
+
+            char[] result = new char[3];
+
+            result[0] = getCharByValue(vvv);
+            result[1] = getCharByValue(vv);
+            result[2] = getCharByValue(v);
+
+            return new String(result);
+        }
     }
 }
 

@@ -80,7 +80,7 @@ public class BadTest extends AbstractBaseModelTest {
     }
     #foreach($bad in $bads)
     @Test
-    public void _00${foreach.count}_bad${bad.getBaseActivityDataCode()}() {
+    public void _${bad.getOrder()}_bad${bad.getBaseActivityDataCode()}() {
         bad_${bad.getBaseActivityDataCode()}Test.test(scopeId);
     }
     #end

@@ -208,7 +208,7 @@ public class BAD_AM_BAD1CTest{
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("AM26",3);
-                list.add(new AnswerLineDTO("AM32",4000.0,  mapRepetition1  , UnitCode.U5155.getKey()  ));
+                list.add(new AnswerLineDTO("AM32",4000.0,  mapRepetition1  , UnitCode.U5156.getKey()  ));
         
         return list;
     }

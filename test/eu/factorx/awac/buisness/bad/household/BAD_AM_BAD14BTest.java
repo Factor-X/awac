@@ -155,7 +155,7 @@ public class BAD_AM_BAD14BTest{
 
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
-                list.add(new AnswerLineDTO("AM178",2000.0,  mapRepetition1  , UnitCode.U5169.getKey()  ));
+                list.add(new AnswerLineDTO("AM178",2000.0,  mapRepetition1  , UnitCode.U5170.getKey()  ));
         
         return list;
     }

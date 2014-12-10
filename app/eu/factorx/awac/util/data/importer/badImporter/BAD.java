@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.factorx.awac.models.knowledge.Unit;
+import play.Logger;
 
 /**
  * Created by florian on 29/08/14.
  */
 public class BAD {
 
+    private String order;
     private String baseActivityDataCode;
     private String name;
     private int rank;
@@ -39,7 +41,8 @@ public class BAD {
     private List<BadTestValue> testValues = new ArrayList<>();
     private String alternativeGroup;
 
-    public BAD() {
+    public BAD(String order) {
+        this.order=order;
     }
 
     public String getBaseActivityDataCode() {
@@ -48,6 +51,10 @@ public class BAD {
 
     public void setBaseActivityDataCode(String baseActivityDataCode) {
         this.baseActivityDataCode = baseActivityDataCode;
+    }
+
+    public String getOrder() {
+        return order;
     }
 
     public String getName() {
