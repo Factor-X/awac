@@ -80,7 +80,7 @@ public class BadTest extends AbstractBaseModelTest {
     private BAD_AM_BAD2ATest bad_AM_BAD2ATest;
     
     @Autowired
-    private BAD_AM_BAD3BTest bad_AM_BAD3BTest;
+    private BAD_AM_BAD3DTest bad_AM_BAD3DTest;
     
     @Autowired
     private BAD_AM_BAD4Test bad_AM_BAD4Test;
@@ -311,8 +311,8 @@ public class BadTest extends AbstractBaseModelTest {
         bad_AM_BAD2ATest.test(scopeId);
     }
         @Test
-    public void _AAS_badAM_BAD3B() {
-        bad_AM_BAD3BTest.test(scopeId);
+    public void _AAU_badAM_BAD3D() {
+        bad_AM_BAD3DTest.test(scopeId);
     }
         @Test
     public void _AAV_badAM_BAD4() {

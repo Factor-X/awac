@@ -54,7 +54,6 @@ div
                         ng-bind-html='\'SITE_MANAGER_BUTTON\' | translate',
                         ng-click='isDisabled || $root.nav(\'/site_manager\')',
                         ng-class='{\'selected\': isMenuCurrentlySelected(\'/site_manager\') == true}',
-                        ng-hide="$root.instanceName == 'household' || $root.instanceName == 'event'",
                         ng-disabled='$root.currentPerson.isAdmin === false')
                         //  product manager button => only for event
                         button.button.user_manage(

@@ -81,12 +81,6 @@ public class BAD_AEV_BAD9Test{
         List<AnswerLineDTO> answerLineDTOList = new ArrayList<>();
 
         //add answers
-                answerLineDTOList.addAll(buildAnswerAEV99());
-                answerLineDTOList.addAll(buildAnswerAEV102());
-                answerLineDTOList.addAll(buildAnswerAEV105());
-                answerLineDTOList.addAll(buildAnswerAEV103());
-                answerLineDTOList.addAll(buildAnswerAEV104());
-                answerLineDTOList.addAll(buildAnswerAEV101());
         
         questionAnswersDTO.setListAnswers(answerLineDTOList);
 
@@ -150,96 +144,6 @@ public class BAD_AEV_BAD9Test{
 
     }
 
-        /**
-     * build the AnswerLineDTO
-     * question : AEV99
-     */
-    private List<AnswerLineDTO> buildAnswerAEV99(){
-
-        List<AnswerLineDTO> list = new ArrayList<>();
-
-                 //add repetition
-        Map<String, Integer> mapRepetition1 = new HashMap<>();
-                mapRepetition1.put("AEV98",1);
-                list.add(new AnswerLineDTO("AEV99","test",  mapRepetition1 ));
-        
-        return list;
-    }
-        /**
-     * build the AnswerLineDTO
-     * question : AEV102
-     */
-    private List<AnswerLineDTO> buildAnswerAEV102(){
-
-        List<AnswerLineDTO> list = new ArrayList<>();
-
-                 //add repetition
-        Map<String, Integer> mapRepetition1 = new HashMap<>();
-                mapRepetition1.put("AEV98",1);
-                list.add(new AnswerLineDTO("AEV102","AS_162",  mapRepetition1 ));
-        
-        return list;
-    }
-        /**
-     * build the AnswerLineDTO
-     * question : AEV105
-     */
-    private List<AnswerLineDTO> buildAnswerAEV105(){
-
-        List<AnswerLineDTO> list = new ArrayList<>();
-
-                 //add repetition
-        Map<String, Integer> mapRepetition1 = new HashMap<>();
-                mapRepetition1.put("AEV98",1);
-                list.add(new AnswerLineDTO("AEV105","1",  mapRepetition1 ));
-        
-        return list;
-    }
-        /**
-     * build the AnswerLineDTO
-     * question : AEV103
-     */
-    private List<AnswerLineDTO> buildAnswerAEV103(){
-
-        List<AnswerLineDTO> list = new ArrayList<>();
-
-                 //add repetition
-        Map<String, Integer> mapRepetition1 = new HashMap<>();
-                mapRepetition1.put("AEV98",1);
-                list.add(new AnswerLineDTO("AEV103",10.0,  mapRepetition1 ));
-        
-        return list;
-    }
-        /**
-     * build the AnswerLineDTO
-     * question : AEV104
-     */
-    private List<AnswerLineDTO> buildAnswerAEV104(){
-
-        List<AnswerLineDTO> list = new ArrayList<>();
-
-                 //add repetition
-        Map<String, Integer> mapRepetition1 = new HashMap<>();
-                mapRepetition1.put("AEV98",1);
-                list.add(new AnswerLineDTO("AEV104",100.0,  mapRepetition1  , UnitCode.U5106.getKey()  ));
-        
-        return list;
-    }
-        /**
-     * build the AnswerLineDTO
-     * question : AEV101
-     */
-    private List<AnswerLineDTO> buildAnswerAEV101(){
-
-        List<AnswerLineDTO> list = new ArrayList<>();
-
-                 //add repetition
-        Map<String, Integer> mapRepetition1 = new HashMap<>();
-                mapRepetition1.put("AEV98",1);
-                list.add(new AnswerLineDTO("AEV101",5.0,  mapRepetition1 ));
-        
-        return list;
-    }
     
 
     /**
