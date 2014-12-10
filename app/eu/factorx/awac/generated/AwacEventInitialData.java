@@ -344,7 +344,7 @@ public class AwacEventInitialData {
     }
     private void createForm2() {
         // == TAB_EV2
-        // COMBUSTBILES & REFRIGERATION
+        // COMBUSTIBLES & REFRIGERATION
         form2 = formService.findByIdentifier("TAB_EV2");
         if (form2 == null) {
             form2 = new Form("TAB_EV2");
@@ -1585,7 +1585,7 @@ if (aev29 == null) {
         
 aev30 = (DoubleQuestion) questionService.findByCode(QuestionCode.AEV30);
 if (aev30 == null) {
-    aev30 = new DoubleQuestion( aev27, 0, QuestionCode.AEV30, energyUnits, getUnitBySymbol("kWh") );
+    aev30 = new DoubleQuestion( aev27, 0, QuestionCode.AEV30, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(aev30);
 
     // cleanup the driver
@@ -1606,7 +1606,7 @@ if (aev30 == null) {
     }
     ((NumericQuestion)aev30).setUnitCategory(energyUnits);
     aev30.setOrderIndex(0);
-    ((NumericQuestion)aev30).setDefaultUnit(getUnitBySymbol("kWh"));
+    ((NumericQuestion)aev30).setDefaultUnit(getUnitBySymbol("kW.h"));
 
     // cleanup the driver
     Driver aev30_driver = driverService.findByName("AEV30");
@@ -1978,7 +1978,7 @@ if (aev45 == null) {
     aev45_driver = new Driver("AEV45");
     driverService.saveOrUpdate(aev45_driver);
     Period p2000 = periodService.findByCode(PeriodCode.P2000);
-    DriverValue dv = new DriverValue(aev45_driver, p2000, Double.valueOf(69));
+    DriverValue dv = new DriverValue(aev45_driver, p2000, Double.valueOf(0.69));
     aev45_driver.getDriverValueList().add(dv);;
     driverService.saveOrUpdate(aev45_driver);
     JPA.em().persist(dv);
@@ -2006,7 +2006,7 @@ if (aev45 == null) {
     aev45_driver = new Driver("AEV45");
     driverService.saveOrUpdate(aev45_driver);
     Period p2000 = periodService.findByCode(PeriodCode.P2000);
-    DriverValue dv = new DriverValue(aev45_driver, p2000, Double.valueOf(69));
+    DriverValue dv = new DriverValue(aev45_driver, p2000, Double.valueOf(0.69));
     aev45_driver.getDriverValueList().add(dv);;
     driverService.saveOrUpdate(aev45_driver);
     JPA.em().persist(dv);
@@ -2036,7 +2036,7 @@ if (aev46 == null) {
     aev46_driver = new Driver("AEV46");
     driverService.saveOrUpdate(aev46_driver);
     Period p2000 = periodService.findByCode(PeriodCode.P2000);
-    DriverValue dv = new DriverValue(aev46_driver, p2000, Double.valueOf(31));
+    DriverValue dv = new DriverValue(aev46_driver, p2000, Double.valueOf(0.31));
     aev46_driver.getDriverValueList().add(dv);;
     driverService.saveOrUpdate(aev46_driver);
     JPA.em().persist(dv);
@@ -2064,7 +2064,7 @@ if (aev46 == null) {
     aev46_driver = new Driver("AEV46");
     driverService.saveOrUpdate(aev46_driver);
     Period p2000 = periodService.findByCode(PeriodCode.P2000);
-    DriverValue dv = new DriverValue(aev46_driver, p2000, Double.valueOf(31));
+    DriverValue dv = new DriverValue(aev46_driver, p2000, Double.valueOf(0.31));
     aev46_driver.getDriverValueList().add(dv);;
     driverService.saveOrUpdate(aev46_driver);
     JPA.em().persist(dv);
