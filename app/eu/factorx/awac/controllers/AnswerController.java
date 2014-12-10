@@ -5,6 +5,7 @@ import eu.factorx.awac.converter.QuestionAnswerToAnswerLineConverter;
 import eu.factorx.awac.dto.awac.get.*;
 import eu.factorx.awac.dto.awac.get.ListPeriodsDTO;
 import eu.factorx.awac.dto.awac.post.*;
+import eu.factorx.awac.dto.awac.shared.ResultMessageDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.dto.verification.get.VerificationRequestDTO;
@@ -190,7 +191,7 @@ public class AnswerController extends AbstractController {
             awacCalculatorInstanceService.saveOrUpdate(awacCalculatorInstance);
         }
 
-        return ok(new ResultsDTO());
+        return ok(new ResultMessageDTO());
     }
 
 
@@ -318,7 +319,7 @@ public class AnswerController extends AbstractController {
         //save
         questionSetAnswerService.saveOrUpdate(questionSetAnswer);
 
-        return ok(new ResultsDTO());
+        return ok(new ResultMessageDTO());
     }
 
     @Transactional(readOnly = true)
@@ -335,7 +336,7 @@ public class AnswerController extends AbstractController {
         //unlock
         securedController.unlockForm(form.getAllQuestionSets().get(0), scope, period);
 
-        return ok(new ResultsDTO());
+        return ok(new ResultMessageDTO());
 
     }
 
@@ -416,7 +417,7 @@ public class AnswerController extends AbstractController {
         //save
         questionSetAnswerService.saveOrUpdate(questionSetAnswer);
 
-        return ok(new ResultsDTO());
+        return ok(new ResultMessageDTO());
     }
 
     @Transactional(readOnly = true)

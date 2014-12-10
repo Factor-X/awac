@@ -33,10 +33,8 @@ angular
                 $scope.linkedLists = $scope.sortLinkedListsItems(result.data.linkedLists)
                 $scope.initialLinkedLists = angular.copy($scope.linkedLists)
                 codeLabels = result.data.codeLabels
-                $scope.activitySourcesLabels = codeLabelHelper.sortCodeLabelsByOrder(_.findWhere(codeLabels,
-                    {code: 'ActivitySource'}).codeLabels)
-                $scope.activityTypesLabels = codeLabelHelper.sortCodeLabelsByOrder(_.findWhere(codeLabels,
-                    {code: 'ActivityType'}).codeLabels)
+                $scope.activitySourcesLabels = codeLabelHelper.sortCodeLabelsByOrder(_.findWhere(codeLabels, {code: 'ActivitySource'}).codeLabels)
+                $scope.activityTypesLabels = codeLabelHelper.sortCodeLabelsByOrder(_.findWhere(codeLabels, {code: 'ActivityType'}).codeLabels)
             $scope.waitingData = false
             return
         return
@@ -76,8 +74,7 @@ angular
         if !!_.findWhere(linkedList.items, {'key': $scope.itemToAdd.key})
             messageFlash.displayError "Echec de l'ajout: la clé '" + $scope.itemToAdd.key + "' est déjà présente dans cette liste!"
             return
-        if !!_.findWhere(linkedList.items,
-            {'activitySourceKey': $scope.itemToAdd.activitySourceKey, 'activityTypeKey': $scope.itemToAdd.activityTypeKey})
+        if !!_.findWhere(linkedList.items,{'activitySourceKey': $scope.itemToAdd.activitySourceKey, 'activityTypeKey': $scope.itemToAdd.activityTypeKey})
             messageFlash.displayError "Echec de l'ajout: un élément avec la même combinaison ActivityType - ActivitySource est déjà présent dans cette liste!"
             return
         linkedList.items.push(angular.copy($scope.itemToAdd))

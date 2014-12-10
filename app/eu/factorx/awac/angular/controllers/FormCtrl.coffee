@@ -211,6 +211,9 @@ angular
                 $scope.o.answersSave.listAnswers = finalList
 
 
+                console.log "SAVE"
+                console.log $scope.o.answersSave
+
                 downloadService.postJson '/awac/answer/save', $scope.o.answersSave, (result) ->
                     if result.success
 

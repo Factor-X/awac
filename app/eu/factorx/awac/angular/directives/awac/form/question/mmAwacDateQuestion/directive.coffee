@@ -17,12 +17,11 @@ angular
         post: (scope, $filter) ->
             directiveService.autoScopeImpl scope
 
-            scope.result = new Date()
-
             scope.$watch 'result',(o,n) ->
                 if o != n
                     if scope.getAnswer()?
                         scope.getAnswer().value = scope.result.getTime()
+
 
             scope.getDisabled = ->
                 return scope.$parent.isDisabled()
@@ -46,8 +45,10 @@ angular
             # called when the user change the value of the field
             #
             if scope.getDataToCompare() == false && scope.getIsAggregation() == false
-                if scope.getAnswer().value?
-                    scope.result = new Date(scope.getAnswer().value)
+                scope.result = new Date(scope.getAnswer().value)
+                if scope.result.getTime() == 0
+                    scope.result = new Date()
+
                 scope.$watch 'getAnswer().value', (o, n) ->
                     if "" + n != "" + o
                         scope.$parent.edited()

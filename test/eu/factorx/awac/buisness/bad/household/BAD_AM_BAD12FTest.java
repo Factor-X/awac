@@ -69,44 +69,6 @@ public class BAD_AM_BAD12FTest{
         Organization organization= organizationService.findById(organizationId);
         Period period = periodService.findById(PERIOD_ID);
 
-        //
-        // 1) build data
-        //
-        QuestionAnswersDTO questionAnswersDTO = new QuestionAnswersDTO();
-        questionAnswersDTO.setFormId(FORM_ID);
-        questionAnswersDTO.setPeriodId(PERIOD_ID);
-        questionAnswersDTO.setScopeId(organization.getId());
-        questionAnswersDTO.setLastUpdateDate(new Date().toString());
-
-        List<AnswerLineDTO> answerLineDTOList = new ArrayList<>();
-
-        //add answers
-                answerLineDTOList.addAll(buildAnswerAM154());
-                answerLineDTOList.addAll(buildAnswerAM166());
-        
-        questionAnswersDTO.setListAnswers(answerLineDTOList);
-
-        //
-        // 2) send request
-        //
-        //Json node
-        JsonNode node = Json.toJson(questionAnswersDTO);
-        FakeRequest saveFakeRequest = new FakeRequest();
-        saveFakeRequest.withHeader("Content-type", "application/json");
-        saveFakeRequest.withJsonBody(node);
-
-        //connection
-        ConnectionFormDTO cfDto = new ConnectionFormDTO(identifier, identifierPassword, InterfaceTypeCode.ENTERPRISE.getKey(), "");
-        saveFakeRequest.withSession(SecuredController.SESSION_IDENTIFIER_STORE,cfDto.getLogin());
-
-        // Call controller action
-        Result result = callAction(
-            eu.factorx.awac.controllers.routes.ref.AnswerController.save(),
-            saveFakeRequest
-        );
-
-        // control result
-        assertEquals(200, status(result));
 
         //
         // 3) control BAD
@@ -145,58 +107,6 @@ public class BAD_AM_BAD12FTest{
         assertTrue("Value expected but not found : "+valueNotFound+". Value generated : "+valueGenerated,valueNotFound.length() == 0);
 
     }
-
-        /**
-     * build the AnswerLineDTO
-     * question : AM154
-     */
-    private List<AnswerLineDTO> buildAnswerAM154(){
-
-        List<AnswerLineDTO> list = new ArrayList<>();
-
-                 //add repetition
-        Map<String, Integer> mapRepetition1 = new HashMap<>();
-                mapRepetition1.put("AM153",1);
-                list.add(new AnswerLineDTO("AM154","1",  mapRepetition1 ));
-                //add repetition
-        Map<String, Integer> mapRepetition2 = new HashMap<>();
-                mapRepetition2.put("AM153",2);
-                list.add(new AnswerLineDTO("AM154","5",  mapRepetition2 ));
-                //add repetition
-        Map<String, Integer> mapRepetition3 = new HashMap<>();
-                mapRepetition3.put("AM153",3);
-                list.add(new AnswerLineDTO("AM154","10",  mapRepetition3 ));
-                //add repetition
-        Map<String, Integer> mapRepetition4 = new HashMap<>();
-                mapRepetition4.put("AM153",4);
-                list.add(new AnswerLineDTO("AM154","17",  mapRepetition4 ));
-                //add repetition
-        Map<String, Integer> mapRepetition5 = new HashMap<>();
-                mapRepetition5.put("AM153",5);
-                list.add(new AnswerLineDTO("AM154","20",  mapRepetition5 ));
-                //add repetition
-        Map<String, Integer> mapRepetition6 = new HashMap<>();
-                mapRepetition6.put("AM153",6);
-                list.add(new AnswerLineDTO("AM154","13",  mapRepetition6 ));
-        
-        return list;
-    }
-        /**
-     * build the AnswerLineDTO
-     * question : AM166
-     */
-    private List<AnswerLineDTO> buildAnswerAM166(){
-
-        List<AnswerLineDTO> list = new ArrayList<>();
-
-                 //add repetition
-        Map<String, Integer> mapRepetition1 = new HashMap<>();
-                mapRepetition1.put("AM153",6);
-                list.add(new AnswerLineDTO("AM166",40.0,  mapRepetition1  , UnitCode.U5133.getKey()  ));
-        
-        return list;
-    }
-    
 
     /**
      * control all except value
