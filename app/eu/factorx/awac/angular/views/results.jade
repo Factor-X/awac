@@ -26,7 +26,7 @@ div.results.pdf-able
                                     td
                                         input(type="checkbox", ng-model="site.selected")
 
-                .sites-panel(ng-hide="$root.instanceName == 'household'")
+                .sites-panel(ng-hide="$root.instanceName == 'household' || $root.instanceName == 'event'")
                     .sites-panel-title
                         span(ng-bind-html="'SURVEY_INTERFACE_VERIFICATION' | translate")
 
@@ -79,7 +79,7 @@ div.results.pdf-able
                             br
 
 
-                            table(ng-show="$root.instanceName == 'household'")
+                            table(ng-show="$root.instanceName == 'household' || $root.instanceName == 'event' ")
                                 tr
                                     td
                                         .diagram(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.leftSvgDonuts.R_1 | trustAsHtml")
@@ -93,7 +93,7 @@ div.results.pdf-able
 
 
 
-                            table(ng-hide="$root.instanceName == 'household'")
+                            table(ng-hide="$root.instanceName == 'household' || $root.instanceName == 'event'")
                                 tr
                                     td(colspan="3")
                                         h3
@@ -355,7 +355,7 @@ div.results.pdf-able
                         .charts-panel-tab-arrow
                         .charts-panel-tab-title.tab_numbers(ng-bind-html="'NUMBERS' | translate")
 
-                    .charts-panel-tab(ng-click="current_tab = 5", ng-class="{ active: current_tab == 5 }", ng-hide="$root.instanceName == 'household'")
+                    .charts-panel-tab(ng-click="current_tab = 5", ng-class="{ active: current_tab == 5 }", ng-hide="$root.instanceName == 'household' || $root.instanceName == 'event'")
                         .charts-panel-tab-arrow
                         .charts-panel-tab-title.tab_constant_factors(ng-bind-html="'COMPARISION_WITH_CONSTANT_EMISSION_FACTORS' | translate")
 

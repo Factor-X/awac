@@ -22,6 +22,7 @@ angular
                     if scope.getAnswer()?
                         scope.getAnswer().value = scope.result.getTime()
 
+
             scope.getDisabled = ->
                 return scope.$parent.isDisabled()
 
@@ -45,6 +46,9 @@ angular
             #
             if scope.getDataToCompare() == false && scope.getIsAggregation() == false
                 scope.result = new Date(scope.getAnswer().value)
+                if scope.result.getTime() == 0
+                    scope.result = new Date()
+
                 scope.$watch 'getAnswer().value', (o, n) ->
                     if "" + n != "" + o
                         scope.$parent.edited()
