@@ -6,7 +6,7 @@ div
             mm-awac-question(question-code="AEV12", ng-optional="true")
 
             mm-awac-repetition-name(question-code="AEV13")
-            mm-awac-repetition-question(question-set-code="AEV13", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionmapByQuestionSet('AEV13')")
+            mm-awac-repetition-question(question-set-code="AEV13", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AEV13')")
                 mm-awac-question(question-code="AEV14",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}")
                 mm-awac-question(question-code="AEV15",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}")
                 mm-awac-question(question-code="AEV16",ng-repetition-map="itLevel1",ng-map-index="{'AEV13':$index}", ng-condition="getAnswer('AEV15', itLevel1).value == '1' && (getAnswer('AEV14', itLevel1).value == 'AS_1' || getAnswer('AEV14', itLevel1).value == 'AS_3' || getAnswer('AEV14', itLevel1).value == 'AS_376' || getAnswer('AEV14', itLevel1).value == 'AS_377' || getAnswer('AEV14', itLevel1).value == 'AS_4')")

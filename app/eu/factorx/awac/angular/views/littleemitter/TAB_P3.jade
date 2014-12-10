@@ -59,7 +59,7 @@ div
             mm-awac-question(question-code="AP102", ng-condition="getAnswer('AP80').value == '2'")
             mm-awac-question(question-code="AP103", ng-condition="getAnswer('AP80').value == '2'")
             mm-awac-question(question-code="AP104", ng-condition="getAnswer('AP80').value == '2'")
-            mm-awac-question(question-code="AP105", ng-condition="getAnswer('AP80').value == '2'", ng-aggregation="(getAnswer('AP94').value | nullToZero)+getAnswer('AP99').value | nullToZero)+getAnswer('AP100').value | nullToZero)+getAnswer('AP101').value | nullToZero)+getAnswer('AP102').value | nullToZero)+getAnswer('AP103').value | nullToZero)+getAnswer('AP104').value | nullToZero)")
+            mm-awac-question(question-code="AP105", ng-condition="getAnswer('AP80').value == '2'", ng-aggregation="(getAnswer('AP94').value | nullToZero)+(getAnswer('AP99').value | nullToZero)+(getAnswer('AP100').value | nullToZero)+(getAnswer('AP101').value | nullToZero)+(getAnswer('AP102').value | nullToZero)+(getAnswer('AP103').value | nullToZero)+(getAnswer('AP104').value | nullToZero)")
 
         .horizontal_separator
         mm-awac-section(title-code="AP106")
