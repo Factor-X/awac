@@ -72,7 +72,7 @@ public class BadTest extends AbstractBaseModelTest {
     private BAD_AM_BAD2ATest bad_AM_BAD2ATest;
     
     @Autowired
-    private BAD_AM_BAD3BTest bad_AM_BAD3BTest;
+    private BAD_AM_BAD3DTest bad_AM_BAD3DTest;
     
     @Autowired
     private BAD_AM_BAD4Test bad_AM_BAD4Test;
@@ -170,131 +170,131 @@ public class BadTest extends AbstractBaseModelTest {
 
     }
         @Test
-    public void _001_badAM_BAD1A() {
+    public void _AAB_badAM_BAD1A() {
         bad_AM_BAD1ATest.test(scopeId);
     }
         @Test
-    public void _002_badAM_BAD1B() {
+    public void _AAC_badAM_BAD1B() {
         bad_AM_BAD1BTest.test(scopeId);
     }
         @Test
-    public void _003_badAM_BAD1C() {
+    public void _AAD_badAM_BAD1C() {
         bad_AM_BAD1CTest.test(scopeId);
     }
         @Test
-    public void _004_badAM_BAD1D() {
+    public void _AAE_badAM_BAD1D() {
         bad_AM_BAD1DTest.test(scopeId);
     }
         @Test
-    public void _005_badAM_BAD1E() {
+    public void _AAF_badAM_BAD1E() {
         bad_AM_BAD1ETest.test(scopeId);
     }
         @Test
-    public void _006_badAM_BAD1F() {
+    public void _AAG_badAM_BAD1F() {
         bad_AM_BAD1FTest.test(scopeId);
     }
         @Test
-    public void _007_badAM_BAD1G() {
+    public void _AAH_badAM_BAD1G() {
         bad_AM_BAD1GTest.test(scopeId);
     }
         @Test
-    public void _008_badAM_BAD1H() {
+    public void _AAI_badAM_BAD1H() {
         bad_AM_BAD1HTest.test(scopeId);
     }
         @Test
-    public void _009_badAM_BAD1I() {
+    public void _AAJ_badAM_BAD1I() {
         bad_AM_BAD1ITest.test(scopeId);
     }
         @Test
-    public void _0010_badAM_BAD1J() {
+    public void _AAK_badAM_BAD1J() {
         bad_AM_BAD1JTest.test(scopeId);
     }
         @Test
-    public void _0011_badAM_BAD2A() {
+    public void _AAL_badAM_BAD2A() {
         bad_AM_BAD2ATest.test(scopeId);
     }
         @Test
-    public void _0012_badAM_BAD3B() {
-        bad_AM_BAD3BTest.test(scopeId);
+    public void _AAU_badAM_BAD3D() {
+        bad_AM_BAD3DTest.test(scopeId);
     }
         @Test
-    public void _0013_badAM_BAD4() {
+    public void _AAV_badAM_BAD4() {
         bad_AM_BAD4Test.test(scopeId);
     }
         @Test
-    public void _0014_badAM_BAD5() {
+    public void _AAW_badAM_BAD5() {
         bad_AM_BAD5Test.test(scopeId);
     }
         @Test
-    public void _0015_badAM_BAD6() {
+    public void _AAX_badAM_BAD6() {
         bad_AM_BAD6Test.test(scopeId);
     }
         @Test
-    public void _0016_badAM_BAD7() {
+    public void _AAY_badAM_BAD7() {
         bad_AM_BAD7Test.test(scopeId);
     }
         @Test
-    public void _0017_badAM_BAD8() {
+    public void _ABA_badAM_BAD8() {
         bad_AM_BAD8Test.test(scopeId);
     }
         @Test
-    public void _0018_badAM_BAD9() {
+    public void _ABB_badAM_BAD9() {
         bad_AM_BAD9Test.test(scopeId);
     }
         @Test
-    public void _0019_badAM_BAD10() {
+    public void _ABC_badAM_BAD10() {
         bad_AM_BAD10Test.test(scopeId);
     }
         @Test
-    public void _0020_badAM_BAD11() {
+    public void _ABD_badAM_BAD11() {
         bad_AM_BAD11Test.test(scopeId);
     }
         @Test
-    public void _0021_badAM_BAD12A() {
+    public void _ABE_badAM_BAD12A() {
         bad_AM_BAD12ATest.test(scopeId);
     }
         @Test
-    public void _0022_badAM_BAD12B() {
+    public void _ABF_badAM_BAD12B() {
         bad_AM_BAD12BTest.test(scopeId);
     }
         @Test
-    public void _0023_badAM_BAD12C() {
+    public void _ABG_badAM_BAD12C() {
         bad_AM_BAD12CTest.test(scopeId);
     }
         @Test
-    public void _0024_badAM_BAD12D() {
+    public void _ABH_badAM_BAD12D() {
         bad_AM_BAD12DTest.test(scopeId);
     }
         @Test
-    public void _0025_badAM_BAD12E() {
+    public void _ABI_badAM_BAD12E() {
         bad_AM_BAD12ETest.test(scopeId);
     }
         @Test
-    public void _0026_badAM_BAD12F() {
+    public void _ABJ_badAM_BAD12F() {
         bad_AM_BAD12FTest.test(scopeId);
     }
         @Test
-    public void _0027_badAM_BAD13A() {
+    public void _ABK_badAM_BAD13A() {
         bad_AM_BAD13ATest.test(scopeId);
     }
         @Test
-    public void _0028_badAM_BAD13B() {
+    public void _ABL_badAM_BAD13B() {
         bad_AM_BAD13BTest.test(scopeId);
     }
         @Test
-    public void _0029_badAM_BAD13C() {
+    public void _ABM_badAM_BAD13C() {
         bad_AM_BAD13CTest.test(scopeId);
     }
         @Test
-    public void _0030_badAM_BAD14A() {
+    public void _ABN_badAM_BAD14A() {
         bad_AM_BAD14ATest.test(scopeId);
     }
         @Test
-    public void _0031_badAM_BAD14B() {
+    public void _ABO_badAM_BAD14B() {
         bad_AM_BAD14BTest.test(scopeId);
     }
         @Test
-    public void _0032_badAM_BAD14C() {
+    public void _ABP_badAM_BAD14C() {
         bad_AM_BAD14CTest.test(scopeId);
     }
     }

@@ -119,7 +119,7 @@ public class BAD_AEV_BAD13BTest{
         //control content
         //map mapResult
         Map<Double, Boolean> mapResult = new HashMap<>();
-                mapResult.put(156.0, false);
+                mapResult.put(158.0, false);
         
         String valueGenerated = "";
 

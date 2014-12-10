@@ -120,7 +120,7 @@ public class BAD_AEV_BAD2ATest{
         //control content
         //map mapResult
         Map<Double, Boolean> mapResult = new HashMap<>();
-                mapResult.put(4000.0, false);
+                mapResult.put(14.4, false);
         
         String valueGenerated = "";
 
@@ -156,7 +156,7 @@ public class BAD_AEV_BAD2ATest{
 
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
-                list.add(new AnswerLineDTO("AEV30",4000.0,  mapRepetition1  , UnitCode.U5155.getKey()  ));
+                list.add(new AnswerLineDTO("AEV30",4000.0,  mapRepetition1  , UnitCode.U5156.getKey()  ));
         
         return list;
     }

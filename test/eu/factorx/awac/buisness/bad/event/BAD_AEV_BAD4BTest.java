@@ -187,7 +187,7 @@ public class BAD_AEV_BAD4BTest{
 
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
-                list.add(new AnswerLineDTO("AEV43",20.0,  mapRepetition1 ));
+                list.add(new AnswerLineDTO("AEV43",0.2,  mapRepetition1 ));
         
         return list;
     }
@@ -215,7 +215,7 @@ public class BAD_AEV_BAD4BTest{
 
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
-                list.add(new AnswerLineDTO("AEV46",30.0,  mapRepetition1 ));
+                list.add(new AnswerLineDTO("AEV46",0.3,  mapRepetition1 ));
         
         return list;
     }

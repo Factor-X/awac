@@ -1,4 +1,4 @@
-package eu.factorx.awac.buisness.bad.event;
+package eu.factorx.awac.buisness.bad.household;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import eu.factorx.awac.controllers.SecuredController;
@@ -6,7 +6,7 @@ import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
 import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.models.business.Scope;
-import eu.factorx.awac.models.business.Product;
+import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.knowledge.Period;
@@ -14,8 +14,8 @@ import eu.factorx.awac.models.reporting.BaseActivityData;
 import eu.factorx.awac.service.PeriodService;
 import eu.factorx.awac.service.QuestionSetAnswerService;
 import eu.factorx.awac.service.ScopeService;
-import eu.factorx.awac.service.ProductService;
-import eu.factorx.awac.service.knowledge.activity.contributor.event.*;
+import eu.factorx.awac.service.OrganizationService;
+import eu.factorx.awac.service.knowledge.activity.contributor.household.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,10 +32,10 @@ import static play.test.Helpers.callAction;
 import static play.test.Helpers.status;
 
 /*
- * Test for bad AEV_BAD4D
+ * Test for bad AM_BAD3D
 */
 @Component
-public class BAD_AEV_BAD4DTest{
+public class BAD_AM_BAD3DTest{
 
     private static final Double ERROR_MARGE = 0.0001;
 
@@ -43,7 +43,7 @@ public class BAD_AEV_BAD4DTest{
     private QuestionSetAnswerService questionSetAnswerService;
 
     @Autowired
-    private ProductService productService;
+    private OrganizationService organizationService;
 
     @Autowired
     private ScopeService scopeService;
@@ -52,21 +52,21 @@ public class BAD_AEV_BAD4DTest{
     private PeriodService periodService;
 
     @Autowired
-    private BaseActivityDataAEV_BAD4D baseActivityDataAEV_BAD4D;
+    private BaseActivityDataAM_BAD3D baseActivityDataAM_BAD3D;
 
     private final static Long FORM_ID = 2L;
     private final static Long PERIOD_ID = 1L;
-    private String identifier = "user40";
+    private String identifier = "user30";
     private String identifierPassword = "password";
 
     /**
      * run test
-     * need an id of a scope (product)
-     * @param productId
+     * need an id of a scope (organization)
+     * @param organizationId
      */
-    public void test(long productId){
+    public void test(long organizationId){
 
-        Product product = productService.findById(productId);
+        Organization organization= organizationService.findById(organizationId);
         Period period = periodService.findById(PERIOD_ID);
 
         //
@@ -75,15 +75,15 @@ public class BAD_AEV_BAD4DTest{
         QuestionAnswersDTO questionAnswersDTO = new QuestionAnswersDTO();
         questionAnswersDTO.setFormId(FORM_ID);
         questionAnswersDTO.setPeriodId(PERIOD_ID);
-        questionAnswersDTO.setScopeId(product.getId());
+        questionAnswersDTO.setScopeId(organization.getId());
         questionAnswersDTO.setLastUpdateDate(new Date().toString());
 
         List<AnswerLineDTO> answerLineDTOList = new ArrayList<>();
 
         //add answers
-                answerLineDTOList.addAll(buildAnswerAEV40());
-                answerLineDTOList.addAll(buildAnswerAEV41());
-                answerLineDTOList.addAll(buildAnswerAEV50());
+                answerLineDTOList.addAll(buildAnswerAM68());
+                answerLineDTOList.addAll(buildAnswerAM69());
+                answerLineDTOList.addAll(buildAnswerAM66());
         
         questionAnswersDTO.setListAnswers(answerLineDTOList);
 
@@ -115,13 +115,13 @@ public class BAD_AEV_BAD4DTest{
         //TODO temporary
         JPA.em().clear();
         JPA.em().flush();
-        Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(product, period);
-        List<BaseActivityData> bads = baseActivityDataAEV_BAD4D.getBaseActivityData(questionSetAnswers);
+        Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(organization, period);
+        List<BaseActivityData> bads = baseActivityDataAM_BAD3D.getBaseActivityData(questionSetAnswers);
 
         //control content
         //map mapResult
         Map<Double, Boolean> mapResult = new HashMap<>();
-                mapResult.put(4000.0, false);
+                mapResult.put(3.6, false);
         
         String valueGenerated = "";
 
@@ -149,43 +149,43 @@ public class BAD_AEV_BAD4DTest{
 
         /**
      * build the AnswerLineDTO
-     * question : AEV40
+     * question : AM68
      */
-    private List<AnswerLineDTO> buildAnswerAEV40(){
+    private List<AnswerLineDTO> buildAnswerAM68(){
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
-                list.add(new AnswerLineDTO("AEV40",1000.0,  mapRepetition1 ));
+                list.add(new AnswerLineDTO("AM68",3000.0,  mapRepetition1  , UnitCode.U5170.getKey()  ));
         
         return list;
     }
         /**
      * build the AnswerLineDTO
-     * question : AEV41
+     * question : AM69
      */
-    private List<AnswerLineDTO> buildAnswerAEV41(){
+    private List<AnswerLineDTO> buildAnswerAM69(){
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
-                list.add(new AnswerLineDTO("AEV41",40.0,  mapRepetition1  , UnitCode.U5106.getKey()  ));
+                list.add(new AnswerLineDTO("AM69",3.0,  mapRepetition1  , UnitCode.U5170.getKey()  ));
         
         return list;
     }
         /**
      * build the AnswerLineDTO
-     * question : AEV50
+     * question : AM66
      */
-    private List<AnswerLineDTO> buildAnswerAEV50(){
+    private List<AnswerLineDTO> buildAnswerAM66(){
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
-                list.add(new AnswerLineDTO("AEV50",0.1,  mapRepetition1 ));
+                list.add(new AnswerLineDTO("AM66","2",  mapRepetition1 ));
         
         return list;
     }
@@ -197,7 +197,7 @@ public class BAD_AEV_BAD4DTest{
      */
     private void controlGlobalBad(BaseActivityData bad){
         /*
-        assertTrue("BaseActivityDataCode error. Expected : ActivityCategoryCode.AC_5, founded : "+bad.getKey(),bad.getKey().equals(BaseActivityDataCode.ActivityCategoryCode.AC_5));
+        assertTrue("BaseActivityDataCode error. Expected : ActivityCategoryCode.AC_1, founded : "+bad.getKey(),bad.getKey().equals(BaseActivityDataCode.ActivityCategoryCode.AC_1));
         assertTrue("Rank error : Expected : 0, founded : "+bad.getRank(),bad.getRank().equals(0));
         assertTrue("SpecificPurpose error : Expected : {}, founded : "+bad.getSpecificPurpose(),bad.getSpecificPurpose() == null);
         assertTrue("ActivityCategory error : Expected : {}, founded : "+bad.getActivityCategory(),bad.getActivityCategory().equals(ActivityCategoryCode.AC_1));

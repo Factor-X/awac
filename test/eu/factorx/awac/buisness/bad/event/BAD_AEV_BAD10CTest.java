@@ -122,7 +122,7 @@ public class BAD_AEV_BAD10CTest{
         //control content
         //map mapResult
         Map<Double, Boolean> mapResult = new HashMap<>();
-                mapResult.put(112.5, false);
+                mapResult.put(1350.0, false);
         
         String valueGenerated = "";
 
