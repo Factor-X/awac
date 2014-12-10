@@ -1,29 +1,29 @@
 .question-set-tree
     .question-set
-        .question-key [QS] {{ ngModel.label.key}}
+        .question-key(ng-style="{'padding-left': (getPadding()-30) + 'px'}") [QS] {{ ngModel.label.key}}
         .question-labels(ng-if="!!ngModel.label.labelEn")
             .question-label
-                input(type="text", ng-model="ngModel.label.labelEn")
+                textarea(type="text", ng-model="ngModel.label.labelEn")
             .question-label
-                input(type="text", ng-model="ngModel.label.labelFr")
+                textarea(type="text", ng-model="ngModel.label.labelFr")
             .question-label
-                input(type="text", ng-model="ngModel.label.labelNl")
+                textarea(type="text", ng-model="ngModel.label.labelNl")
         .question-labels(ng-if="!ngModel.label.labelEn")
             span [NO LABELS]
 
-    ul.question-set-questions(style="margin-left:30px; margin-bottom:0px;")
-        li.question-set(ng-repeat="question in ngModel.questions", style="padding-top:10px;")
-            .question-key [Q] {{ question.label.key }}
+    .question-set-questions
+        .question-set(ng-repeat="question in ngModel.questions")
+            .question-key(ng-style="{'padding-left': ($parent.getPadding()) + 'px'}") [Q] {{ question.label.key }}
             .question-labels(ng-if="!!question.label.labelEn")
                 .question-label
-                    input(type="text", ng-model="question.label.labelEn")
+                    textarea(type="text", ng-model="question.label.labelEn")
                 .question-label
-                    input(type="text", ng-model="question.label.labelFr")
+                    textarea(type="text", ng-model="question.label.labelFr")
                 .question-label
-                    input(type="text", ng-model="question.label.labelNl")
+                    textarea(type="text", ng-model="question.label.labelNl")
             .question-labels(ng-if="!question.label.labelEn")
                 span [NO LABELS]
 
-    ul.question-set-children(style="margin-left:30px; margin-bottom:0px;")
-        li.question-set-child(ng-if="ngModel.children.length > 0", ng-repeat="child in ngModel.children", style="padding-top:10px;")
+    .question-set-children
+        .question-set-child(ng-if="ngModel.children.length > 0", ng-repeat="child in ngModel.children", style="padding-top:10px;")
             mm-awac-question-set-tree(ng-model="child")

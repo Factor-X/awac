@@ -2,14 +2,18 @@
 # Modules
 #
 
-angular.module 'app.directives', ['ngAnimate', 'ngSanitize', 'ui.bootstrap', 'ui.bootstrap.datetimepicker', 'ngCkeditor', 'ui.sortable', 'RecursionHelper']
+angular.module 'app.directives', ['ngAnimate', 'ngSanitize', 'ui.bootstrap', 'ui.bootstrap.datetimepicker',
+                                  'ngCkeditor', 'ui.sortable', 'RecursionHelper']
 
 angular.module 'app.filters', []
 
 angular.module 'app.services', []
 
-angular.module 'app.controllers', ['app.services', 'ngRoute',
-                                   'angularFileUpload', 'tmh.dynamicLocale', 'ngTable']
+angular.module 'app.controllers', ['app.services',
+                                   'ngRoute',
+                                   'angularFileUpload',
+                                   'tmh.dynamicLocale',
+                                   'ngTable']
 
 angular.module 'app', [
     'app.directives',
