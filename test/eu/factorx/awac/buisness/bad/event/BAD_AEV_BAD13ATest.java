@@ -81,7 +81,6 @@ public class BAD_AEV_BAD13ATest{
         List<AnswerLineDTO> answerLineDTOList = new ArrayList<>();
 
         //add answers
-                answerLineDTOList.addAll(buildAnswerAEV134());
         
         questionAnswersDTO.setListAnswers(answerLineDTOList);
 
@@ -145,20 +144,6 @@ public class BAD_AEV_BAD13ATest{
 
     }
 
-        /**
-     * build the AnswerLineDTO
-     * question : AEV134
-     */
-    private List<AnswerLineDTO> buildAnswerAEV134(){
-
-        List<AnswerLineDTO> list = new ArrayList<>();
-
-                 //add repetition
-        Map<String, Integer> mapRepetition1 = new HashMap<>();
-                list.add(new AnswerLineDTO("AEV134",280.0,  mapRepetition1 ));
-        
-        return list;
-    }
     
 
     /**
