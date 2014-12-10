@@ -25,99 +25,100 @@ import java.util.List;
 
 @Component
 public class
-		AccountToLoginResultDTOConverter implements Converter<Account, LoginResultDTO> {
+        AccountToLoginResultDTOConverter implements Converter<Account, LoginResultDTO> {
 
-	@Autowired
-	private AccountToPersonDTOConverter accountToPersonDTOConverter;
+    @Autowired
+    private AccountToPersonDTOConverter accountToPersonDTOConverter;
 
-	@Autowired
-	private OrganizationToOrganizationDTOConverter organizationToOrganizationDTOConverter;
+    @Autowired
+    private OrganizationToOrganizationDTOConverter organizationToOrganizationDTOConverter;
 
-	@Autowired
-	private PeriodToPeriodDTOConverter periodToPeriodDTOConverter;
+    @Autowired
+    private PeriodToPeriodDTOConverter periodToPeriodDTOConverter;
 
-	@Autowired
-	private PeriodService periodService;
+    @Autowired
+    private PeriodService periodService;
 
-	@Autowired
-	private AccountSiteAssociationService accountSiteAssociationService;
+    @Autowired
+    private AccountSiteAssociationService accountSiteAssociationService;
 
-	@Autowired
-	private AccountProductAssociationService accountProductAssociationService;
+    @Autowired
+    private AccountProductAssociationService accountProductAssociationService;
 
-	@Autowired
-	private SiteToSiteDTOConverter siteToSiteDTOConverter;
+    @Autowired
+    private SiteToSiteDTOConverter siteToSiteDTOConverter;
 
-	@Autowired
-	private ProductToProductDTOConverter productToProductDTOConverter;
-
-
-	@Override
-	public LoginResultDTO convert(Account account) {
-
-		LoginResultDTO loginResultDTO = new LoginResultDTO();
-
-		//create the person
-		loginResultDTO.setPerson(accountToPersonDTOConverter.convert(account));
+    @Autowired
+    private ProductToProductDTOConverter productToProductDTOConverter;
 
 
-		List<ScopeDTO> scopeDTOs = new ArrayList<>();
+    @Override
+    public LoginResultDTO convert(Account account) {
 
-		//convert scope
-		if (account.getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.SITE)) {
+        LoginResultDTO loginResultDTO = new LoginResultDTO();
 
-			//create siteDTO
-			List<AccountSiteAssociation> sites = accountSiteAssociationService.findByAccount(account);
-
-
-			//site for calculator
-			for (AccountSiteAssociation accountSiteAssociation : sites) {
-				scopeDTOs.add(siteToSiteDTOConverter.convert(accountSiteAssociation.getSite()));
-			}
-
-		} else if (account.getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.PRODUCT)) {
-
-			//create product list
-			List<AccountProductAssociation> productList = accountProductAssociationService.findByAccount(account);
+        //create the person
+        loginResultDTO.setPerson(accountToPersonDTOConverter.convert(account));
 
 
-			for (AccountProductAssociation accountProductAssociation : productList) {
-				scopeDTOs.add(productToProductDTOConverter.convert(accountProductAssociation.getProduct()));
-			}
+        List<ScopeDTO> scopeDTOs = new ArrayList<>();
 
-		} else{
-			//organization
-			scopeDTOs.add(organizationToOrganizationDTOConverter.convert(account.getOrganization()));
-		}
+        //convert scope
+        if (account.getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.SITE)) {
 
-		//.... continue
-		loginResultDTO.setMyScopes(scopeDTOs);
+            //create siteDTO
+            List<AccountSiteAssociation> sites = accountSiteAssociationService.findByAccount(account);
 
-		//add organization name
-		loginResultDTO.setOrganizationName(account.getOrganization().getName());
 
-		//create periodDTO
-		List<PeriodDTO> periodsDTO = new ArrayList<>();
-		List<Period> periods = periodService.findAll();
-		Collections.sort(periods, new Comparator<Period>() {
-			@Override
-			public int compare(Period a, Period b) {
-				return -a.getLabel().compareTo(b.getLabel());
-			}
-		});
-		for (final Period period : periods) {
-			periodsDTO.add(periodToPeriodDTOConverter.convert(period));
-		}
+            //site for calculator
+            for (AccountSiteAssociation accountSiteAssociation : sites) {
+                scopeDTOs.add(siteToSiteDTOConverter.convert(accountSiteAssociation.getSite()));
+            }
 
-		Logger.debug("map period : ");
+        } else if (account.getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.PRODUCT)) {
 
-		for (PeriodDTO periodDTO : periodsDTO) {
-			Logger.debug("  ->" + periodDTO);
-		}
+            //create product list
+            List<AccountProductAssociation> productList = accountProductAssociationService.findByAccount(account);
 
-		loginResultDTO.setAvailablePeriods(periodsDTO);
-		loginResultDTO.setDefaultPeriod(periods.get(0).getPeriodCode().getKey());
 
-		return loginResultDTO;
-	}
+            for (AccountProductAssociation accountProductAssociation : productList) {
+                scopeDTOs.add(productToProductDTOConverter.convert(accountProductAssociation.getProduct()));
+            }
+
+        } else if (!account.getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
+                !account.getOrganization().getInterfaceCode().equals(InterfaceTypeCode.ADMIN)) {
+            //organization
+            scopeDTOs.add(organizationToOrganizationDTOConverter.convert(account.getOrganization()));
+        }
+
+        //.... continue
+        loginResultDTO.setMyScopes(scopeDTOs);
+
+        //add organization name
+        loginResultDTO.setOrganizationName(account.getOrganization().getName());
+
+        //create periodDTO
+        List<PeriodDTO> periodsDTO = new ArrayList<>();
+        List<Period> periods = periodService.findAll();
+        Collections.sort(periods, new Comparator<Period>() {
+            @Override
+            public int compare(Period a, Period b) {
+                return -a.getLabel().compareTo(b.getLabel());
+            }
+        });
+        for (final Period period : periods) {
+            periodsDTO.add(periodToPeriodDTOConverter.convert(period));
+        }
+
+        Logger.debug("map period : ");
+
+        for (PeriodDTO periodDTO : periodsDTO) {
+            Logger.debug("  ->" + periodDTO);
+        }
+
+        loginResultDTO.setAvailablePeriods(periodsDTO);
+        loginResultDTO.setDefaultPeriod(periods.get(0).getPeriodCode().getKey());
+
+        return loginResultDTO;
+    }
 }

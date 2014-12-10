@@ -1,7 +1,6 @@
 angular
 .module('app.controllers')
 .controller "AdminTranslationSingleListCtrl", ($scope, $compile, downloadService, modalService, messageFlash, translationService, codeLabelHelper, displayLittleFormMenu, state, $location) ->
-
     $scope.displayLittleFormMenu = displayLittleFormMenu
     $scope.state = state
 

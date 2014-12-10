@@ -7,7 +7,7 @@ angular
     $scope.tempIdCounter = 0
 
     $scope.drivers = null
-    wasEdited=false
+    wasEdited = false
 
     #launch download
     modalService.show(modalService.LOADING)
@@ -25,11 +25,11 @@ angular
 
 
     $scope.wasEdited = () ->
-        wasEdited=true
+        wasEdited = true
 
     $scope.addValue = (driver) ->
         driver.driverValues.push {tempId: ++$scope.tempIdCounter}
-        wasEdited=true
+        wasEdited = true
 
     $scope.getPeriod = (driver, currentDriverValue) ->
         periods = []
@@ -63,7 +63,7 @@ angular
         modalService.show modalService.LOADING
         downloadService.postJson '/awac/admin/driver/update', {list: $scope.drivers}, (result) ->
             modalService.close modalService.LOADING
-            wasEdited=false
+            wasEdited = false
 
     $scope.remove = (driver, valueTempId) ->
         params =
@@ -83,7 +83,7 @@ angular
             if value.tempId == valueTempId
                 driver.driverValues.splice(i, 1)
                 console.log "wasEdited => remove"
-                wasEdited=true
+                wasEdited = true
                 break
             i++
 

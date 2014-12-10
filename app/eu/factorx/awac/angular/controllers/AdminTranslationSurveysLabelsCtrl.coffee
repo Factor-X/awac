@@ -83,8 +83,4 @@ angular
             modalService.show modalService.CONFIRM_DIALOG, params
 
 
-
-
-
-
     $scope.loadCodeLabels()

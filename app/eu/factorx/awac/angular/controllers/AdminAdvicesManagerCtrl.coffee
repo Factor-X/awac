@@ -60,7 +60,8 @@ angular
         return codeLabelHelper.getLabelByKey($scope.typeCodeLabels, typeKey)
 
     $scope.getBaseIndicatorLabel = (baseIndicatorKey) ->
-        return baseIndicatorKey + " - " + codeLabelHelper.getLabelByKey($scope.baseIndicatorCodeLabels, baseIndicatorKey)
+        return baseIndicatorKey + " - " + codeLabelHelper.getLabelByKey($scope.baseIndicatorCodeLabels,
+            baseIndicatorKey)
 
     $scope.getInterfaceTypeLabel = (interfaceTypeKey) ->
         return codeLabelHelper.getLabelByKey($scope.interfaceTypeCodeLabels, interfaceTypeKey)

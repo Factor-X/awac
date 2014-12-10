@@ -49,7 +49,6 @@ angular
 
     # Handle CTRL+S to save
     $(window).keydown (event) ->
-
         if (!( String.fromCharCode(event.which).toLowerCase() == 's' && event.ctrlKey) && !(event.which == 19)) || !$scope.selectedFile
             return true
 

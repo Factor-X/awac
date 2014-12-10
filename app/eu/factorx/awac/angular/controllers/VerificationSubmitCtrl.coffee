@@ -1,6 +1,6 @@
 angular
 .module('app.controllers')
-.controller "VerificationSubmitCtrl",  ($scope, displayLittleFormMenu, downloadService, modalService, messageFlash, translationService, ngTableParams, $filter, $compile,$window) ->
+.controller "VerificationSubmitCtrl", ($scope, displayLittleFormMenu, downloadService, modalService, messageFlash, translationService, ngTableParams, $filter, $compile, $window) ->
     $scope.displayLittleFormMenu = displayLittleFormMenu
 
     $scope.selectedRequest = null
@@ -80,29 +80,28 @@ angular
             return true
         return false
 
-    $scope.downloadFile =->
+    $scope.downloadFile = ->
         url = '/awac/file/download/' + $scope.selectedRequest.verificationSuccessFileId
         $window.open(url)
 
     $scope.validVerificationFinalization = (valid) ->
-
-        if valid== true
+        if valid == true
             if $scope.requestSelected.status == 'VERIFICATION_STATUS_WAIT_VERIFICATION_CONFIRMATION_SUCCESS'
-                newStatus ='VERIFICATION_STATUS_WAIT_CUSTOMER_VERIFIED_CONFIRMATION'
+                newStatus = 'VERIFICATION_STATUS_WAIT_CUSTOMER_VERIFIED_CONFIRMATION'
             else
-                newStatus ='VERIFICATION_STATUS_CORRECTION'
+                newStatus = 'VERIFICATION_STATUS_CORRECTION'
         else
-            newStatus ='VERIFICATION_STATUS_VERIFICATION'
+            newStatus = 'VERIFICATION_STATUS_VERIFICATION'
 
         data =
-            url:"/awac/verification/setStatus"
-            successMessage:"CHANGES_SAVED"
-            title:"VALID_REQUEST"
+            url: "/awac/verification/setStatus"
+            successMessage: "CHANGES_SAVED"
+            title: "VALID_REQUEST"
             data:
                 scopeId: $scope.selectedRequest.scope.id
                 periodKey: $scope.selectedRequest.period.key
-                newStatus:newStatus
-            afterSave:->
+                newStatus: newStatus
+            afterSave: ->
                 $scope.removeRequest()
         modalService.show modalService.PASSWORD_CONFIRMATION, data
 
@@ -119,14 +118,14 @@ angular
     $scope.consultEvent = () ->
         data =
             organizationCustomer: $scope.requestSelected.organizationCustomer
-        modalService.show modalService.CONSULT_EVENT,data
+        modalService.show modalService.CONSULT_EVENT, data
 
 
     $scope.removeRequest = ->
-        i=0
+        i = 0
         for request in $scope.requests
             if request.id == $scope.requestSelected.id
-                $scope.requests.splice i,1
+                $scope.requests.splice i, 1
             i++
         $scope.displayTable()
         $('.injectForm:first').empty()

@@ -1,7 +1,6 @@
 angular
 .module('app.controllers')
 .controller "UserDataCtrl", ($scope, downloadService, translationService, messageFlash, modalService) ->
-
     $scope.isLoading = false
 
     $scope.identifierInfo =
@@ -77,7 +76,7 @@ angular
         $scope.$root.currentPerson.email = newEmail
 
     $scope.changeEmail = () ->
-        modalService.show(modalService.EMAIL_CHANGE, { oldEmail: $scope.emailInfo.field, cb : $scope.setNewEmail })
+        modalService.show(modalService.EMAIL_CHANGE, { oldEmail: $scope.emailInfo.field, cb: $scope.setNewEmail })
 
     $scope.changePassword = () ->
         modalService.show(modalService.PASSWORD_CHANGE, {})
@@ -160,8 +159,8 @@ angular
                 #logout
                 $scope.$root.nav('/login')
                 $scope.$root.currentPerson = null
-                $scope.$root.periodSelectedKey=null
-                $scope.$root.scopeSelectedId=null
+                $scope.$root.periodSelectedKey = null
+                $scope.$root.scopeSelectedId = null
                 $scope.isLoading = false
             else
                 $scope.isLoading = false

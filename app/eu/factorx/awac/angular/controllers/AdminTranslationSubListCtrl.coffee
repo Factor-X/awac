@@ -50,10 +50,10 @@ angular
         return
 
     $scope.addItem = (subList) ->
-        if ! (!!$scope.itemToAdd.key)
+        if !(!!$scope.itemToAdd.key)
             messageFlash.displayError "Veuillez sélectionner un élément de la liste!"
             return
-        if !! _.findWhere(subList.items, {'key': $scope.itemToAdd.key})
+        if !!_.findWhere(subList.items, {'key': $scope.itemToAdd.key})
             messageFlash.displayError "Echec de l'ajout: la clé '" + $scope.itemToAdd.key + "' est déjà présente dans cette liste!"
             return
         subList.items.push(angular.copy($scope.itemToAdd))

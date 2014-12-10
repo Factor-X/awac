@@ -30,7 +30,7 @@ angular
                 for index, e of $scope.actionAdvices
                     if ((e.typeKey == "2") && (!!e.alternativeGroupKey))
                         altGroupLabel = translationService.get e.alternativeGroupKey
-                        e.title = $filter("translateTextWithVars")("BETTER_MEASURE_ADVICE_TITLE" , [altGroupLabel])
+                        e.title = $filter("translateTextWithVars")("BETTER_MEASURE_ADVICE_TITLE", [altGroupLabel])
                         e.physicalMeasure = translationService.get "BETTER_MEASURE_ADVICE_DESC"
             $scope.waitingAdvices = false
             return
@@ -111,7 +111,7 @@ angular
         return defaultDueDate
 
     $scope.createActionFromAdvice = (actionAdvice) ->
-        if (!! _.findWhere($scope.actions, {scopeTypeKey: '1', title: actionAdvice.title}))
+        if (!!_.findWhere($scope.actions, {scopeTypeKey: '1', title: actionAdvice.title}))
             messageFlash.displayError "REDUCING_ACTION_ALREADY_EXISTING_ERROR"
             return
         data =
