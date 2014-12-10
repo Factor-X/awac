@@ -3209,7 +3209,7 @@ if (ap86 == null) {
     ap86_driver = new Driver("AP86");
     driverService.saveOrUpdate(ap86_driver);
     Period p2000 = periodService.findByCode(PeriodCode.P2000);
-    DriverValue dv = new DriverValue(ap86_driver, p2000, Double.valueOf(220.0));
+    DriverValue dv = new DriverValue(ap86_driver, p2000, Double.valueOf(220));
     ap86_driver.getDriverValueList().add(dv);;
     driverService.saveOrUpdate(ap86_driver);
     JPA.em().persist(dv);
@@ -3238,7 +3238,7 @@ if (ap86 == null) {
     ap86_driver = new Driver("AP86");
     driverService.saveOrUpdate(ap86_driver);
     Period p2000 = periodService.findByCode(PeriodCode.P2000);
-    DriverValue dv = new DriverValue(ap86_driver, p2000, Double.valueOf(220.0));
+    DriverValue dv = new DriverValue(ap86_driver, p2000, Double.valueOf(220));
     ap86_driver.getDriverValueList().add(dv);;
     driverService.saveOrUpdate(ap86_driver);
     JPA.em().persist(dv);

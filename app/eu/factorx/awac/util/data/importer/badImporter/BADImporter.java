@@ -32,7 +32,7 @@ public class BADImporter extends WorkbookDataImporter implements ApplicationCont
     private final static String FILE_PATH = "data_importer_resources/awac_data_09-08-2014/AWAC-tous-calcul_FE.xls";
     public static final String ENTERPRISE_METHOD = "site entreprise-activityData";
     public static final String MUNICIPALIT_METHOD = "commune-activityData";
-    private static final String EVENT_METHOD = "evenement-activityData";
+    private static final String EVENT_METHOD = "evenement - activityData";
     private static final String LITTLEEMITTER_METHOD ="petit emetteur-activityData";
     private static final String HOUSEHOLD_METHOD = "menage-activityData";
 

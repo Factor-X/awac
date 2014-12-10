@@ -2,7 +2,7 @@ package eu.factorx.awac.buisness.bad.household;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import eu.factorx.awac.controllers.SecuredController;
-import eu.factorx.awac.dto.awac.get.SiteDTO;
+import eu.factorx.awac.dto.awac.get.OrganizationDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.models.AbstractBaseModelTest;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
@@ -136,33 +136,23 @@ public class BadTest extends AbstractBaseModelTest {
     
     @Test
     public void _000_initialize() {
-
-
         // ConnectionFormDTO
-        ConnectionFormDTO cfDto = new ConnectionFormDTO("user1", "password", InterfaceTypeCode.ENTERPRISE.getKey(), "");
+        ConnectionFormDTO cfDto = new ConnectionFormDTO("user30", "password", InterfaceTypeCode.HOUSEHOLD.getKey(), "");
 
         /*
         start with a percentage too big => except an error
 
         */
-        SiteDTO dto = new SiteDTO();
-
-        dto.setName("sitename");
-        dto.setPercentOwned(100.0);
-
-        //Json node
-        JsonNode node = Json.toJson(dto);
 
         // perform save
         // Fake request
         FakeRequest saveFakeRequest = new FakeRequest();
         saveFakeRequest.withHeader("Content-type", "application/json");
-        saveFakeRequest.withJsonBody(node);
         saveFakeRequest.withSession(SecuredController.SESSION_IDENTIFIER_STORE, cfDto.getLogin());
 
         // Call controller action
         Result result = callAction(
-        eu.factorx.awac.controllers.routes.ref.SiteController.create(),
+        eu.factorx.awac.controllers.routes.ref.OrganizationController.getMyOrganization(),
         saveFakeRequest
         ); // callAction
 
@@ -172,7 +162,7 @@ public class BadTest extends AbstractBaseModelTest {
 
 
         //analyse result
-        SiteDTO resultDTO = getDTO(result, SiteDTO.class);
+        OrganizationDTO resultDTO = getDTO(result, OrganizationDTO.class);
 
         assertNotNull(resultDTO.getId());
 
