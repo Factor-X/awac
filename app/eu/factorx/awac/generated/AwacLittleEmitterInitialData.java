@@ -1332,7 +1332,7 @@ if (ap22 == null) {
         
 ap23 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP23);
 if (ap23 == null) {
-    ap23 = new DoubleQuestion( ap17, 0, QuestionCode.AP23, energyUnits, getUnitBySymbol("kWh") );
+    ap23 = new DoubleQuestion( ap17, 0, QuestionCode.AP23, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(ap23);
 
     // cleanup the driver
@@ -1353,7 +1353,7 @@ if (ap23 == null) {
     }
     ((NumericQuestion)ap23).setUnitCategory(energyUnits);
     ap23.setOrderIndex(0);
-    ((NumericQuestion)ap23).setDefaultUnit(getUnitBySymbol("kWh"));
+    ((NumericQuestion)ap23).setDefaultUnit(getUnitBySymbol("kW.h"));
 
     // cleanup the driver
     Driver ap23_driver = driverService.findByName("AP23");
@@ -1506,7 +1506,7 @@ if (ap500 == null) {
         
 ap501 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP501);
 if (ap501 == null) {
-    ap501 = new DoubleQuestion( ap17, 0, QuestionCode.AP501, energyUnits, getUnitBySymbol("kWh") );
+    ap501 = new DoubleQuestion( ap17, 0, QuestionCode.AP501, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(ap501);
 
     // cleanup the driver
@@ -1527,7 +1527,7 @@ if (ap501 == null) {
     }
     ((NumericQuestion)ap501).setUnitCategory(energyUnits);
     ap501.setOrderIndex(0);
-    ((NumericQuestion)ap501).setDefaultUnit(getUnitBySymbol("kWh"));
+    ((NumericQuestion)ap501).setDefaultUnit(getUnitBySymbol("kW.h"));
 
     // cleanup the driver
     Driver ap501_driver = driverService.findByName("AP501");
@@ -2039,7 +2039,7 @@ if (ap34 == null) {
         
 ap35 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP35);
 if (ap35 == null) {
-    ap35 = new DoubleQuestion( ap17, 0, QuestionCode.AP35, energyUnits, getUnitBySymbol("kWh") );
+    ap35 = new DoubleQuestion( ap17, 0, QuestionCode.AP35, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(ap35);
 
     // cleanup the driver
@@ -2060,7 +2060,7 @@ if (ap35 == null) {
     }
     ((NumericQuestion)ap35).setUnitCategory(energyUnits);
     ap35.setOrderIndex(0);
-    ((NumericQuestion)ap35).setDefaultUnit(getUnitBySymbol("kWh"));
+    ((NumericQuestion)ap35).setDefaultUnit(getUnitBySymbol("kW.h"));
 
     // cleanup the driver
     Driver ap35_driver = driverService.findByName("AP35");
@@ -2170,7 +2170,7 @@ if (ap37 == null) {
         
 ap38 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP38);
 if (ap38 == null) {
-    ap38 = new DoubleQuestion( ap17, 0, QuestionCode.AP38, energyUnits, getUnitBySymbol("kWh") );
+    ap38 = new DoubleQuestion( ap17, 0, QuestionCode.AP38, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(ap38);
 
     // cleanup the driver
@@ -2191,7 +2191,7 @@ if (ap38 == null) {
     }
     ((NumericQuestion)ap38).setUnitCategory(energyUnits);
     ap38.setOrderIndex(0);
-    ((NumericQuestion)ap38).setDefaultUnit(getUnitBySymbol("kWh"));
+    ((NumericQuestion)ap38).setDefaultUnit(getUnitBySymbol("kW.h"));
 
     // cleanup the driver
     Driver ap38_driver = driverService.findByName("AP38");
@@ -2282,7 +2282,7 @@ if (ap44 == null) {
         
 ap45 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP45);
 if (ap45 == null) {
-    ap45 = new DoubleQuestion( ap41, 0, QuestionCode.AP45, energyUnits, getUnitBySymbol("kWh") );
+    ap45 = new DoubleQuestion( ap41, 0, QuestionCode.AP45, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(ap45);
 
     // cleanup the driver
@@ -2303,7 +2303,7 @@ if (ap45 == null) {
     }
     ((NumericQuestion)ap45).setUnitCategory(energyUnits);
     ap45.setOrderIndex(0);
-    ((NumericQuestion)ap45).setDefaultUnit(getUnitBySymbol("kWh"));
+    ((NumericQuestion)ap45).setDefaultUnit(getUnitBySymbol("kW.h"));
 
     // cleanup the driver
     Driver ap45_driver = driverService.findByName("AP45");
@@ -2432,7 +2432,7 @@ if (ap47 == null) {
         
 ap48 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP48);
 if (ap48 == null) {
-    ap48 = new DoubleQuestion( ap41, 0, QuestionCode.AP48, energyUnits, getUnitBySymbol("kWh") );
+    ap48 = new DoubleQuestion( ap41, 0, QuestionCode.AP48, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(ap48);
 
     // cleanup the driver
@@ -2453,7 +2453,7 @@ if (ap48 == null) {
     }
     ((NumericQuestion)ap48).setUnitCategory(energyUnits);
     ap48.setOrderIndex(0);
-    ((NumericQuestion)ap48).setDefaultUnit(getUnitBySymbol("kWh"));
+    ((NumericQuestion)ap48).setDefaultUnit(getUnitBySymbol("kW.h"));
 
     // cleanup the driver
     Driver ap48_driver = driverService.findByName("AP48");
@@ -2476,7 +2476,7 @@ if (ap48 == null) {
         
 ap49 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP49);
 if (ap49 == null) {
-    ap49 = new DoubleQuestion( ap41, 0, QuestionCode.AP49, energyUnits, getUnitBySymbol("kWh") );
+    ap49 = new DoubleQuestion( ap41, 0, QuestionCode.AP49, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(ap49);
 
     // cleanup the driver
@@ -2497,7 +2497,7 @@ if (ap49 == null) {
     }
     ((NumericQuestion)ap49).setUnitCategory(energyUnits);
     ap49.setOrderIndex(0);
-    ((NumericQuestion)ap49).setDefaultUnit(getUnitBySymbol("kWh"));
+    ((NumericQuestion)ap49).setDefaultUnit(getUnitBySymbol("kW.h"));
 
     // cleanup the driver
     Driver ap49_driver = driverService.findByName("AP49");
@@ -2520,7 +2520,7 @@ if (ap49 == null) {
         
 ap50 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP50);
 if (ap50 == null) {
-    ap50 = new DoubleQuestion( ap41, 0, QuestionCode.AP50, energyUnits, getUnitBySymbol("kWh") );
+    ap50 = new DoubleQuestion( ap41, 0, QuestionCode.AP50, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(ap50);
 
     // cleanup the driver
@@ -2541,7 +2541,7 @@ if (ap50 == null) {
     }
     ((NumericQuestion)ap50).setUnitCategory(energyUnits);
     ap50.setOrderIndex(0);
-    ((NumericQuestion)ap50).setDefaultUnit(getUnitBySymbol("kWh"));
+    ((NumericQuestion)ap50).setDefaultUnit(getUnitBySymbol("kW.h"));
 
     // cleanup the driver
     Driver ap50_driver = driverService.findByName("AP50");
@@ -3431,7 +3431,7 @@ if (ap96 == null) {
     ap96_driver = new Driver("AP96");
     driverService.saveOrUpdate(ap96_driver);
     Period p2000 = periodService.findByCode(PeriodCode.P2000);
-    DriverValue dv = new DriverValue(ap96_driver, p2000, Double.valueOf(61));
+    DriverValue dv = new DriverValue(ap96_driver, p2000, Double.valueOf(0.61));
     ap96_driver.getDriverValueList().add(dv);;
     driverService.saveOrUpdate(ap96_driver);
     JPA.em().persist(dv);
@@ -3459,7 +3459,7 @@ if (ap96 == null) {
     ap96_driver = new Driver("AP96");
     driverService.saveOrUpdate(ap96_driver);
     Period p2000 = periodService.findByCode(PeriodCode.P2000);
-    DriverValue dv = new DriverValue(ap96_driver, p2000, Double.valueOf(61));
+    DriverValue dv = new DriverValue(ap96_driver, p2000, Double.valueOf(0.61));
     ap96_driver.getDriverValueList().add(dv);;
     driverService.saveOrUpdate(ap96_driver);
     JPA.em().persist(dv);
@@ -3489,7 +3489,7 @@ if (ap97 == null) {
     ap97_driver = new Driver("AP97");
     driverService.saveOrUpdate(ap97_driver);
     Period p2000 = periodService.findByCode(PeriodCode.P2000);
-    DriverValue dv = new DriverValue(ap97_driver, p2000, Double.valueOf(39));
+    DriverValue dv = new DriverValue(ap97_driver, p2000, Double.valueOf(0.39));
     ap97_driver.getDriverValueList().add(dv);;
     driverService.saveOrUpdate(ap97_driver);
     JPA.em().persist(dv);
@@ -3517,7 +3517,7 @@ if (ap97 == null) {
     ap97_driver = new Driver("AP97");
     driverService.saveOrUpdate(ap97_driver);
     Period p2000 = periodService.findByCode(PeriodCode.P2000);
-    DriverValue dv = new DriverValue(ap97_driver, p2000, Double.valueOf(39));
+    DriverValue dv = new DriverValue(ap97_driver, p2000, Double.valueOf(0.39));
     ap97_driver.getDriverValueList().add(dv);;
     driverService.saveOrUpdate(ap97_driver);
     JPA.em().persist(dv);

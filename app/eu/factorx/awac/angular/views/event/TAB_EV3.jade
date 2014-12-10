@@ -27,7 +27,7 @@ div
     .horizontal_separator
         mm-awac-section(title-code="AEV57")
 
-            mm-awac-repetition-name(question-code="AEV58", ng-condition="getAnswer('AEV80').value == '1'")
+            mm-awac-repetition-name(question-code="AEV58")
             mm-awac-repetition-question(question-set-code="AEV58", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionmapByQuestionSet('AEV58')")
                 mm-awac-question(question-code="AEV59",ng-repetition-map="itLevel1",ng-map-index="{'AEV58':$index}")
                 mm-awac-question(question-code="AEV60",ng-repetition-map="itLevel1",ng-map-index="{'AEV58':$index}")
@@ -42,7 +42,7 @@ div
 
             mm-awac-sub-title(question-code="AEV66")
 
-            mm-awac-repetition-name(question-code="AEV67", ng-condition="getAnswer('AEV80').value == '1'")
+            mm-awac-repetition-name(question-code="AEV67")
             mm-awac-repetition-question(question-set-code="AEV67", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionmapByQuestionSet('AEV67')")
                 mm-awac-question(question-code="AEV68",ng-repetition-map="itLevel1",ng-map-index="{'AEV67':$index}")
                 mm-awac-question(question-code="AEV74",ng-repetition-map="itLevel1",ng-map-index="{'AEV67':$index}")

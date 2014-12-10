@@ -206,7 +206,7 @@ public class BAD_APE_BAD1KTest{
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("AP17",3);
-                list.add(new AnswerLineDTO("AP501",15000.0,  mapRepetition1  , UnitCode.U5155.getKey()  ));
+                list.add(new AnswerLineDTO("AP501",15000.0,  mapRepetition1  , UnitCode.U5156.getKey()  ));
         
         return list;
     }

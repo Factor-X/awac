@@ -6,7 +6,7 @@ import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
 import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.models.business.Scope;
-import eu.factorx.awac.models.business.Site;
+import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.code.type.*;
 import eu.factorx.awac.models.data.answer.QuestionSetAnswer;
 import eu.factorx.awac.models.knowledge.Period;
@@ -14,7 +14,7 @@ import eu.factorx.awac.models.reporting.BaseActivityData;
 import eu.factorx.awac.service.PeriodService;
 import eu.factorx.awac.service.QuestionSetAnswerService;
 import eu.factorx.awac.service.ScopeService;
-import eu.factorx.awac.service.SiteService;
+import eu.factorx.awac.service.OrganizationService;
 import eu.factorx.awac.service.knowledge.activity.contributor.household.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public class BAD_AM_BAD1ITest{
     private QuestionSetAnswerService questionSetAnswerService;
 
     @Autowired
-    private SiteService siteService;
+    private OrganizationService organizationService;
 
     @Autowired
     private ScopeService scopeService;
@@ -56,17 +56,17 @@ public class BAD_AM_BAD1ITest{
 
     private final static Long FORM_ID = 2L;
     private final static Long PERIOD_ID = 1L;
-    private String identifier = "user1";
+    private String identifier = "user30";
     private String identifierPassword = "password";
 
     /**
      * run test
-     * need an id of a scope (site)
-     * @param siteId
+     * need an id of a scope (organization)
+     * @param organizationId
      */
-    public void test(long siteId){
+    public void test(long organizationId){
 
-        Site site = siteService.findById(siteId);
+        Organization organization= organizationService.findById(organizationId);
         Period period = periodService.findById(PERIOD_ID);
 
         //
@@ -75,7 +75,7 @@ public class BAD_AM_BAD1ITest{
         QuestionAnswersDTO questionAnswersDTO = new QuestionAnswersDTO();
         questionAnswersDTO.setFormId(FORM_ID);
         questionAnswersDTO.setPeriodId(PERIOD_ID);
-        questionAnswersDTO.setScopeId(site.getId());
+        questionAnswersDTO.setScopeId(organization.getId());
         questionAnswersDTO.setLastUpdateDate(new Date().toString());
 
         List<AnswerLineDTO> answerLineDTOList = new ArrayList<>();
@@ -115,7 +115,7 @@ public class BAD_AM_BAD1ITest{
         //TODO temporary
         JPA.em().clear();
         JPA.em().flush();
-        Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(site, period);
+        Map<QuestionCode, List<QuestionSetAnswer>> questionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(organization, period);
         List<BaseActivityData> bads = baseActivityDataAM_BAD1I.getBaseActivityData(questionSetAnswers);
 
         //control content
@@ -209,31 +209,31 @@ public class BAD_AM_BAD1ITest{
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("AM26",4);
-                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition1  , UnitCode.U5169.getKey()  ));
+                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition1  , UnitCode.U5170.getKey()  ));
                 //add repetition
         Map<String, Integer> mapRepetition2 = new HashMap<>();
                 mapRepetition2.put("AM26",5);
-                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition2  , UnitCode.U5169.getKey()  ));
+                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition2  , UnitCode.U5170.getKey()  ));
                 //add repetition
         Map<String, Integer> mapRepetition3 = new HashMap<>();
                 mapRepetition3.put("AM26",6);
-                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition3  , UnitCode.U5169.getKey()  ));
+                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition3  , UnitCode.U5170.getKey()  ));
                 //add repetition
         Map<String, Integer> mapRepetition4 = new HashMap<>();
                 mapRepetition4.put("AM26",7);
-                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition4  , UnitCode.U5169.getKey()  ));
+                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition4  , UnitCode.U5170.getKey()  ));
                 //add repetition
         Map<String, Integer> mapRepetition5 = new HashMap<>();
                 mapRepetition5.put("AM26",8);
-                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition5  , UnitCode.U5169.getKey()  ));
+                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition5  , UnitCode.U5170.getKey()  ));
                 //add repetition
         Map<String, Integer> mapRepetition6 = new HashMap<>();
                 mapRepetition6.put("AM26",9);
-                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition6  , UnitCode.U5169.getKey()  ));
+                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition6  , UnitCode.U5170.getKey()  ));
                 //add repetition
         Map<String, Integer> mapRepetition7 = new HashMap<>();
                 mapRepetition7.put("AM26",10);
-                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition7  , UnitCode.U5169.getKey()  ));
+                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition7  , UnitCode.U5170.getKey()  ));
         
         return list;
     }
@@ -248,7 +248,7 @@ public class BAD_AM_BAD1ITest{
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("AM26",9);
-                list.add(new AnswerLineDTO("AM39",0.8,  mapRepetition1  , UnitCode.U5169.getKey()  ));
+                list.add(new AnswerLineDTO("AM39",0.8,  mapRepetition1  , UnitCode.U5170.getKey()  ));
         
         return list;
     }
