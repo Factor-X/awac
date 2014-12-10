@@ -205,15 +205,15 @@ public class BAD_APE_BAD1DTest{
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("AP17",2);
-                list.add(new AnswerLineDTO("AP24",8000.0,  mapRepetition1  , UnitCode.U5169.getKey()  ));
+                list.add(new AnswerLineDTO("AP24",8000.0,  mapRepetition1  , UnitCode.U5170.getKey()  ));
                 //add repetition
         Map<String, Integer> mapRepetition2 = new HashMap<>();
                 mapRepetition2.put("AP17",5);
-                list.add(new AnswerLineDTO("AP24",8000.0,  mapRepetition2  , UnitCode.U5169.getKey()  ));
+                list.add(new AnswerLineDTO("AP24",8000.0,  mapRepetition2  , UnitCode.U5170.getKey()  ));
                 //add repetition
         Map<String, Integer> mapRepetition3 = new HashMap<>();
                 mapRepetition3.put("AP17",8);
-                list.add(new AnswerLineDTO("AP24",8000.0,  mapRepetition3  , UnitCode.U5169.getKey()  ));
+                list.add(new AnswerLineDTO("AP24",8000.0,  mapRepetition3  , UnitCode.U5170.getKey()  ));
         
         return list;
     }
@@ -228,7 +228,7 @@ public class BAD_APE_BAD1DTest{
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("AP17",5);
-                list.add(new AnswerLineDTO("AP26",1.3,  mapRepetition1  , UnitCode.U5169.getKey()  ));
+                list.add(new AnswerLineDTO("AP26",1.3,  mapRepetition1  , UnitCode.U5170.getKey()  ));
         
         return list;
     }

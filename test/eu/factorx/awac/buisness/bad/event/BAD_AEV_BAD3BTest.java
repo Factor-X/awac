@@ -43,7 +43,7 @@ public class BAD_AEV_BAD3BTest{
     private QuestionSetAnswerService questionSetAnswerService;
 
     @Autowired
-    private ProductService ProductService;
+    private ProductService productService;
 
     @Autowired
     private ScopeService scopeService;

@@ -209,31 +209,31 @@ public class BAD_AM_BAD1GTest{
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("AM26",4);
-                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition1  , UnitCode.U5169.getKey()  ));
+                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition1  , UnitCode.U5170.getKey()  ));
                 //add repetition
         Map<String, Integer> mapRepetition2 = new HashMap<>();
                 mapRepetition2.put("AM26",5);
-                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition2  , UnitCode.U5169.getKey()  ));
+                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition2  , UnitCode.U5170.getKey()  ));
                 //add repetition
         Map<String, Integer> mapRepetition3 = new HashMap<>();
                 mapRepetition3.put("AM26",6);
-                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition3  , UnitCode.U5169.getKey()  ));
+                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition3  , UnitCode.U5170.getKey()  ));
                 //add repetition
         Map<String, Integer> mapRepetition4 = new HashMap<>();
                 mapRepetition4.put("AM26",7);
-                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition4  , UnitCode.U5169.getKey()  ));
+                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition4  , UnitCode.U5170.getKey()  ));
                 //add repetition
         Map<String, Integer> mapRepetition5 = new HashMap<>();
                 mapRepetition5.put("AM26",8);
-                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition5  , UnitCode.U5169.getKey()  ));
+                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition5  , UnitCode.U5170.getKey()  ));
                 //add repetition
         Map<String, Integer> mapRepetition6 = new HashMap<>();
                 mapRepetition6.put("AM26",9);
-                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition6  , UnitCode.U5169.getKey()  ));
+                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition6  , UnitCode.U5170.getKey()  ));
                 //add repetition
         Map<String, Integer> mapRepetition7 = new HashMap<>();
                 mapRepetition7.put("AM26",10);
-                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition7  , UnitCode.U5169.getKey()  ));
+                list.add(new AnswerLineDTO("AM33",1000.0,  mapRepetition7  , UnitCode.U5170.getKey()  ));
         
         return list;
     }
@@ -248,7 +248,7 @@ public class BAD_AM_BAD1GTest{
                  //add repetition
         Map<String, Integer> mapRepetition1 = new HashMap<>();
                 mapRepetition1.put("AM26",7);
-                list.add(new AnswerLineDTO("AM37",3.8,  mapRepetition1  , UnitCode.U5169.getKey()  ));
+                list.add(new AnswerLineDTO("AM37",3.8,  mapRepetition1  , UnitCode.U5170.getKey()  ));
         
         return list;
     }

@@ -43,7 +43,7 @@ public class BAD_AEV_BAD5Test{
     private QuestionSetAnswerService questionSetAnswerService;
 
     @Autowired
-    private ProductService ProductService;
+    private ProductService productService;
 
     @Autowired
     private ScopeService scopeService;
@@ -172,7 +172,11 @@ public class BAD_AEV_BAD5Test{
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
-         
+                 //add repetition
+        Map<String, Integer> mapRepetition1 = new HashMap<>();
+                mapRepetition1.put("AEV58",1);
+                list.add(new AnswerLineDTO("AEV61","AT_18",  mapRepetition1 ));
+        
         return list;
     }
         /**
@@ -183,7 +187,11 @@ public class BAD_AEV_BAD5Test{
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
-         
+                 //add repetition
+        Map<String, Integer> mapRepetition1 = new HashMap<>();
+                mapRepetition1.put("AEV58",1);
+                list.add(new AnswerLineDTO("AEV60","AS_173",  mapRepetition1 ));
+        
         return list;
     }
         /**

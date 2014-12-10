@@ -43,7 +43,7 @@ public class BAD_AEV_BAD9Test{
     private QuestionSetAnswerService questionSetAnswerService;
 
     @Autowired
-    private ProductService ProductService;
+    private ProductService productService;
 
     @Autowired
     private ScopeService scopeService;
@@ -158,7 +158,11 @@ public class BAD_AEV_BAD9Test{
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
-         
+                 //add repetition
+        Map<String, Integer> mapRepetition1 = new HashMap<>();
+                mapRepetition1.put("AEV98",1);
+                list.add(new AnswerLineDTO("AEV99","test",  mapRepetition1 ));
+        
         return list;
     }
         /**
@@ -169,7 +173,11 @@ public class BAD_AEV_BAD9Test{
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
-         
+                 //add repetition
+        Map<String, Integer> mapRepetition1 = new HashMap<>();
+                mapRepetition1.put("AEV98",1);
+                list.add(new AnswerLineDTO("AEV102","AS_162",  mapRepetition1 ));
+        
         return list;
     }
         /**
@@ -180,7 +188,11 @@ public class BAD_AEV_BAD9Test{
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
-         
+                 //add repetition
+        Map<String, Integer> mapRepetition1 = new HashMap<>();
+                mapRepetition1.put("AEV98",1);
+                list.add(new AnswerLineDTO("AEV105","1",  mapRepetition1 ));
+        
         return list;
     }
         /**
@@ -191,7 +203,11 @@ public class BAD_AEV_BAD9Test{
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
-         
+                 //add repetition
+        Map<String, Integer> mapRepetition1 = new HashMap<>();
+                mapRepetition1.put("AEV98",1);
+                list.add(new AnswerLineDTO("AEV103",10.0,  mapRepetition1 ));
+        
         return list;
     }
         /**
@@ -202,7 +218,11 @@ public class BAD_AEV_BAD9Test{
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
-         
+                 //add repetition
+        Map<String, Integer> mapRepetition1 = new HashMap<>();
+                mapRepetition1.put("AEV98",1);
+                list.add(new AnswerLineDTO("AEV104",100.0,  mapRepetition1  , UnitCode.U5106.getKey()  ));
+        
         return list;
     }
         /**
@@ -213,7 +233,11 @@ public class BAD_AEV_BAD9Test{
 
         List<AnswerLineDTO> list = new ArrayList<>();
 
-         
+                 //add repetition
+        Map<String, Integer> mapRepetition1 = new HashMap<>();
+                mapRepetition1.put("AEV98",1);
+                list.add(new AnswerLineDTO("AEV101",5.0,  mapRepetition1 ));
+        
         return list;
     }
     

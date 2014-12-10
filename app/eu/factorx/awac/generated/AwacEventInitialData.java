@@ -344,7 +344,7 @@ public class AwacEventInitialData {
     }
     private void createForm2() {
         // == TAB_EV2
-        // COMBUSTBILES & REFRIGERATION
+        // COMBUSTIBLES & REFRIGERATION
         form2 = formService.findByIdentifier("TAB_EV2");
         if (form2 == null) {
             form2 = new Form("TAB_EV2");
@@ -1585,7 +1585,7 @@ if (aev29 == null) {
         
 aev30 = (DoubleQuestion) questionService.findByCode(QuestionCode.AEV30);
 if (aev30 == null) {
-    aev30 = new DoubleQuestion( aev27, 0, QuestionCode.AEV30, energyUnits, getUnitBySymbol("kWh") );
+    aev30 = new DoubleQuestion( aev27, 0, QuestionCode.AEV30, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(aev30);
 
     // cleanup the driver
@@ -1606,7 +1606,7 @@ if (aev30 == null) {
     }
     ((NumericQuestion)aev30).setUnitCategory(energyUnits);
     aev30.setOrderIndex(0);
-    ((NumericQuestion)aev30).setDefaultUnit(getUnitBySymbol("kWh"));
+    ((NumericQuestion)aev30).setDefaultUnit(getUnitBySymbol("kW.h"));
 
     // cleanup the driver
     Driver aev30_driver = driverService.findByName("AEV30");

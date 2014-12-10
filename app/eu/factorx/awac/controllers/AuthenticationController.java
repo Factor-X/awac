@@ -14,6 +14,8 @@ package eu.factorx.awac.controllers;
 import java.util.HashMap;
 import java.util.Map;
 
+import eu.factorx.awac.models.association.AccountProductAssociation;
+import eu.factorx.awac.models.business.Product;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
@@ -77,6 +79,11 @@ public class AuthenticationController extends AbstractController {
 	@Autowired
 	private PeriodService periodService;
 
+	@Autowired
+	private ProductService productService;
+
+	@Autowired
+	private AccountProductAssociationService accountProductAssociationService;
 
 	@Transactional(readOnly = true)
 	public Result testAuthentication() {
@@ -148,15 +155,26 @@ public class AuthenticationController extends AbstractController {
 				accountService.saveOrUpdate(account);
 
 				// create site & period
-				Site site = new Site(org, "YourSite");
-				site.setOrganizationalStructure("ORGANIZATION_STRUCTURE_1");
-				site.getListPeriodAvailable().add(periodService.findLastYear());
-				siteService.saveOrUpdate(site);
+				if (InterfaceTypeCode.EVENT.equals(interfaceTypeCode)) {
+					Product product = new Product(org, "YourProduct" + lastName);
+					product.getListPeriodAvailable().add(periodService.findLastYear());
+					productService.saveOrUpdate(product);
 
-				AccountSiteAssociation asa = new AccountSiteAssociation();
-				asa.setAccount(account);
-				asa.setSite(site);
-				accountSiteAssociationService.saveOrUpdate(asa);
+					AccountProductAssociation apa = new AccountProductAssociation();
+					apa.setAccount(account);
+					apa.setProduct(product);
+					accountProductAssociationService.saveOrUpdate(apa);
+				} else {
+					Site site = new Site(org, "YourSite");
+					site.setOrganizationalStructure("ORGANIZATION_STRUCTURE_1");
+					site.getListPeriodAvailable().add(periodService.findLastYear());
+					siteService.saveOrUpdate(site);
+
+					AccountSiteAssociation asa = new AccountSiteAssociation();
+					asa.setAccount(account);
+					asa.setSite(site);
+					accountSiteAssociationService.saveOrUpdate(asa);
+				}
 
 				response().setCookie("AWAC_ANONYMOUS_IDENTIFIER", identifier);
 			} // else cookie does not exist

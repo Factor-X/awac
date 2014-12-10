@@ -2,7 +2,7 @@ package $PACKAGE;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import eu.factorx.awac.controllers.SecuredController;
-import eu.factorx.awac.dto.awac.get.ProductDTO;
+import eu.factorx.awac.dto.myrmex.get.ProductDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.models.AbstractBaseModelTest;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;

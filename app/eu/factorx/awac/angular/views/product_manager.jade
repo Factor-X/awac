@@ -1,6 +1,6 @@
 div
     .menu_close(ng-click="toForm()")
-    h1(ng-bind-html="'PRODUCT_MANAGER_BUTTON' | translateText")
+    h1(ng-bind-html="'EVENT_MANAGER_BUTTON' | translateText")
 
     div.site_manager
 
@@ -9,7 +9,7 @@ div
 
         table.site_table
             tr.site_table_header
-                td(ng-bind-html="'SITE_MANAGER_EDIT_SITE_BUTTON' | translateText")
+                td(ng-bind-html="'EVENT_MANAGER_EDIT_EVENT' | translateText")
                 td(ng-bind-html="'NAME' | translateText")
                 td(ng-bind-html="'DESCRIPTION' | translateText")
                 td(ng-bind-html="'SITE_MANAGER_ADD_USERS_BUTTON' | translateText")
@@ -30,4 +30,4 @@ div
                             ng-click="assignPeriodToProduct(product)")
                     img(src='/assets/images/modal-loading.gif',ng-show="isLoading[product.id]=== true")
 
-        button.button.add(type="button", ng-click="editOrCreateProduct()",ng-bind-html="'SITE_MANAGER_ADD_SITE_BUTTON' | translateText")
+        button.button.add(type="button", ng-click="editOrCreateProduct()",ng-bind-html="'EVENT_MANAGER_CREATE_EVENT' | translateText")

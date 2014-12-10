@@ -1459,7 +1459,7 @@ if (am31 == null) {
         
 am32 = (DoubleQuestion) questionService.findByCode(QuestionCode.AM32);
 if (am32 == null) {
-    am32 = new DoubleQuestion( am26, 0, QuestionCode.AM32, energyUnits, getUnitBySymbol("kWh") );
+    am32 = new DoubleQuestion( am26, 0, QuestionCode.AM32, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(am32);
 
     // cleanup the driver
@@ -1480,7 +1480,7 @@ if (am32 == null) {
     }
     ((NumericQuestion)am32).setUnitCategory(energyUnits);
     am32.setOrderIndex(0);
-    ((NumericQuestion)am32).setDefaultUnit(getUnitBySymbol("kWh"));
+    ((NumericQuestion)am32).setDefaultUnit(getUnitBySymbol("kW.h"));
 
     // cleanup the driver
     Driver am32_driver = driverService.findByName("AM32");
@@ -2247,7 +2247,7 @@ if (am46 == null) {
         
 am47 = (DoubleQuestion) questionService.findByCode(QuestionCode.AM47);
 if (am47 == null) {
-    am47 = new DoubleQuestion( am26, 0, QuestionCode.AM47, energyUnits, getUnitBySymbol("kWh") );
+    am47 = new DoubleQuestion( am26, 0, QuestionCode.AM47, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(am47);
 
     // cleanup the driver
@@ -2268,7 +2268,7 @@ if (am47 == null) {
     }
     ((NumericQuestion)am47).setUnitCategory(energyUnits);
     am47.setOrderIndex(0);
-    ((NumericQuestion)am47).setDefaultUnit(getUnitBySymbol("kWh"));
+    ((NumericQuestion)am47).setDefaultUnit(getUnitBySymbol("kW.h"));
 
     // cleanup the driver
     Driver am47_driver = driverService.findByName("AM47");
@@ -2403,7 +2403,7 @@ if (am52 == null) {
         
 am53 = (DoubleQuestion) questionService.findByCode(QuestionCode.AM53);
 if (am53 == null) {
-    am53 = new DoubleQuestion( am48, 0, QuestionCode.AM53, energyUnits, getUnitBySymbol("kWh") );
+    am53 = new DoubleQuestion( am48, 0, QuestionCode.AM53, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(am53);
 
     // cleanup the driver
@@ -2424,7 +2424,7 @@ if (am53 == null) {
     }
     ((NumericQuestion)am53).setUnitCategory(energyUnits);
     am53.setOrderIndex(0);
-    ((NumericQuestion)am53).setDefaultUnit(getUnitBySymbol("kWh"));
+    ((NumericQuestion)am53).setDefaultUnit(getUnitBySymbol("kW.h"));
 
     // cleanup the driver
     Driver am53_driver = driverService.findByName("AM53");
@@ -2871,7 +2871,7 @@ if (am61 == null) {
         
 am62 = (DoubleQuestion) questionService.findByCode(QuestionCode.AM62);
 if (am62 == null) {
-    am62 = new DoubleQuestion( am48, 0, QuestionCode.AM62, energyUnits, getUnitBySymbol("kWh") );
+    am62 = new DoubleQuestion( am48, 0, QuestionCode.AM62, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(am62);
 
     // cleanup the driver
@@ -2892,7 +2892,7 @@ if (am62 == null) {
     }
     ((NumericQuestion)am62).setUnitCategory(energyUnits);
     am62.setOrderIndex(0);
-    ((NumericQuestion)am62).setDefaultUnit(getUnitBySymbol("kWh"));
+    ((NumericQuestion)am62).setDefaultUnit(getUnitBySymbol("kW.h"));
 
     // cleanup the driver
     Driver am62_driver = driverService.findByName("AM62");
@@ -2983,7 +2983,7 @@ if (am66 == null) {
         
 am67 = (DoubleQuestion) questionService.findByCode(QuestionCode.AM67);
 if (am67 == null) {
-    am67 = new DoubleQuestion( am63, 0, QuestionCode.AM67, energyUnits, getUnitBySymbol("kWh") );
+    am67 = new DoubleQuestion( am63, 0, QuestionCode.AM67, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(am67);
 
     // cleanup the driver
@@ -3004,7 +3004,7 @@ if (am67 == null) {
     }
     ((NumericQuestion)am67).setUnitCategory(energyUnits);
     am67.setOrderIndex(0);
-    ((NumericQuestion)am67).setDefaultUnit(getUnitBySymbol("kWh"));
+    ((NumericQuestion)am67).setDefaultUnit(getUnitBySymbol("kW.h"));
 
     // cleanup the driver
     Driver am67_driver = driverService.findByName("AM67");
@@ -3133,7 +3133,7 @@ if (am69 == null) {
         
 am70 = (DoubleQuestion) questionService.findByCode(QuestionCode.AM70);
 if (am70 == null) {
-    am70 = new DoubleQuestion( am63, 0, QuestionCode.AM70, energyUnits, getUnitBySymbol("kWh") );
+    am70 = new DoubleQuestion( am63, 0, QuestionCode.AM70, energyUnits, getUnitBySymbol("kW.h") );
     JPA.em().persist(am70);
 
     // cleanup the driver
@@ -3154,7 +3154,7 @@ if (am70 == null) {
     }
     ((NumericQuestion)am70).setUnitCategory(energyUnits);
     am70.setOrderIndex(0);
-    ((NumericQuestion)am70).setDefaultUnit(getUnitBySymbol("kWh"));
+    ((NumericQuestion)am70).setDefaultUnit(getUnitBySymbol("kW.h"));
 
     // cleanup the driver
     Driver am70_driver = driverService.findByName("AM70");
