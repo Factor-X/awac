@@ -1,7 +1,6 @@
 angular
 .module('app.controllers')
-.controller "VerificationRegistrationCtrl", ($scope,downloadService,modalService,messageFlash,$routeParams,translationService) ->
-
+.controller "VerificationRegistrationCtrl", ($scope, downloadService, modalService, messageFlash, $routeParams, translationService) ->
     $scope.isLoading = false
 
     $scope.fields =
@@ -54,7 +53,7 @@ angular
             validationMessage: "ORGANIZATION_NAME_WRONG_LENGTH"
 
         agreementValidation:
-            isValid:false
+            isValid: false
 
     $scope.displayAgreement = () ->
         modalService.show(modalService.HELP, {template: 'agreement'})

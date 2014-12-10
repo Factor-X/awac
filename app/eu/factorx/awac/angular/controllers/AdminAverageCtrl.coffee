@@ -1,25 +1,24 @@
 angular
 .module('app.controllers')
-.controller "AdminAverageCtrl", ($scope, displayLittleFormMenu, downloadService, modalService, messageFlash, translationService, ngTableParams, $filter, $compile,$window) ->
-
+.controller "AdminAverageCtrl", ($scope, displayLittleFormMenu, downloadService, modalService, messageFlash, translationService, ngTableParams, $filter, $compile, $window) ->
     $scope.displayLittleFormMenu = displayLittleFormMenu
     $scope.isLoading = false
 
     $scope.naceCodes = [
-        key:null
-        label:'tous les NACEs'
+        key: null
+        label: 'tous les NACEs'
     ,
-        key:'SECTEURPRIMAIRE'
-        label:'Industrie primaire, hormis le secteur agricole'
+        key: 'SECTEURPRIMAIRE'
+        label: 'Industrie primaire, hormis le secteur agricole'
     ,
-        key:'SECTEURSECONDAIRE'
-        label:'Production de biens intermédiaires'
+        key: 'SECTEURSECONDAIRE'
+        label: 'Production de biens intermédiaires'
     ,
-        key:'SECTEURSECONDAIRE'
-        label:'Production de biens de consommation'
+        key: 'SECTEURSECONDAIRE'
+        label: 'Production de biens de consommation'
     ,
-        key:'SECTEURTERTIAIRE'
-        label:'Tertiaire'
+        key: 'SECTEURTERTIAIRE'
+        label: 'Tertiaire'
     ]
 
     $scope.onlyVerifiedForm = true
@@ -28,9 +27,9 @@ angular
         if result.success
             for codeList in result.data.list
                 for code in codeList.codeLabels
-                    $scope.naceCodes.push {key:codeList.code+"/"+code.key, label:code.label}
+                    $scope.naceCodes.push {key: codeList.code + "/" + code.key, label: code.label}
 
-    $scope.interfaceNames =[
+    $scope.interfaceNames = [
         "enterprise"
         "municipality"
         "household"
@@ -39,15 +38,13 @@ angular
     ]
 
     $scope.results =
-        interface:null
-        period:null
+        interface: null
+        period: null
 
-    $scope.naceCode=null
-
+    $scope.naceCode = null
 
 
     $scope.allFieldValid = () ->
-
         for key in Object.keys($scope.results)
             if key != '$$hashKey'
                 if !$scope.results[key]?
@@ -63,10 +60,10 @@ angular
                 naceCodeKey = $scope.naceCode.split("/")[1];
         data =
             interfaceName: $scope.results.interface
-            periodKey:$scope.results.period
-            naceCodeListKey:naceCodeListKey
-            naceCodeKey:naceCodeKey
-            onlyVerifiedForm:$scope.onlyVerifiedForm
+            periodKey: $scope.results.period
+            naceCodeListKey: naceCodeListKey
+            naceCodeKey: naceCodeKey
+            onlyVerifiedForm: $scope.onlyVerifiedForm
         console.log data
         downloadService.postJson '/awac/admin/average/computeAverage', data, (result) ->
             $scope.isLoading = false

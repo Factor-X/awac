@@ -1,8 +1,7 @@
 angular
 .module('app.controllers')
-.controller "VerificationArchiveCtrl", ($scope,displayLittleFormMenu,modalService,downloadService,messageFlash,$window,ngTableParams,$filter) ->
-
-    $scope.displayLittleFormMenu=displayLittleFormMenu
+.controller "VerificationArchiveCtrl", ($scope, displayLittleFormMenu, modalService, downloadService, messageFlash, $window, ngTableParams, $filter) ->
+    $scope.displayLittleFormMenu = displayLittleFormMenu
 
 
     #launch download
@@ -17,7 +16,7 @@ angular
 
     $scope.displayTable = () ->
         if not $scope.requests
-            $scope.requests=[]
+            $scope.requests = []
         if $scope.tableParams?
             $scope.tableParams.reload();
         else

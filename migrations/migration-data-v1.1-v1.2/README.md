@@ -55,5 +55,5 @@
          $ rake surveys:import:municipality
          $ rake surveys:import:household
          $ rake surveys:import:event
-         $ rake surveys:import:little-emitter
+         $ rake surveys:import:little_emitter
          ```

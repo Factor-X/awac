@@ -33,7 +33,8 @@ angular
         downloadService.getJson "awac/admin/translations/baselists/load", (result) ->
             if result.success
                 allBaseLists = result.data.baseLists
-                $scope.allBaseLists = [getSystemBaseLists(allBaseLists), getActionsBaseLists(allBaseLists), getSurveysBaseLists(allBaseLists)]
+                $scope.allBaseLists = [getSystemBaseLists(allBaseLists), getActionsBaseLists(allBaseLists),
+                                       getSurveysBaseLists(allBaseLists)]
                 $scope.originalData = updateOrderIndexes(angular.copy($scope.allBaseLists))
             $scope.waitingData = false
             return
@@ -63,7 +64,7 @@ angular
 
     getSurveysBaseLists = (allBaseLists) ->
         res = _.filter allBaseLists, (baseList) ->
-            return ! _.contains(fixedLists, baseList.codeList)
+            return !_.contains(fixedLists, baseList.codeList)
         res = _.sortBy res, (baseList) ->
             return baseList.codeList
         for baseList in res

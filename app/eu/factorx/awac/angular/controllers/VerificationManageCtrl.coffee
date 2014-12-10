@@ -17,7 +17,7 @@ angular
 
     $scope.displayTable = () ->
         if not $scope.requests
-            $scope.requests=[]
+            $scope.requests = []
         if $scope.tableParams?
             $scope.tableParams.reload();
         else
@@ -51,24 +51,24 @@ angular
                 request.status = newStatus
                 $scope.loadingRequest[request.id] = false
                 if newStatus == 'VERIFICATION_STATUS_REJECTED'
-                    i=0
+                    i = 0
                     for r in $scope.requests
                         if r.id == request.id
-                            $scope.requests.splice(i,1)
+                            $scope.requests.splice(i, 1)
                         i++
-                        
+
                 $scope.displayTable()
 
     $scope.assignRequest = (request) ->
-        params=
-            request:request
+        params =
+            request: request
         modalService.show(modalService.VERIFICATION_ASSIGN, params)
 
     $scope.addKey = () ->
         dto =
-            key:angular.copy $scope.keyToInject
+            key: angular.copy $scope.keyToInject
         $scope.addKeyLoading = true
-        $scope.keyToInject=""
+        $scope.keyToInject = ""
         downloadService.postJson "/awac/verification/addRequestByKey", dto, (result) ->
             if not result.success
                 $scope.addKeyLoading = false

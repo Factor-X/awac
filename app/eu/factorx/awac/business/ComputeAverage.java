@@ -120,7 +120,7 @@ public class ComputeAverage {
 		List<AverageValue> averageValueList = new ArrayList<>();
 		for (Form form : awacCalculator.getForms()) {
 			for (QuestionSet questionSet : form.getQuestionSets()) {
-				averageValueList.addAll(computeAverage(questionSet, scopeAndPeriodList, account.getPerson().getDefaultLanguage(), null));
+				averageValueList.addAll(computeAverage(questionSet, scopeAndPeriodList, account.getPerson().getDefaultLanguage(), null,period));
 			}
 		}
 
@@ -372,7 +372,7 @@ public class ComputeAverage {
 	}
 
 
-	private List<AverageValue> computeAverage(QuestionSet questionSet, List<ScopeAndPeriod> scopeAndPeriodList, LanguageCode lang, RepetitionMap repetitionMap) {
+	private List<AverageValue> computeAverage(QuestionSet questionSet, List<ScopeAndPeriod> scopeAndPeriodList, LanguageCode lang, RepetitionMap repetitionMap,Period period) {
 
 		List<AverageValue> averageValueList = new ArrayList<>();
 
@@ -409,9 +409,9 @@ public class ComputeAverage {
 
 			//continue the tree if the questionSet is not repetable
 			for (QuestionSet child : questionSet.getChildren()) {
-				averageValueList.addAll(computeAverage(child, scopeAndPeriodList, lang, repetitionMap));
+				averageValueList.addAll(computeAverage(child, scopeAndPeriodList, lang, repetitionMap,period));
 			}
-			averageValueList.addAll(computeResponse(questionSet, scopeAndPeriodList, lang, null));
+			averageValueList.addAll(computeResponse(questionSet, scopeAndPeriodList, lang, null,period));
 		} else {
 
 			listQuestionSetWithRepetition.add(questionSet);
@@ -491,7 +491,7 @@ public class ComputeAverage {
 			for (QuestionSet child : questionSet.getChildren()) {
 				if (repetitionMapList.get(questionSet) != null) {
 					for (RepetitionMap repetitionMapToTest : repetitionMapList.get(questionSet)) {
-						averageValueList.addAll(computeAverage(child, scopeAndPeriodList, lang, repetitionMapToTest));
+						averageValueList.addAll(computeAverage(child, scopeAndPeriodList, lang, repetitionMapToTest,period));
 					}
 				}
 			}
@@ -499,14 +499,14 @@ public class ComputeAverage {
 			//print by repetitionMap
 			if (repetitionMapList.get(questionSet) != null) {
 				for (RepetitionMap repetitionMapToTest : repetitionMapList.get(questionSet)) {
-					averageValueList.addAll(computeResponse(questionSet, null, lang, repetitionMapToTest));
+					averageValueList.addAll(computeResponse(questionSet, null, lang, repetitionMapToTest,period));
 				}
 			}
 		}
 		return averageValueList;
 	}
 
-	private List<AverageValue> computeResponse(QuestionSet questionSet, List<ScopeAndPeriod> scopeAndPeriodList, LanguageCode lang, RepetitionMap repetitionMap) {
+	private List<AverageValue> computeResponse(QuestionSet questionSet, List<ScopeAndPeriod> scopeAndPeriodList, LanguageCode lang, RepetitionMap repetitionMap,Period period) {
 
 
 		List<AverageValue> averageValueList = new ArrayList<>();
@@ -590,7 +590,7 @@ public class ComputeAverage {
 
 							//convert
 							if (unit != null) {
-								value = convert(((DoubleAnswerValue) answerValue), unit);
+								value = convert(((DoubleAnswerValue) answerValue), unit,period);
 							}
 
 							listValues.add(value);
@@ -641,7 +641,7 @@ public class ComputeAverage {
 
 							//convert
 							if (unit != null) {
-								value = convert(((IntegerAnswerValue) answerValue), unit);
+								value = convert(((IntegerAnswerValue) answerValue), unit,period);
 							}
 							listValues.add(value);
 							total++;
@@ -674,7 +674,8 @@ public class ComputeAverage {
 
 						if ((answerValue instanceof StringAnswerValue && ((StringAnswerValue) answerValue).getValue() != null) ||
 								(answerValue instanceof DocumentAnswerValue && ((DocumentAnswerValue) answerValue).getStoredFile() != null) ||
-								(answerValue instanceof EntityAnswerValue && ((EntityAnswerValue) answerValue).getEntityId() != null)) {
+								(answerValue instanceof EntityAnswerValue && ((EntityAnswerValue) answerValue).getEntityId() != null) ||
+                                (answerValue instanceof DateTimeAnswerValue && ((DateTimeAnswerValue) answerValue).getDateTime() != null)) {
 
 							total++;
 
@@ -845,7 +846,7 @@ public class ComputeAverage {
 	}
 
 
-	private Double convert(NumericAnswerValue answerValue, Unit toUnit) {
+	private Double convert(NumericAnswerValue answerValue, Unit toUnit,Period period) {
 
 		if (toUnit == null && answerValue.getUnit() == null) {
 			return answerValue.doubleValue();
@@ -861,7 +862,7 @@ public class ComputeAverage {
 
 		}
 		//convert
-		return unitConversionService.convert(answerValue.doubleValue(), answerValue.getUnit(), toUnit, null);
+		return unitConversionService.convert(answerValue.doubleValue(), answerValue.getUnit(), toUnit, Integer.valueOf(period.getPeriodCode().getKey()));
 	}
 
 	private Double standardDeviation(List<Double> values, double average, int total) {

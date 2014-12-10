@@ -64,7 +64,7 @@ angular
         if $scope.form == '/results'
             directiveName = "<div ng-include=\"'$/angular/views/results.html'\" ng-controller=\"ResultsCtrl\"></div>"
         else
-            directiveName = "<div ng-include=\"'$/angular/views/"+$scope.requestSelected.organizationCustomer.interfaceName+"/" + $scope.form + ".html'\" ng-init=\"init('" + $scope.form + "')\" ng-controller=\"FormCtrl\"></div>"
+            directiveName = "<div ng-include=\"'$/angular/views/" + $scope.requestSelected.organizationCustomer.interfaceName + "/" + $scope.form + ".html'\" ng-init=\"init('" + $scope.form + "')\" ng-controller=\"FormCtrl\"></div>"
         $scope.directive = $compile(directiveName)($scope)
         $('.injectForm:first').append($scope.directive)
 
@@ -91,7 +91,7 @@ angular
     $scope.consultEvent = () ->
         data =
             organizationCustomer: $scope.requestSelected.organizationCustomer
-        modalService.show modalService.CONSULT_EVENT,data
+        modalService.show modalService.CONSULT_EVENT, data
 
 
     $scope.$on 'TEST_CLOSING_VALIDATION', () ->
@@ -106,10 +106,10 @@ angular
 
 
     $scope.removeRequest = ->
-        i=0
+        i = 0
         for request in $scope.requests
             if request.id == $scope.requestSelected.id
-                $scope.requests.splice i,1
+                $scope.requests.splice i, 1
             i++
         $scope.displayTable()
         $('.injectForm:first').empty()
@@ -119,7 +119,7 @@ angular
     $scope.finalizeVerification = () ->
         console.log $scope.verificationFinalization
         data =
-            removeRequest:$scope.removeRequest
-            verificationSuccess:$scope.verificationFinalization.success
+            removeRequest: $scope.removeRequest
+            verificationSuccess: $scope.verificationFinalization.success
             request: $scope.requestSelected
         modalService.show modalService.VERIFICATION_FINALIZATION, data

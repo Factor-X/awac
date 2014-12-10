@@ -26,27 +26,14 @@ public class BADTestGenerator {
     private CodeLabelService codeLabelService;
 
 
-    public void generateBAD(BAD bad, BADLog.LogLine logLine, Map<String, Answer> mapAnswer, TemplateName templateName) {
+    public void generateBAD(BAD bad, BADLog.LogLine logLine, TemplateName templateName) {
 
 
         if (bad.getTestValues().size() > 0) {
 
-            //generate questionAndAnswer list
-            List<QuestionAndAnswer> questionAndAnswerList = new ArrayList<>();
-
-            for (String questionCode : bad.getListQuestions()) {
-                if (mapAnswer.get(questionCode) == null) {
-                    logLine.addError("Cannot found the answer for the required question " + questionCode);
-                } else {
-                    questionAndAnswerList.add(new QuestionAndAnswer(questionCode, mapAnswer.get(questionCode).getAnswerLines()));
-                }
-            }
-
-
             //create template
             BADTemplate badTemplate = new BADTemplate(templateName.getTestTemplate(), "BAD_" + bad.getBaseActivityDataCode() + "Test.java");
 
-            Logger.info("questionAndAnswerList for " + bad.getBaseActivityDataCode() + "->" + questionAndAnswerList.toString());
 
             //insert user
             badTemplate.addParameter("user", templateName.getUserIdentifier());
@@ -56,9 +43,6 @@ public class BADTestGenerator {
 
             //bad package
             badTemplate.addParameter("BAD_PACKAGE", templateName.getPackageString());
-
-            //inset questions
-            badTemplate.addParameter("questions", questionAndAnswerList);
 
             //insert answer
             badTemplate.addParameter("testValues", bad.getTestValues());
@@ -72,41 +56,5 @@ public class BADTestGenerator {
         }
     }
 
-
-    public class QuestionAndAnswer {
-
-        private String questionCode;
-
-        private List<AnswerLine> answerLines;
-
-        public QuestionAndAnswer(String questionCode, List<AnswerLine> answerLines) {
-            this.questionCode = questionCode;
-            this.answerLines = answerLines;
-        }
-
-        public String getQuestionCode() {
-            return questionCode;
-        }
-
-        public void setQuestionCode(String questionCode) {
-            this.questionCode = questionCode;
-        }
-
-        public List<AnswerLine> getAnswerLines() {
-            return answerLines;
-        }
-
-        public void setAnswerLines(List<AnswerLine> answerLines) {
-            this.answerLines = answerLines;
-        }
-
-        @Override
-        public String toString() {
-            return "QuestionAndAnswer{" +
-                    "questionCode='" + questionCode + '\'' +
-                    ", answerLines=" + answerLines +
-                    '}';
-        }
-    }
 
 }

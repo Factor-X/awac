@@ -12,7 +12,7 @@ angular
 
     $scope.enterEvent = ->
         if $scope.tabActive[0] == true
-            $scope.send({anonymous:false})
+            $scope.send({anonymous: false})
         else if $scope.tabActive[1] == true
             $scope.sendForgotPassword()
 
@@ -79,7 +79,6 @@ angular
 
             #send request
             downloadService.postJson '/awac/login', dto, (result) ->
-
                 if result.success
                     $scope.$root.loginSuccess(result.data)
                     messageFlash.displaySuccess translationService.get 'CONNECTION_MESSAGE_SUCCESS'

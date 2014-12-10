@@ -439,8 +439,6 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                     $rootScope.availablePeriods = null
                     $location.path("noScope")
         else if $rootScope.instanceName == 'event'
-            console.log '$rootScope.mySites', $rootScope.mySites
-            console.log '$rootScope.scopeSelectedId', $rootScope.scopeSelectedId
             if !scopeId?
                 scopeId = $rootScope.scopeSelectedId
             if scopeId?

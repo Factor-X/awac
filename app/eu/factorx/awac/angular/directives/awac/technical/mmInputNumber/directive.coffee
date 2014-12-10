@@ -45,8 +45,8 @@ angular
                         modelCtrl.$setViewValue resultToDisplay
                         modelCtrl.$render()
                     else
-                        if  attrs.numbersOnly == "percent"
-                            result=result/100
+                        #if  attrs.numbersOnly == "percent"
+                        #    result=result/100
                         scope.lastValidValue = result
                         resultString = result.toString()
                     if resultString == ""

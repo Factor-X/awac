@@ -28,7 +28,6 @@ angular
     $scope.statisticsAllowed = false
 
 
-
     # load my organization
     modalService.show(modalService.LOADING)
     downloadService.getJson 'awac/organization/getMyOrganization', (result) ->
@@ -40,7 +39,7 @@ angular
             $scope.statisticsAllowed = $scope.organization.statisticsAllowed
 
 
-            downloadService.getJson 'awac/organization/events/load',  (result) ->
+            downloadService.getJson 'awac/organization/events/load', (result) ->
                 if result.success
                     $scope.events = result.data.organizationEventList
 
@@ -64,8 +63,8 @@ angular
                     return false
 
                 data =
-                	name: $scope.nameInfo.field
-                	statisticsAllowed: $scope.statisticsAllowed
+                    name: $scope.nameInfo.field
+                    statisticsAllowed: $scope.statisticsAllowed
 
                 $scope.isLoading = true
                 downloadService.postJson '/awac/organization/update', data, (result) ->

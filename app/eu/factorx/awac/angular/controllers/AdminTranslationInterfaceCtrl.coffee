@@ -1,7 +1,6 @@
 angular
 .module('app.controllers')
 .controller "AdminTranslationInterfaceCtrl", ($scope, $compile, downloadService, modalService, messageFlash, translationService, codeLabelHelper, displayLittleFormMenu, $location) ->
-
     $scope.displayLittleFormMenu = displayLittleFormMenu
 
     $scope.codeLabelsByList = {}
