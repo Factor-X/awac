@@ -16,6 +16,7 @@ angular
                 allFormLabels = _.sortBy(allFormLabels, 'codeKey')
                 $scope.formLabelsByCalculator = _.groupBy(allFormLabels, 'calculatorCodeKey')
                 $scope.initialFormLabelsByCalculator = angular.copy($scope.formLabelsByCalculator)
+
             $scope.waitingData = false
             return
         return
@@ -80,6 +81,10 @@ angular
                     $scope.ignoreChanges = true
                     $location.path(next.split('#')[1])
             modalService.show modalService.CONFIRM_DIALOG, params
+
+
+
+
 
 
     $scope.loadCodeLabels()

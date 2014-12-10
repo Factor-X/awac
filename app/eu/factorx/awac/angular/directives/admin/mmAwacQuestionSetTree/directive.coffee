@@ -9,4 +9,10 @@ angular
     compile: (element) ->
         return RecursionHelper.compile(element, (scope, iElement, iAttrs, controller, transcludeFn) ->
 
+            scope.getPadding = () ->
+                p = 30
+                if scope.$parent.getPadding
+                    p += scope.$parent.getPadding()
+                return p
+
         )
