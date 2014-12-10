@@ -599,7 +599,7 @@ public class AwacLittleEmitterInitialData {
     }
     private void createQuestionSetAP91() {
         // == AP91
-        // Renseignez lesdéplacements pour l'ensemble de vos travailleurs
+        // Renseignez les déplacements pour l'ensemble de vos travailleurs
         ap91 = questionSetService.findByCode(QuestionCode.AP91);
         if( ap91 == null ) {
             ap91 = new QuestionSet(QuestionCode.AP91, false, ap78);
@@ -736,7 +736,7 @@ public class AwacLittleEmitterInitialData {
         // Créez autant de marchandises que nécessaire
         ap144 = questionSetService.findByCode(QuestionCode.AP144);
         if( ap144 == null ) {
-            ap144 = new QuestionSet(QuestionCode.AP144, true, ap140);
+            ap144 = new QuestionSet(QuestionCode.AP144, true, ap143);
             JPA.em().persist(ap144);
         }
     }
@@ -1545,7 +1545,7 @@ if (ap501 == null) {
     }
     private void createQuestionAP26() {
         // == AP26
-        // Prix unitaire du combustible (€/l)
+        // Prix unitaire du mazout (€/l)
 
         
 ap26 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP26);
@@ -1608,7 +1608,7 @@ if (ap26 == null) {
     }
     private void createQuestionAP27() {
         // == AP27
-        // Prix unitaire du combustible (€/m3)
+        // Prix unitaire du gaz (€/l)
 
         
 ap27 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP27);
@@ -1671,7 +1671,7 @@ if (ap27 == null) {
     }
     private void createQuestionAP28() {
         // == AP28
-        // Prix unitaire du combustible (€/kg)
+        // Prix unitaire du bois (€/kg)
 
         
 ap28 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP28);
@@ -1734,7 +1734,7 @@ if (ap28 == null) {
     }
     private void createQuestionAP29() {
         // == AP29
-        // Prix unitaire du combustible (€/kg)
+        // Prix unitaire du charbon (€/kg)
 
         
 ap29 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP29);
@@ -3209,7 +3209,7 @@ if (ap86 == null) {
     ap86_driver = new Driver("AP86");
     driverService.saveOrUpdate(ap86_driver);
     Period p2000 = periodService.findByCode(PeriodCode.P2000);
-    DriverValue dv = new DriverValue(ap86_driver, p2000, Double.valueOf(220));
+    DriverValue dv = new DriverValue(ap86_driver, p2000, Double.valueOf(220.0));
     ap86_driver.getDriverValueList().add(dv);;
     driverService.saveOrUpdate(ap86_driver);
     JPA.em().persist(dv);
@@ -3238,7 +3238,7 @@ if (ap86 == null) {
     ap86_driver = new Driver("AP86");
     driverService.saveOrUpdate(ap86_driver);
     Period p2000 = periodService.findByCode(PeriodCode.P2000);
-    DriverValue dv = new DriverValue(ap86_driver, p2000, Double.valueOf(220));
+    DriverValue dv = new DriverValue(ap86_driver, p2000, Double.valueOf(220.0));
     ap86_driver.getDriverValueList().add(dv);;
     driverService.saveOrUpdate(ap86_driver);
     JPA.em().persist(dv);
@@ -3431,7 +3431,7 @@ if (ap96 == null) {
     ap96_driver = new Driver("AP96");
     driverService.saveOrUpdate(ap96_driver);
     Period p2000 = periodService.findByCode(PeriodCode.P2000);
-    DriverValue dv = new DriverValue(ap96_driver, p2000, Double.valueOf(61));
+    DriverValue dv = new DriverValue(ap96_driver, p2000, Double.valueOf(0.61));
     ap96_driver.getDriverValueList().add(dv);;
     driverService.saveOrUpdate(ap96_driver);
     JPA.em().persist(dv);
@@ -3459,7 +3459,7 @@ if (ap96 == null) {
     ap96_driver = new Driver("AP96");
     driverService.saveOrUpdate(ap96_driver);
     Period p2000 = periodService.findByCode(PeriodCode.P2000);
-    DriverValue dv = new DriverValue(ap96_driver, p2000, Double.valueOf(61));
+    DriverValue dv = new DriverValue(ap96_driver, p2000, Double.valueOf(0.61));
     ap96_driver.getDriverValueList().add(dv);;
     driverService.saveOrUpdate(ap96_driver);
     JPA.em().persist(dv);
@@ -3489,7 +3489,7 @@ if (ap97 == null) {
     ap97_driver = new Driver("AP97");
     driverService.saveOrUpdate(ap97_driver);
     Period p2000 = periodService.findByCode(PeriodCode.P2000);
-    DriverValue dv = new DriverValue(ap97_driver, p2000, Double.valueOf(39));
+    DriverValue dv = new DriverValue(ap97_driver, p2000, Double.valueOf(0.39));
     ap97_driver.getDriverValueList().add(dv);;
     driverService.saveOrUpdate(ap97_driver);
     JPA.em().persist(dv);
@@ -3517,7 +3517,7 @@ if (ap97 == null) {
     ap97_driver = new Driver("AP97");
     driverService.saveOrUpdate(ap97_driver);
     Period p2000 = periodService.findByCode(PeriodCode.P2000);
-    DriverValue dv = new DriverValue(ap97_driver, p2000, Double.valueOf(39));
+    DriverValue dv = new DriverValue(ap97_driver, p2000, Double.valueOf(0.39));
     ap97_driver.getDriverValueList().add(dv);;
     driverService.saveOrUpdate(ap97_driver);
     JPA.em().persist(dv);
