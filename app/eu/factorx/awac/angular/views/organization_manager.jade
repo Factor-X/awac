@@ -19,7 +19,7 @@ div
             button(type="button", class="btn btn-primary", ng-bind-html="'SAVE_BUTTON' | translate", ng-click="saveOrganization()", ng-disabled="!allFieldValid()")
         img(ng-show="isLoading",src="/assets/images/modal-loading.gif")
 
-        div(ng-hide="$root.instanceName == 'verification' || $root.instanceName == 'admin'")
+        div(ng-hide="$root.instanceName == 'verification' || $root.instanceName == 'admin' || $root.instanceName == 'littleemitter' || $root.instanceName == 'event' || $root.instanceName == 'household' ")
             br
             br
             h4(ng-bind-html="'SITE_MANAGER_EVENT_TITLE' | translateText")
