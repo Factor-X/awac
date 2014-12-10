@@ -26,6 +26,10 @@ angular
                             modelCtrl.$render()
 
                 modelCtrl.$parsers.unshift (viewValue) ->
+
+                    console.log "je suis la valeur visuel : "+viewValue
+
+
                     if viewValue == ""
                         return null
 
@@ -45,12 +49,13 @@ angular
                         modelCtrl.$setViewValue resultToDisplay
                         modelCtrl.$render()
                     else
-                        #if  attrs.numbersOnly == "percent"
-                        #    result=result/100
+                        if  attrs.numbersOnly == "percent"
+                            result=result/100
                         scope.lastValidValue = result
                         resultString = result.toString()
                     if resultString == ""
                         return null
+                    console.log " == > la nouvelle valeur-model est : "+resultString
                     return  resultString
 
 
@@ -58,10 +63,14 @@ angular
                     return scope.displayValue(modelValue)
 
                 scope.displayValue = (modelValue) ->
+                    console.log "je suis la valeur model : "+modelValue
                     result=parseFloat(modelValue)
                     if  attrs.numbersOnly == "percent"
-                        result=result*100
-                    return convertToString(result)
+                        result=angular.copy(result)*100
+                    viewValue =  convertToString(result)
+
+                    console.log " == > la nouvelle valeur-view est : "+viewValue
+                    return viewValue
 
                 displayError = ->
                     # try to display the message like a error message.
@@ -111,8 +120,10 @@ angular
                 # first initialization : save first value and display it
                 #
                 if modelCtrl.$modelValue?
+                    console.log "je suis l'initilaization !! la valueToDisplay est : "+valueToDisplay
                     scope.lastValidValue = parseFloat(modelCtrl.$modelValue)
                     # first displaying
                     valueToDisplay = scope.displayValue(scope.lastValidValue)
+                    console.log "=> la valeur de initilaization visuel est "+valueToDisplay
                     modelCtrl.$setViewValue(valueToDisplay)
                     modelCtrl.$render()
