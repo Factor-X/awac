@@ -2,9 +2,10 @@ package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.business.ComputeAverage;
 import eu.factorx.awac.dto.awac.get.CodeListDTO;
-import eu.factorx.awac.dto.awac.get.ResultsDTO;
+import eu.factorx.awac.dto.awac.get.LoginResultDTO;
 import eu.factorx.awac.dto.awac.post.ComputeAverageDTO;
 import eu.factorx.awac.dto.awac.shared.ListDTO;
+import eu.factorx.awac.dto.awac.shared.ResultMessageDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Product;
@@ -208,7 +209,7 @@ public class AverageController extends AbstractController {
 
         } // else
 
-        return ok(new ResultsDTO());
+        return ok(new ResultMessageDTO("STATS_SUCCESS_MESSAGE"));
     }
 
     /**

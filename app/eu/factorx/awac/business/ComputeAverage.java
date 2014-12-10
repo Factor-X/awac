@@ -33,7 +33,6 @@ import jxl.WorkbookSettings;
 import jxl.format.Colour;
 import jxl.write.*;
 import jxl.write.Number;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -43,8 +42,6 @@ import play.Logger;
 import play.db.jpa.JPA;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.Boolean;
 import java.util.*;
@@ -82,9 +79,9 @@ public class ComputeAverage {
 	@play.db.jpa.Transactional(readOnly = true)
 	@Async
 	public Future<Boolean> computeAverageAsync(final Account account, final AwacCalculator awacCalculator,
-	                                           final List<eu.factorx.awac.controllers.AverageController.ScopeAndPeriod> scopeAndPeriodList,
-	                                           final Period period, final int organizationComputed,
-	                                           final int scopeComputed) throws IOException, WriteException {
+											   final List<eu.factorx.awac.controllers.AverageController.ScopeAndPeriod> scopeAndPeriodList,
+											   final Period period, final int organizationComputed,
+											   final int scopeComputed) throws IOException, WriteException {
 
 		try {
 			JPA.withTransaction("default", false, new play.libs.F.Function0<Void>() {
@@ -115,8 +112,8 @@ public class ComputeAverage {
 	}
 
 	public void computeAverage(final Account account, final AwacCalculator awacCalculator,
-	                           final List<eu.factorx.awac.controllers.AverageController.ScopeAndPeriod> scopeAndPeriodList,
-	                           final Period period, final int organizationComputed, final int scopeComputed) throws IOException, WriteException {
+							   final List<eu.factorx.awac.controllers.AverageController.ScopeAndPeriod> scopeAndPeriodList,
+							   final Period period, final int organizationComputed, final int scopeComputed) throws IOException, WriteException {
 
 		//for each question, compute average
 		//compute form by form
@@ -153,24 +150,24 @@ public class ComputeAverage {
 	    values.put("user", securedController.getCurrentUser());
 	    */
 
-        /*** Add CELDL-405 ***/
-        String subject;
-        String content;
-        HashMap<String, CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
+		/*** Add CELDL-405 ***/
+		String subject;
+		String content;
+		HashMap<String, CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
 
-        subject = traductions.get("AVERAGE_SUBJECT").getLabel(account.getPerson().getDefaultLanguage());
-        content = traductions.get("AVERAGE_CONTENT").getLabel(account.getPerson().getDefaultLanguage());
+		subject = traductions.get("AVERAGE_SUBJECT").getLabel(account.getPerson().getDefaultLanguage());
+		content = traductions.get("AVERAGE_CONTENT").getLabel(account.getPerson().getDefaultLanguage());
 
-        values.put("content", content);
+		values.put("content", content);
 
-        String velocityContent = velocityGeneratorService.generate("verification/average.vm", values);
+		String velocityContent = velocityGeneratorService.generate("verification/average.vm", values);
 
 		EmailMessage email = new EmailMessage(account.getPerson().getEmail(), subject, velocityContent);
 		//
 
-        // Local write for test purposes
-    	//	FileOutputStream outputs = new FileOutputStream(new File("/home/florian/temp/result.xls"));
-	    //	IOUtils.write(output.toByteArray(), outputs);
+		// Local write for test purposes
+		//	FileOutputStream outputs = new FileOutputStream(new File("/home/florian/temp/result.xls"));
+		//	IOUtils.write(output.toByteArray(), outputs);
 
 		//send email
 		HashMap<String, ByteArrayOutputStream> listAttachment = new HashMap<>();
@@ -492,8 +489,10 @@ public class ComputeAverage {
 
 			//continue the tree if the questionSet is not repetable
 			for (QuestionSet child : questionSet.getChildren()) {
-				for (RepetitionMap repetitionMapToTest : repetitionMapList.get(questionSet)) {
-					averageValueList.addAll(computeAverage(child, scopeAndPeriodList, lang, repetitionMapToTest));
+				if (repetitionMapList.get(questionSet) != null) {
+					for (RepetitionMap repetitionMapToTest : repetitionMapList.get(questionSet)) {
+						averageValueList.addAll(computeAverage(child, scopeAndPeriodList, lang, repetitionMapToTest));
+					}
 				}
 			}
 

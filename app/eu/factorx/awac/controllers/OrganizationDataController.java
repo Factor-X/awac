@@ -2,10 +2,10 @@ package eu.factorx.awac.controllers;
 
 import eu.factorx.awac.dto.awac.get.AwacCalculatorLanguagesDTO;
 import eu.factorx.awac.dto.awac.get.OrganizationDataDTO;
-import eu.factorx.awac.dto.awac.get.ResultsDTO;
 import eu.factorx.awac.dto.awac.post.SendEmailDTO;
 import eu.factorx.awac.dto.awac.shared.ListDTO;
 import eu.factorx.awac.dto.awac.shared.MapDTO;
+import eu.factorx.awac.dto.awac.shared.ResultMessageDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
@@ -91,7 +91,7 @@ public class OrganizationDataController extends AbstractController {
             }
         }
 
-        return ok(new ResultsDTO());
+        return ok(new ResultMessageDTO());
     }
 
     @Transactional(readOnly = true)
