@@ -4,8 +4,8 @@ package eu.factorx.awac.controllers;
 import eu.factorx.awac.dto.admin.get.DriverDTO;
 import eu.factorx.awac.dto.admin.get.DriverValueDTO;
 import eu.factorx.awac.dto.admin.get.ListDriverDTO;
-import eu.factorx.awac.dto.awac.get.ResultsDTO;
 import eu.factorx.awac.dto.awac.shared.ListDTO;
+import eu.factorx.awac.dto.awac.shared.ResultMessageDTO;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.code.type.PeriodCode;
 import eu.factorx.awac.models.data.question.Driver;
@@ -91,7 +91,7 @@ public class DriverController extends AbstractController {
             }
         }
 
-        return ok(new ResultsDTO());
+        return ok(new ResultMessageDTO());
     }
 
     @Transactional(readOnly = true)

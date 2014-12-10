@@ -4,6 +4,7 @@ import eu.factorx.awac.common.actions.SecurityAnnotation;
 import eu.factorx.awac.dto.awac.get.ResultsDTO;
 import eu.factorx.awac.dto.awac.get.VerificationDTO;
 import eu.factorx.awac.dto.awac.shared.ListDTO;
+import eu.factorx.awac.dto.awac.shared.ResultMessageDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.verification.get.VerificationRequestDTO;
 import eu.factorx.awac.dto.verification.post.CreateVerificationRequestDTO;
@@ -680,7 +681,7 @@ public class VerificationController extends AbstractController {
 			emailService.send(email);
 		}
 
-		return ok(new ResultsDTO());
+		return ok(new ResultMessageDTO());
 	}
 
 
