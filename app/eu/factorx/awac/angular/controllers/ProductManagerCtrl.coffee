@@ -72,7 +72,7 @@ angular
                     $scope.isLoading[product.id] = false
                     if result.success
                         product.listPeriodAvailable = result.data.periodsList
-                        $scope.refreshMyProduct()
+                        $scope.refreshMyProducts()
 
             #
             # this function replace my product by organization product
