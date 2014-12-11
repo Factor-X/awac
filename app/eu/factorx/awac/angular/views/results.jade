@@ -5,9 +5,9 @@ div.results.pdf-able
     table.wide
         tr
             td.top-aligned
-                .sites-panel(ng-hide="$root.instanceName == 'municipality' || $root.instanceName == 'household'|| $root.instanceName == 'littleemitter'")
+                .sites-panel(ng-hide="$root.instanceName == 'municipality' || $root.instanceName == 'household' || $root.instanceName == 'littleemitter'")
                     .sites-panel-title
-                        span(ng-bind-html="'SITES_LIST' | translate")
+                        span(ng-bind-html="($root.instanceName == 'event' ? 'EVENTS_LIST' : 'SITES_LIST') | translate")
 
                     //
                         .sites-panel-all-items
