@@ -67,7 +67,7 @@ public class Period extends AuditedAbstractEntity implements Comparable<Period> 
     }
 
     public String toString() {
-        return "Period[preiodCode : " + periodCode.toString() + ", label: " + label + "]";
+        return "Period[periodCode : " + periodCode.toString() + ", label: " + label + "]";
     }
 
     @Override

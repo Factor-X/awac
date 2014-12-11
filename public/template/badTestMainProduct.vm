@@ -2,10 +2,14 @@ package $PACKAGE;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import eu.factorx.awac.controllers.SecuredController;
+import eu.factorx.awac.dto.awac.get.OrganizationDTO;
+import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
+import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
 import eu.factorx.awac.dto.myrmex.get.ProductDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.models.AbstractBaseModelTest;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import eu.factorx.awac.models.code.type.UnitCode;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +22,7 @@ import play.libs.Json;
 import play.mvc.Result;
 import play.test.FakeRequest;
 
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,6 +41,10 @@ import static play.test.Helpers.status;
 public class BadTest extends AbstractBaseModelTest {
 
     private static Long scopeId = null;
+    private final static Long FORM_ID = 2L;
+    private final static Long PERIOD_ID = 1L;
+    private String identifier = "user20";
+    private String identifierPassword = "password";
 
     #foreach($bad in $bads)
 
@@ -59,13 +68,13 @@ public class BadTest extends AbstractBaseModelTest {
     dto.setName("productname");
 
     //Json node
-    JsonNode node = Json.toJson(dto);
+    JsonNode nodeForProduct = Json.toJson(dto);
 
     // perform save
     // Fake request
     FakeRequest saveFakeRequest = new FakeRequest();
     saveFakeRequest.withHeader("Content-type", "application/json");
-    saveFakeRequest.withJsonBody(node);
+    saveFakeRequest.withJsonBody(nodeForProduct);
     saveFakeRequest.withSession(SecuredController.SESSION_IDENTIFIER_STORE, cfDto.getLogin());
 
     // Call controller action
@@ -86,11 +95,75 @@ public class BadTest extends AbstractBaseModelTest {
 
     scopeId = resultDTO.getId();
 
+    //
+    // 1) build data
+    //
+    QuestionAnswersDTO questionAnswersDTO = new QuestionAnswersDTO();
+    questionAnswersDTO.setFormId(FORM_ID);
+    questionAnswersDTO.setPeriodId(PERIOD_ID);
+    questionAnswersDTO.setScopeId(scopeId);
+    questionAnswersDTO.setLastUpdateDate(new Date().toString());
+
+    List<AnswerLineDTO> answerLineDTOList = new ArrayList<>();
+
+    //add answers
+    #foreach($question in $questions)
+        answerLineDTOList.addAll(buildAnswer${question.questionCode}());
+    #end
+
+    questionAnswersDTO.setListAnswers(answerLineDTOList);
+
+    //
+    // 2) send request
+    //
+    //Json node
+    JsonNode node = Json.toJson(questionAnswersDTO);
+    FakeRequest saveFakeRequestBad = new FakeRequest();
+    saveFakeRequestBad.withHeader("Content-type", "application/json");
+    saveFakeRequestBad.withJsonBody(node);
+
+    //connection
+    saveFakeRequestBad.withSession(SecuredController.SESSION_IDENTIFIER_STORE,cfDto.getLogin());
+
+    // Call controller action
+    Result resultBad = callAction(
+    eu.factorx.awac.controllers.routes.ref.AnswerController.save(),
+    saveFakeRequestBad
+    );
+
+    // control result
+    assertEquals(200, status(resultBad));
+
     }
+
     #foreach($bad in $bads)
     @Test
-    public void _00${foreach.count}_bad${bad.getBaseActivityDataCode()}() {
+    public void _${bad.getOrder()}_bad${bad.getBaseActivityDataCode()}() {
         bad_${bad.getBaseActivityDataCode()}Test.test(scopeId);
     }
+    #end
+
+
+    #foreach($question in $questions)
+    /**
+    * build the AnswerLineDTO
+    * question : $question.questionCode
+    */
+    private List<AnswerLineDTO> buildAnswer${question.questionCode}(){
+
+        List<AnswerLineDTO> list = new ArrayList<>();
+
+        #foreach($answerLine in $question.answerLines)
+            #set($repetitionCount = $foreach.count)
+            //add repetition
+            Map<String, Integer> mapRepetition${repetitionCount} = new HashMap<>();
+            #foreach ($repetition in $answerLine.mapRepetition.entrySet())
+                mapRepetition${repetitionCount}.put("$repetition.key",$repetition.value);
+            #end
+            list.add(new AnswerLineDTO("$question.questionCode",$answerLine.value,  mapRepetition${repetitionCount} #if( ${answerLine.unit} ) , UnitCode.${answerLine.unit.unitCode.key}.getKey()  #end));
+        #end
+
+        return list;
+        }
     #end
 }

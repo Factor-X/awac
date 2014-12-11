@@ -120,8 +120,8 @@ angular
                 # first initialization : save first value and display it
                 #
                 if modelCtrl.$modelValue?
-                    console.log "je suis l'initilaization !! la valueToDisplay est : "+valueToDisplay
                     scope.lastValidValue = parseFloat(modelCtrl.$modelValue)
+                    console.log "je suis l'initilaization !! la modelCtrl.$modelValue est : "+modelCtrl.$modelValue
                     # first displaying
                     valueToDisplay = scope.displayValue(scope.lastValidValue)
                     console.log "=> la valeur de initilaization visuel est "+valueToDisplay
