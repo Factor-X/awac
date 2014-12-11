@@ -1,5 +1,6 @@
 package eu.factorx.awac.controllers;
 
+import eu.factorx.awac.common.Constants;
 import eu.factorx.awac.common.actions.SecurityAnnotation;
 import eu.factorx.awac.dto.awac.post.ChangeUserStatusDTO;
 import eu.factorx.awac.dto.awac.post.EmailChangeDTO;
@@ -64,7 +65,8 @@ public class UserProfileController extends AbstractController {
         accountService.saveOrUpdate(currentUser);
 
         // remove cookie
-        response().discardCookie("AWAC_ANONYMOUS_IDENTIFIER");
+        String cookieName = Constants.COOKIE.ANONYMOUS.NAME + currentUser.getOrganization().getInterfaceCode().getKey();
+        response().discardCookie(cookieName);
 
         return ok(new ReturnDTO());
     }
