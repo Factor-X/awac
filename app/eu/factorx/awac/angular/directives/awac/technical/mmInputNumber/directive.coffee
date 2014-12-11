@@ -25,6 +25,9 @@ angular
                             modelCtrl.$setViewValue result.toString()
                             modelCtrl.$render()
 
+                #
+                # this function receive the displayed value and return the model value
+                #
                 modelCtrl.$parsers.unshift (viewValue) ->
 
                     console.log "je suis la valeur visuel : "+viewValue
@@ -58,7 +61,9 @@ angular
                     console.log " == > la nouvelle valeur-model est : "+resultString
                     return  resultString
 
-
+                #
+                # this function receive the model value and return a displayed value
+                #
                 modelCtrl.$formatters.unshift (modelValue) ->
                     return scope.displayValue(modelValue)
 
