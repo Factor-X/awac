@@ -82,7 +82,7 @@ public class BAD_APE_BAD8BTest{
         //control content
         //map mapResult
         Map<Double, Boolean> mapResult = new HashMap<>();
-                mapResult.put(528.0, false);
+                mapResult.put(527.0, false);
         
         String valueGenerated = "";
 

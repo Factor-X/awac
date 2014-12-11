@@ -3209,7 +3209,7 @@ if (ap86 == null) {
     ap86_driver = new Driver("AP86");
     driverService.saveOrUpdate(ap86_driver);
     Period p2000 = periodService.findByCode(PeriodCode.P2000);
-    DriverValue dv = new DriverValue(ap86_driver, p2000, Double.valueOf(220));
+    DriverValue dv = new DriverValue(ap86_driver, p2000, Double.valueOf(220.0));
     ap86_driver.getDriverValueList().add(dv);;
     driverService.saveOrUpdate(ap86_driver);
     JPA.em().persist(dv);
@@ -3238,7 +3238,7 @@ if (ap86 == null) {
     ap86_driver = new Driver("AP86");
     driverService.saveOrUpdate(ap86_driver);
     Period p2000 = periodService.findByCode(PeriodCode.P2000);
-    DriverValue dv = new DriverValue(ap86_driver, p2000, Double.valueOf(220));
+    DriverValue dv = new DriverValue(ap86_driver, p2000, Double.valueOf(220.0));
     ap86_driver.getDriverValueList().add(dv);;
     driverService.saveOrUpdate(ap86_driver);
     JPA.em().persist(dv);
@@ -3431,7 +3431,7 @@ if (ap96 == null) {
     ap96_driver = new Driver("AP96");
     driverService.saveOrUpdate(ap96_driver);
     Period p2000 = periodService.findByCode(PeriodCode.P2000);
-    DriverValue dv = new DriverValue(ap96_driver, p2000, Double.valueOf(61));
+    DriverValue dv = new DriverValue(ap96_driver, p2000, Double.valueOf(0.61));
     ap96_driver.getDriverValueList().add(dv);;
     driverService.saveOrUpdate(ap96_driver);
     JPA.em().persist(dv);
@@ -3459,7 +3459,7 @@ if (ap96 == null) {
     ap96_driver = new Driver("AP96");
     driverService.saveOrUpdate(ap96_driver);
     Period p2000 = periodService.findByCode(PeriodCode.P2000);
-    DriverValue dv = new DriverValue(ap96_driver, p2000, Double.valueOf(61));
+    DriverValue dv = new DriverValue(ap96_driver, p2000, Double.valueOf(0.61));
     ap96_driver.getDriverValueList().add(dv);;
     driverService.saveOrUpdate(ap96_driver);
     JPA.em().persist(dv);
@@ -3489,7 +3489,7 @@ if (ap97 == null) {
     ap97_driver = new Driver("AP97");
     driverService.saveOrUpdate(ap97_driver);
     Period p2000 = periodService.findByCode(PeriodCode.P2000);
-    DriverValue dv = new DriverValue(ap97_driver, p2000, Double.valueOf(39));
+    DriverValue dv = new DriverValue(ap97_driver, p2000, Double.valueOf(0.39));
     ap97_driver.getDriverValueList().add(dv);;
     driverService.saveOrUpdate(ap97_driver);
     JPA.em().persist(dv);
@@ -3517,7 +3517,7 @@ if (ap97 == null) {
     ap97_driver = new Driver("AP97");
     driverService.saveOrUpdate(ap97_driver);
     Period p2000 = periodService.findByCode(PeriodCode.P2000);
-    DriverValue dv = new DriverValue(ap97_driver, p2000, Double.valueOf(39));
+    DriverValue dv = new DriverValue(ap97_driver, p2000, Double.valueOf(0.39));
     ap97_driver.getDriverValueList().add(dv);;
     driverService.saveOrUpdate(ap97_driver);
     JPA.em().persist(dv);
