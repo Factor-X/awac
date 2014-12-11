@@ -599,7 +599,7 @@ public class AwacLittleEmitterInitialData {
     }
     private void createQuestionSetAP91() {
         // == AP91
-        // Renseignez lesdéplacements pour l'ensemble de vos travailleurs
+        // Renseignez les déplacements pour l'ensemble de vos travailleurs
         ap91 = questionSetService.findByCode(QuestionCode.AP91);
         if( ap91 == null ) {
             ap91 = new QuestionSet(QuestionCode.AP91, false, ap78);
@@ -736,7 +736,7 @@ public class AwacLittleEmitterInitialData {
         // Créez autant de marchandises que nécessaire
         ap144 = questionSetService.findByCode(QuestionCode.AP144);
         if( ap144 == null ) {
-            ap144 = new QuestionSet(QuestionCode.AP144, true, ap140);
+            ap144 = new QuestionSet(QuestionCode.AP144, true, ap143);
             JPA.em().persist(ap144);
         }
     }
@@ -1545,7 +1545,7 @@ if (ap501 == null) {
     }
     private void createQuestionAP26() {
         // == AP26
-        // Prix unitaire du combustible (€/l)
+        // Prix unitaire du mazout (€/l)
 
         
 ap26 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP26);
@@ -1608,7 +1608,7 @@ if (ap26 == null) {
     }
     private void createQuestionAP27() {
         // == AP27
-        // Prix unitaire du combustible (€/m3)
+        // Prix unitaire du gaz (€/l)
 
         
 ap27 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP27);
@@ -1671,7 +1671,7 @@ if (ap27 == null) {
     }
     private void createQuestionAP28() {
         // == AP28
-        // Prix unitaire du combustible (€/kg)
+        // Prix unitaire du bois (€/kg)
 
         
 ap28 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP28);
@@ -1734,7 +1734,7 @@ if (ap28 == null) {
     }
     private void createQuestionAP29() {
         // == AP29
-        // Prix unitaire du combustible (€/kg)
+        // Prix unitaire du charbon (€/kg)
 
         
 ap29 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP29);

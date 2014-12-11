@@ -11,6 +11,7 @@ import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.dto.verification.get.VerificationRequestDTO;
 import eu.factorx.awac.models.account.Account;
 import eu.factorx.awac.models.business.Organization;
+import eu.factorx.awac.models.business.Product;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.Code;
@@ -445,8 +446,14 @@ public class AnswerController extends AbstractController {
             } else if (securedController.getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.ORG)) {
                 periodDTOs.add(conversionService.convert(period, PeriodDTO.class));
 
-            } else if (securedController.getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.SITE)) {
-                //TODO ??
+            } else if (securedController.getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.PRODUCT)) {
+              //restrict by period by site
+              for (Period periodToTest : ((Product) scope).getListPeriodAvailable()) {
+                if (periodToTest.equals(period)) {
+                  periodDTOs.add(conversionService.convert(period, PeriodDTO.class));
+                  break;
+                }
+              }
             }
         }
 
