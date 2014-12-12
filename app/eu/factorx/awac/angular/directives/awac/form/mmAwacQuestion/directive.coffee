@@ -103,6 +103,8 @@ angular
                             directiveName = "document-question"
                         else if answerType == 'DATE_TIME'
                             directiveName = "date-question"
+                        else
+                            console.log("TYPE NOT FOUND: " + answerType + " for question " + scope.getQuestion().code)
 
                         # add params
                         params = " "
