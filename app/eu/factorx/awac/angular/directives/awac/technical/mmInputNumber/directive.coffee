@@ -12,16 +12,9 @@ angular
 
             # INTEGER
             if attrs.numbersOnly == "integer"
-                scope.errorMessage = $filter('translateText')('ONLY_INTEGER')
-
-
-            # DOUBLE
-            if attrs.numbersOnly == "double"
-                scope.errorMessage = $filter('translateText')('ONLY_NUMBER')
-
                 format = (modelValue) ->
-                    v = modelValue * 100.0
-                    return v.toFixed(3)
+                    v = modelValue
+                    return v.toFixed(0)
 
                 parse = (viewValue) ->
                     errorMessage = null
@@ -31,7 +24,31 @@ angular
                         return null
                     regexFloat = new RegExp("^(\\-|\\+)?([0-9]+|Infinity)?$")
                     if regexFloat.test(viewValue)
-                        parseResult = viewValue * 0.01
+                        parseResult = viewValue
+                    else
+                        parseResult = null
+                        errorMessage = $filter('translateText')('ONLY_INTEGER')
+
+                    if scope.setErrorMessage?
+                        scope.setErrorMessage(errorMessage)
+
+                    return parseResult
+
+            # DOUBLE
+            if attrs.numbersOnly == "double"
+                format = (modelValue) ->
+                    v = modelValue
+                    return v.toFixed(3)
+
+                parse = (viewValue) ->
+                    errorMessage = null
+
+                    viewValue = viewValue.trim()
+                    if viewValue == ''
+                        return null
+                    regexFloat = new RegExp("^(\\-|\\+)?([0-9]+(\\.[0-9]*)?|Infinity)?$")
+                    if regexFloat.test(viewValue)
+                        parseResult = viewValue
                     else
                         parseResult = null
                         errorMessage = $filter('translateText')('ONLY_NUMBER')

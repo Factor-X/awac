@@ -3,7 +3,7 @@ ng-virtual
         .element_header
             .title(ng-bind-html="getTitleCode() | translate")
             .title_arrow
-        .element_sidebar(ng-hide="$root.instanceName  === 'verification'")
+        .element_sidebar(ng-show="$root.instanceName === 'enterprise' || $root.instanceName === 'municipality' || $root.instanceName === 'event'")
             .block_status
                 .lock_status(ng-click="lock()", ng-class="getLockClass()")
                     div(ng-show="getLocker() != null", ng-bind-html="'LOCK_BY' | translateWithVars: [getLockerName()] ")
