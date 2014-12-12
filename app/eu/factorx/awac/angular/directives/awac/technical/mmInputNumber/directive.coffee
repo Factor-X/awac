@@ -25,11 +25,14 @@ angular
         scope.$watch attrs.numbersOnly, () ->
             scope.lastValidValue = ""
 
+            found = false
             format = angular.noop
             parse = angular.noop
 
             # INTEGER
             if attrs.numbersOnly == "integer"
+                found = true
+
                 format = (modelValue) ->
                     v = modelValue
                     return convertToString(v, 0)
@@ -54,6 +57,8 @@ angular
 
             # DOUBLE
             if attrs.numbersOnly == "double"
+                found = true
+
                 format = (modelValue) ->
                     v = modelValue
                     return convertToString(v, 3)
@@ -79,6 +84,8 @@ angular
 
             # PERCENT
             if attrs.numbersOnly == "percent"
+                found = true
+
                 format = (modelValue) ->
                     v = modelValue * 100.0
                     return convertToString(v,3)
@@ -106,10 +113,10 @@ angular
                 parse = (viewValue) ->
                     return viewValue
 
-
-            if modelCtrl.$modelValue?
-                modelCtrl.$setViewValue format(modelCtrl.$modelValue)
-                modelCtrl.$render()
-            modelCtrl.$parsers.unshift parse
-            modelCtrl.$formatters.unshift format
+            if found
+                if modelCtrl.$modelValue?
+                    modelCtrl.$setViewValue format(modelCtrl.$modelValue)
+                    modelCtrl.$render()
+                modelCtrl.$parsers.unshift parse
+                modelCtrl.$formatters.unshift format
 
