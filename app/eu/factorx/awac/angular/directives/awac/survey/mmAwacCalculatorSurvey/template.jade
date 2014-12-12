@@ -43,10 +43,21 @@ div
                         //  organization manager button => for all calculator
                         button.button.user_manage(
                         type='button',
+                        ng-hide="$root.instanceName == 'household'",
                         ng-bind-html='\'ORGANIZATION_MANAGER_BUTTON\' | translate',
                         ng-click='isDisabled || $root.nav(\'/organization_manager\')',
                         ng-class='{\'selected\': isMenuCurrentlySelected(\'/organization_manager\') == true}',
                         ng-disabled='$root.currentPerson.isAdmin === false')
+
+                        button.button.user_manage(
+                        type='button',
+                        ng-show="$root.instanceName == 'household'",
+                        ng-bind-html='\'HOUSEHOLD_MANAGER_BUTTON\' | translate',
+                        ng-click='isDisabled || $root.nav(\'/organization_manager\')',
+                        ng-class='{\'selected\': isMenuCurrentlySelected(\'/organization_manager\') == true}',
+                        ng-disabled='$root.currentPerson.isAdmin === false')
+
+
                         //  site manager button => only for enterprise
                         button.button.user_manage(
                         ng-show="$root.instanceName == 'enterprise'"
