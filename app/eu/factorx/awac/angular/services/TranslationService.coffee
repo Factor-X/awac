@@ -3,6 +3,10 @@ angular
 .service "translationService", ($rootScope, $filter, $http) ->
     svc = this
     svc.elements = null
+    svc.lang = null
+
+    svc.reinitialize = () ->
+        svc.initialize svc.lang
 
     svc.initialize = (lang) ->
         $http(
@@ -13,12 +17,14 @@ angular
         )
         .success (data, status, headers, config) ->
             svc.elements = data.lines
+            svc.lang = lang
             $rootScope.$broadcast "LOAD_FINISHED",
                 type: "TRANSLATIONS"
                 success: true
 
         .error (data, status, headers, config) ->
             svc.elements = []
+            svc.lang = null
             $rootScope.$broadcast "LOAD_FINISHED",
                 type: "TRANSLATIONS"
                 success: false

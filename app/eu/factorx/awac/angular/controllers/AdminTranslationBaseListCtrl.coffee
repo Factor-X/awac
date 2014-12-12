@@ -118,6 +118,7 @@ angular
             $scope.isLoading = false
             if result.success
                 messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
+                translationService.reinitialize()
             console.log("result.data", result.data)
             $scope.loadBaseLists()
             return
