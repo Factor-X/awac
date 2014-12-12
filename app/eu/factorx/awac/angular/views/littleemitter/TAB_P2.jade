@@ -44,7 +44,7 @@ div
             mm-awac-question(question-code="AP45", ng-condition="getAnswer('AP44').value == '1'")
             mm-awac-question(question-code="AP46", ng-condition="getAnswer('AP44').value == '2'")
             mm-awac-question(question-code="AP47", ng-condition="getAnswer('AP44').value == '2'")
-            mm-awac-question(question-code="AP48", ng-condition="getAnswer('AP44').value == '3'", ng-aggregation="(getAnswer('AP46').value | nullToZero)/(getAnswer('AP47').value | nullToZero)")
+            mm-awac-question(question-code="AP48", ng-condition="getAnswer('AP44').value == '2'", ng-aggregation="(getAnswer('AP46').value | nullToZero)/(getAnswer('AP47').value | nullToZero)")
             mm-awac-question(question-code="AP49", ng-condition="getAnswer('AP44').value == '3'")
             mm-awac-question(question-code="AP50", ng-condition="getAnswer('AP44').value == '3'", ng-aggregation="(getAnswer('AP49').value | nullToZero)*(getAnswer('AP11').value | nullToZero)/(getAnswer('AP12').value | nullToZero)")
 
