@@ -100,6 +100,11 @@ angular
                         scope.setErrorMessage(errorMessage)
 
                     return parseResult
+            else
+                format = (modelValue) ->
+                    return modelValue
+                parse = (viewValue) ->
+                    return viewValue
 
 
             if modelCtrl.$modelValue?
