@@ -11,6 +11,17 @@
         .question-labels(ng-if="!ngModel.label.labelEn")
             span [NO LABELS]
 
+    .question-set.tip(ng-if="!!ngModel.label.labelEn")
+        .question-key(ng-style="{'padding-left': (getPadding()-30) + 'px'}") [QS] {{ ngModel.associatedTipLabel.key}}
+        .question-labels
+            .question-label
+                textarea(type="text", ng-model="ngModel.associatedTipLabel.labelEn")
+            .question-label
+                textarea(type="text", ng-model="ngModel.associatedTipLabel.labelFr")
+            .question-label
+                textarea(type="text", ng-model="ngModel.associatedTipLabel.labelNl")
+
+
     .question-set-questions
         .question-set(ng-repeat="question in ngModel.questions")
             .question-key(ng-style="{'padding-left': ($parent.getPadding()) + 'px'}") [Q] {{ question.label.key }}
@@ -23,6 +34,16 @@
                     textarea(type="text", ng-model="question.label.labelNl")
             .question-labels(ng-if="!question.label.labelEn")
                 span [NO LABELS]
+
+            .question-set.tip(ng-if="!!question.label.labelEn")
+                .question-key(ng-style="{'padding-left': ($parent.getPadding()) + 'px'}") [Q] {{ question.associatedTipLabel.key}}
+                .question-labels
+                    .question-label
+                        textarea(type="text", ng-model="question.associatedTipLabel.labelEn")
+                    .question-label
+                        textarea(type="text", ng-model="question.associatedTipLabel.labelFr")
+                    .question-label
+                        textarea(type="text", ng-model="question.associatedTipLabel.labelNl")
 
     .question-set-children
         .question-set-child(ng-if="ngModel.children.length > 0", ng-repeat="child in ngModel.children", style="padding-top:10px;")

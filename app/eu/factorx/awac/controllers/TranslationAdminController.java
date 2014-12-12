@@ -92,9 +92,9 @@ public class TranslationAdminController extends AbstractController {
 		}
 	}
 
-	private static Map<CodeList,List<SubListItemDTO>> getSubListDTOMap(List<SubListDTO> sublists) {
+	private static Map<CodeList, List<SubListItemDTO>> getSubListDTOMap(List<SubListDTO> sublists) {
 		Map<CodeList, List<SubListItemDTO>> res = new HashMap<>();
-		for (SubListDTO subListDTO: sublists) {
+		for (SubListDTO subListDTO : sublists) {
 			res.put(CodeList.valueOf(subListDTO.getCodeList()), subListDTO.getItems());
 		}
 		return res;
@@ -251,19 +251,29 @@ public class TranslationAdminController extends AbstractController {
 		UpdateCodeLabelsDTO updatedCodeLabelsDTO = extractDTOFromRequest(UpdateCodeLabelsDTO.class);
 		List<UpdateCodeLabelDTO> codeLabelDTOs = updatedCodeLabelsDTO.getCodeLabelsByList().get(CodeList.QUESTION.name());
 		for (UpdateCodeLabelDTO codeLabelDTO : codeLabelDTOs) {
-			CodeLabel codeLabel = codeLabelService.findById(codeLabelDTO.getId());
-			codeLabel.setLabelEn(codeLabelDTO.getLabelEn());
-			codeLabel.setLabelFr(codeLabelDTO.getLabelFr());
-			codeLabel.setLabelNl(codeLabelDTO.getLabelNl());
-			codeLabelService.saveOrUpdate(codeLabel);
+			if (codeLabelDTO.getId() == null) {
+				codeLabelService.saveOrUpdate(new CodeLabel(CodeList.QUESTION, codeLabelDTO.getKey(), codeLabelDTO.getLabelEn(), codeLabelDTO.getLabelFr(), codeLabelDTO.getLabelNl(), codeLabelDTO.getOrderIndex()));
+			} else {
+				CodeLabel codeLabel = codeLabelService.findById(codeLabelDTO.getId());
+				codeLabel.setLabelEn(codeLabelDTO.getLabelEn());
+				codeLabel.setLabelFr(codeLabelDTO.getLabelFr());
+				codeLabel.setLabelNl(codeLabelDTO.getLabelNl());
+				codeLabelService.saveOrUpdate(codeLabel);
+			}
 		}
 		return ok();
 	}
 
 	private FormLabelsDTO.QuestionSetItem toQuestionSetItem(QuestionSet questionSet, Map<String, CodeLabel> questionCodeLabels) {
-		FormLabelsDTO.QuestionSetItem questionSetItem = new FormLabelsDTO.QuestionSetItem(getQuestionCodeLabelDTO(questionSet.getCode(), questionCodeLabels));
+		UpdateCodeLabelDTO questionSetLabelDTO = getQuestionCodeLabelDTO(questionSet.getCode(), questionCodeLabels);
+		UpdateCodeLabelDTO questionSetTipLabelDTO = getTipCodeLabelDTO(questionSet.getCode(), questionCodeLabels);
+
+		FormLabelsDTO.QuestionSetItem questionSetItem = new FormLabelsDTO.QuestionSetItem(questionSetLabelDTO, questionSetTipLabelDTO);
 		for (Question question : questionSet.getQuestions()) {
-			FormLabelsDTO.QuestionItem questionItem = new FormLabelsDTO.QuestionItem(getQuestionCodeLabelDTO(question.getCode(), questionCodeLabels));
+			UpdateCodeLabelDTO questionLabelDTO = getQuestionCodeLabelDTO(question.getCode(), questionCodeLabels);
+			UpdateCodeLabelDTO questionTipLabelDTO = getTipCodeLabelDTO(question.getCode(), questionCodeLabels);
+
+			FormLabelsDTO.QuestionItem questionItem = new FormLabelsDTO.QuestionItem(questionLabelDTO, questionTipLabelDTO);
 			questionSetItem.addQuestion(questionItem);
 		}
 		for (QuestionSet childQuestionSet : questionSet.getChildren()) {
@@ -284,6 +294,10 @@ public class TranslationAdminController extends AbstractController {
 		return res;
 	}
 
+	private UpdateCodeLabelDTO getTipCodeLabelDTO(QuestionCode code, Map<String, CodeLabel> questionCodeLabels) {
+		String tipKey = code.getKey() + "_DESC";
+		return getQuestionCodeLabelDTO(new QuestionCode(tipKey), questionCodeLabels);
+	}
 
 	private void updateCodeLabels(HashMap<String, CodeLabel> savedCodeLabels, List<UpdateCodeLabelDTO> updatedCodeLabelDTOs) {
 		for (UpdateCodeLabelDTO codeLabelDTO : updatedCodeLabelDTOs) {
@@ -317,7 +331,7 @@ public class TranslationAdminController extends AbstractController {
 //
 	private List<BaseListDTO> getBaseListDTOs() {
 		CodeList[] codeListsToExclude = {CodeList.TRANSLATIONS_SURVEY, CodeList.QUESTION,
-				CodeList.TRANSLATIONS_INTERFACE, CodeList.TRANSLATIONS_ERROR_MESSAGES, CodeList.TRANSLATIONS_EMAIL_MESSAGE};
+			CodeList.TRANSLATIONS_INTERFACE, CodeList.TRANSLATIONS_ERROR_MESSAGES, CodeList.TRANSLATIONS_EMAIL_MESSAGE};
 		Map<CodeList, List<InterfaceTypeCode>> interfaceTypesByCodeList = formService.getInterfaceTypesByCodeList();
 
 		List<BaseListDTO> baseListDTOs = new ArrayList<>();

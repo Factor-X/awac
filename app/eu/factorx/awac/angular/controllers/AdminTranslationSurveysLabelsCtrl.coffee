@@ -30,8 +30,10 @@ angular
 
     $scope.addQuestionSetLabels = (res, questionSet) ->
         res.push(questionSet.label)
+        res.push(questionSet.associatedTipLabel)
         for question in questionSet.questions
             res.push(question.label)
+            res.push(question.associatedTipLabel)
         for childQuestionSet in questionSet.children
             res.concat($scope.addQuestionSetLabels(res, childQuestionSet))
         return res
@@ -46,11 +48,13 @@ angular
         for key, codeLabel of finalLabels
             initialLabel = $scope.initialLabels[key]
             if !angular.equals(codeLabel, initialLabel)
+                console.log(codeLabel, initialLabel)
                 if !(codeLabel.labelEn)
                     messageFlash.displayError "Le champ libellé EN est obligatoire. Celui-ci n'est pas défini pour l'élément '" + codeLabel.key + "'"
                     $scope.isLoading = false
                     return
                 updatedCodeLabels.push(codeLabel)
+
         console.log 'updatedCodeLabels', updatedCodeLabels
         if (updatedCodeLabels.length == 0)
             messageFlash.displayError "Vous n'avez effectué aucun changement"
