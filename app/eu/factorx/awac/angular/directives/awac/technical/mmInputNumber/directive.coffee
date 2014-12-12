@@ -5,14 +5,6 @@ angular
     require: "ngModel"
     link: (scope, element, attrs, modelCtrl) ->
 
-        scope.format = angular.noop
-        scope.parse = modelCtrl.$rollbackViewValue
-
-        modelCtrl.$parsers.unshift (v) ->
-            return scope.parse(v)
-        modelCtrl.$formatters.unshift (v) ->
-            return scope.format(v)
-
 
         convertToString = (value, decimal) ->
             if !value? || isNaN value
@@ -34,17 +26,18 @@ angular
             scope.lastValidValue = ""
 
             found = false
-
+            format = angular.noop
+            parse = angular.noop
 
             # INTEGER
             if attrs.numbersOnly == "integer"
                 found = true
 
-                scope.format = (modelValue) ->
+                format = (modelValue) ->
                     v = modelValue
                     return convertToString(v, 0)
 
-                scope.parse = (viewValue) ->
+                parse = (viewValue) ->
                     errorMessage = null
 
                     viewValue = convertToFloat(viewValue.trim())
@@ -66,11 +59,11 @@ angular
             if attrs.numbersOnly == "double"
                 found = true
 
-                scope.format = (modelValue) ->
+                format = (modelValue) ->
                     v = modelValue
                     return convertToString(v, 3)
 
-                scope.parse = (viewValue) ->
+                parse = (viewValue) ->
                     errorMessage = null
 
                     viewValue = convertToFloat(viewValue.trim())
@@ -93,11 +86,11 @@ angular
             if attrs.numbersOnly == "percent"
                 found = true
 
-                scope.format = (modelValue) ->
+                format = (modelValue) ->
                     v = modelValue * 100.0
                     return convertToString(v,3)
 
-                scope.parse = (viewValue) ->
+                parse = (viewValue) ->
                     errorMessage = null
 
                     viewValue = convertToFloat(viewValue.trim())
@@ -117,5 +110,8 @@ angular
 
             if found
                 if modelCtrl.$modelValue?
-                    modelCtrl.$setViewValue scope.format(modelCtrl.$modelValue)
+                    modelCtrl.$setViewValue format(modelCtrl.$modelValue)
                     modelCtrl.$render()
+                modelCtrl.$parsers.unshift parse
+                modelCtrl.$formatters.unshift format
+
