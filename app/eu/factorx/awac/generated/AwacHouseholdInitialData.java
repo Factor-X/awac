@@ -784,7 +784,7 @@ if (am4 == null) {
     }
     private void createQuestionAM5() {
         // == AM5
-        // Ville
+        // Localité
 
         am5 = (StringQuestion) questionService.findByCode(QuestionCode.AM5);
 if (am5 == null) {
