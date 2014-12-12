@@ -1,27 +1,37 @@
 .nav_tabs(ng-show='displayMenu===true')
     .nav_entreprise
         .site_menu
-            .menu.menu_municipality
+            .menu.menu_household
                 button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_M1\') == true}', ng-click='navTo(\'/form/TAB_M1\')')
                     .tab-title(ng-bind-html='\'TAB_M1\' | translate')
                     mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_M1\')')
                     .menu_arrow
+                    img.tablogo(src="/assets/images/household/menage.png", ng-hide="isMenuCurrentlySelected('/form/TAB_M1') == true")
+                    img.tablogo(src="/assets/images/household/menage_on.png", ng-show="isMenuCurrentlySelected('/form/TAB_M1') == true")
                 button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_M2\') == true}', ng-click='navTo(\'/form/TAB_M2\')')
                     .tab-title(ng-bind-html='\'TAB_M2\' | translate')
                     mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_M2\')')
                     .menu_arrow
+                    img.tablogo(src="/assets/images/household/logement.png", ng-hide="isMenuCurrentlySelected('/form/TAB_M2') == true")
+                    img.tablogo(src="/assets/images/household/logement_on.png", ng-show="isMenuCurrentlySelected('/form/TAB_M2') == true")
                 button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_M3\')  == true}', ng-click='navTo(\'/form/TAB_M3\')')
                     .tab-title(ng-bind-html='\'TAB_M3\' | translate')
                     mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_M3\')')
                     .menu_arrow
+                    img.tablogo(src="/assets/images/household/mobilite.png", ng-hide="isMenuCurrentlySelected('/form/TAB_M3') == true")
+                    img.tablogo(src="/assets/images/household/mobilite_on.png", ng-show="isMenuCurrentlySelected('/form/TAB_M3') == true")
                 button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_M4\') == true}', ng-click='navTo(\'/form/TAB_M4\')')
                     .tab-title(ng-bind-html='\'TAB_M4\' | translate')
                     mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_M4\')')
                     .menu_arrow
+                    img.tablogo(src="/assets/images/household/dechets.png", ng-hide="isMenuCurrentlySelected('/form/TAB_M4') == true")
+                    img.tablogo(src="/assets/images/household/dechets_on.png", ng-show="isMenuCurrentlySelected('/form/TAB_M4') == true")
                 button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/form/TAB_M5\') == true}', ng-click='navTo(\'/form/TAB_M5\')')
                     .tab-title(ng-bind-html='\'TAB_M5\' | translate')
                     mm-awac-tab-progress-bar(ng-value='getProgress(\'TAB_M5\')')
                     .menu_arrow
+                    img.tablogo(src="/assets/images/household/consommation.png", ng-hide="isMenuCurrentlySelected('/form/TAB_M5') == true")
+                    img.tablogo(src="/assets/images/household/consommation_on.png", ng-show="isMenuCurrentlySelected('/form/TAB_M5') == true")
 
         .last_menu
             button.button(ng-class='{\'menu_current\': isMenuCurrentlySelected(\'/results\') == true}', ng-click='navTo(\'/results\')')
