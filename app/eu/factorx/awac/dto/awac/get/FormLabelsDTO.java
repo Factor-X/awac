@@ -54,6 +54,8 @@ public class FormLabelsDTO extends DTO {
 
 		private UpdateCodeLabelDTO label;
 
+		private UpdateCodeLabelDTO associatedTipLabel;
+
 		private List<QuestionSetItem> children;
 
 		private List<QuestionItem> questions;
@@ -61,8 +63,9 @@ public class FormLabelsDTO extends DTO {
 		public QuestionSetItem() {
 		}
 
-		public QuestionSetItem(UpdateCodeLabelDTO label) {
+		public QuestionSetItem(UpdateCodeLabelDTO label, UpdateCodeLabelDTO associatedTipLabel) {
 			this.label = label;
+			this.associatedTipLabel = associatedTipLabel;
 			this.children = new ArrayList<>();
 			this.questions = new ArrayList<>();
 		}
@@ -73,6 +76,14 @@ public class FormLabelsDTO extends DTO {
 
 		public void setLabel(UpdateCodeLabelDTO label) {
 			this.label = label;
+		}
+
+		public UpdateCodeLabelDTO getAssociatedTipLabel() {
+			return associatedTipLabel;
+		}
+
+		public void setAssociatedTipLabel(UpdateCodeLabelDTO associatedTipLabel) {
+			this.associatedTipLabel = associatedTipLabel;
 		}
 
 		public List<QuestionSetItem> getChildren() {
@@ -104,11 +115,14 @@ public class FormLabelsDTO extends DTO {
 
 		private UpdateCodeLabelDTO label;
 
+		private UpdateCodeLabelDTO associatedTipLabel;
+
 		public QuestionItem() {
 		}
 
-		public QuestionItem(UpdateCodeLabelDTO label) {
+		public QuestionItem(UpdateCodeLabelDTO label, UpdateCodeLabelDTO associatedTipLabel) {
 			this.label = label;
+			this.associatedTipLabel = associatedTipLabel;
 		}
 
 		public UpdateCodeLabelDTO getLabel() {
@@ -117,6 +131,14 @@ public class FormLabelsDTO extends DTO {
 
 		public void setLabel(UpdateCodeLabelDTO label) {
 			this.label = label;
+		}
+
+		public UpdateCodeLabelDTO getAssociatedTipLabel() {
+			return associatedTipLabel;
+		}
+
+		public void setAssociatedTipLabel(UpdateCodeLabelDTO associatedTipLabel) {
+			this.associatedTipLabel = associatedTipLabel;
 		}
 	}
 

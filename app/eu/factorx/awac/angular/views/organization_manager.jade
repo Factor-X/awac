@@ -1,11 +1,13 @@
 div
     .menu_close(ng-click="toForm()")
-    h1(ng-bind-html="'ORGANIZATION_MANAGER_TITLE' | translateText")
+    h1(ng-bind-html="'ORGANIZATION_MANAGER_TITLE' | translateText", ng-hide="$root.instanceName =='household'")
+    h1(ng-bind-html="'HOUSEHOLD_MANAGER_TITLE' | translateText", ng-show="$root.instanceName =='household'")
 
     .site_manager
 
         br
-        h4(ng-bind-html="'ORGANIZATION_MANAGER_PROPERTIES_TITLE' | translateText")
+        h4(ng-bind-html="'ORGANIZATION_MANAGER_PROPERTIES_TITLE' | translateText", ng-hide="$root.instanceName =='household'"))
+        h4(ng-bind-html="'HOUSEHOLD_MANAGER_PROPERTIES_TITLE' | translateText", ng-show="$root.instanceName =='household'"))
 
         .field_form(style="width: 600px;")
             mm-awac-modal-field-text(ng-info="nameInfo")
@@ -13,7 +15,7 @@ div
                 .field_cell(ng-bind-html="'ORGANIZATION_STATISTICS_ALLOWED' | translateText")
                 .field_cell(ng-hide="$root.instanceName == 'verification' || $root.instanceName == 'admin'")
                     input(type="checkbox", ng-model="statisticsAllowed", style="width: 18px;height: 18px;margin-top: 2px;")
-            
+
 
         div(ng-hide="isLoading")
             button(type="button", class="btn btn-primary", ng-bind-html="'SAVE_BUTTON' | translate", ng-click="saveOrganization()", ng-disabled="!allFieldValid()")

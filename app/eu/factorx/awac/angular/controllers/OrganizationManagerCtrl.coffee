@@ -16,7 +16,7 @@ angular
             ($scope.statisticsAllowed != $scope.organization.statisticsAllowed))
 
     $scope.nameInfo =
-        fieldTitle: "ORGANIZATION_NAME"
+        fieldTitle: (if $scope.$root.instanceName == 'household' then "HOUSEHOLD_NAME" else "ORGANIZATION_NAME")
         validationRegex: "^.{1,255}$"
         validationMessage: "ORGANIZATION_NAME_WRONG_LENGTH"
         field: null

@@ -57,6 +57,7 @@ angular
             if result.success
                 messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
                 $scope.loadLinkedLists()
+                translationService.reinitialize()
             return
 
         return
