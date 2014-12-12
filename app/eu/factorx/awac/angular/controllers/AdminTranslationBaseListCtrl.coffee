@@ -7,7 +7,7 @@ angular
 
     $scope.groupsLabels = ["Listes 'système'", "Listes liées aux actions", "Listes liées aux questionnaires"]
 
-    #    $scope.codeLabels = {}
+    $scope.originalData = []
     $scope.waitingData = true
     $scope.isLoading = false
 
@@ -32,10 +32,10 @@ angular
     $scope.loadBaseLists = () ->
         downloadService.getJson "awac/admin/translations/baselists/load", (result) ->
             if result.success
-                allBaseLists = result.data.baseLists
-                $scope.allBaseLists = [getSystemBaseLists(allBaseLists), getActionsBaseLists(allBaseLists),
-                                       getSurveysBaseLists(allBaseLists)]
-                $scope.originalData = updateOrderIndexes(angular.copy($scope.allBaseLists))
+                baseLists = result.data.baseLists
+                $scope.allBaseLists = [getSystemBaseLists(baseLists), getActionsBaseLists(baseLists),
+                                       getSurveysBaseLists(baseLists)]
+                $scope.originalData = angular.copy($scope.allBaseLists)
             $scope.waitingData = false
             return
         return
@@ -103,23 +103,29 @@ angular
         $scope.codeLabelToAdd.clear()
         return
 
-    updateOrderIndexes = (baseLists) ->
-        for baseList in baseLists
-            for index, codeLabel of baseList.codeLabels
-                codeLabel.orderIndex = +index + 1
-        return baseLists
+    updateOrderIndexes = (allBaseLists) ->
+        for baseLists in allBaseLists
+            console.log("baseLists", baseLists)
+            for baseList in baseLists
+                for index, codeLabel of baseList.codeLabels
+                    codeLabel.orderIndex = +index + 1
+        return allBaseLists
 
     $scope.save = () ->
         $scope.isLoading = true
 
-        data = {baseLists: updateOrderIndexes($scope.baseLists)}
+        $scope.allBaseLists = updateOrderIndexes($scope.allBaseLists)
+        allBaseLists = []
+        for baseLists in $scope.allBaseLists
+            allBaseLists = allBaseLists.concat(baseLists)
+
+        data = {baseLists: allBaseLists}
 
         downloadService.postJson "/awac/admin/translations/baselists/save", data, (result) ->
             $scope.isLoading = false
             if result.success
+                $scope.loadBaseLists()
                 messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
-            console.log("result.data", result.data)
-            $scope.loadBaseLists()
             return
 
     $scope.ignoreChanges = false
