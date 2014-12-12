@@ -45,6 +45,7 @@ angular
                 angular.extend($scope.subLists, $scope.sortLinkedListsItems(result.data.sublists))
                 $scope.subLists = _.sortBy $scope.subLists, (list) ->
                     return list.codeList
+                translationService.reinitialize()
             return
 
         return

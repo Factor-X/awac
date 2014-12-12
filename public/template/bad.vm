@@ -57,7 +57,23 @@ public class BaseActivityData$BAD-KEY extends ActivityResultContributor {
         QuestionAnswer question${question}Answer = byQuestionCode(questionSetAnswers${questionWithoutRepetition.getQuestionSetString()}.get(0).getQuestionAnswers()).get(QuestionCode.${question});
         #end
         #end
+
+        //control
+        if(false
+        #foreach($questionWithoutRepetition in $question-without-repetition)
+        #foreach($question in $questionWithoutRepetition.getQuestionListString())
+             || question${question}Answer==null
+        #end #end
+            ){
+            return res;
+        }
+
         #end
+
+
+
+
+        //and control
 
         //2.1 loop for each answer for each loop for each parents of one or more question needed by the BAD
         #foreach ($repetition in $repetitions)

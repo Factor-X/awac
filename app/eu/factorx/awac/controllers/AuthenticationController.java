@@ -14,6 +14,7 @@ package eu.factorx.awac.controllers;
 import java.util.HashMap;
 import java.util.Map;
 
+import eu.factorx.awac.common.Constants;
 import eu.factorx.awac.models.association.AccountProductAssociation;
 import eu.factorx.awac.models.business.Product;
 import org.apache.commons.lang3.StringUtils;
@@ -114,14 +115,21 @@ public class AuthenticationController extends AbstractController {
 
 		Account account = null;
 
+
 		if ( (connectionFormDTO.getLogin()==null) && (connectionFormDTO.getPassword()==null) ) {
 
-			Http.Cookie cookie = request().cookie("AWAC_ANONYMOUS_IDENTIFIER");
+            InterfaceTypeCode interfaceTypeCode =InterfaceTypeCode.getByKey(connectionFormDTO.getInterfaceName());
+
+            // generate specific cookie for interface type code - household, little emitter, ...
+
+            String cookieName = Constants.COOKIE.ANONYMOUS.NAME + interfaceTypeCode.getKey();
+			Http.Cookie cookie = request().cookie(cookieName);
 			if ((cookie!=null) && (!StringUtils.isBlank(cookie.value()))) {
 
-				Logger.info("Anonymous login with cookie");
+				Logger.info("Anonymous login with cookie for :" + interfaceTypeCode.getKey());
 				account = accountService.findByIdentifier(cookie.value());
-				if (! account.getPerson().getFirstname().equals("anonymous_user") ) {
+                String anonymousUserName = Constants.ANONYMOUS.USERNAME + interfaceTypeCode.getKey();
+				if (! account.getPerson().getFirstname().equals(anonymousUserName) ) {
 					Logger.info("Not an anonymous user login try");
 					throw new MyrmexRuntimeException(BusinessErrorType.LOGIN_PASSWORD_PAIR_NOT_FOUND);
 				}
@@ -133,16 +141,16 @@ public class AuthenticationController extends AbstractController {
 				// if person doesn't already exist, create it
 
 				String lastName = Long.toString(System.currentTimeMillis());
-				String firstName = "anonymous_user";
-				String identifier = firstName + lastName;
+				String firstName = Constants.ANONYMOUS.USERNAME + interfaceTypeCode.getKey();
+                String identifier = firstName + lastName;
 				String password = Long.toString(System.nanoTime());
-				String email = identifier + "@anonymousorg.org";
+				String email = identifier + Constants.ANONYMOUS.EMAILDOMAIN;
 
 
 				Person person = new Person(lastName, firstName, email);
 				personService.saveOrUpdate(person);
 
-                InterfaceTypeCode interfaceTypeCode =InterfaceTypeCode.getByKey(connectionFormDTO.getInterfaceName());
+                //InterfaceTypeCode interfaceTypeCode =InterfaceTypeCode.getByKey(connectionFormDTO.getInterfaceName());
 
 				Organization org = new Organization("YourOrg" + lastName, interfaceTypeCode);
 				organizationService.saveOrUpdate(org);
@@ -176,7 +184,7 @@ public class AuthenticationController extends AbstractController {
 					accountSiteAssociationService.saveOrUpdate(asa);
 				}
 
-				response().setCookie("AWAC_ANONYMOUS_IDENTIFIER", identifier);
+				response().setCookie(cookieName, identifier);
 			} // else cookie does not exist
 
 		} else {

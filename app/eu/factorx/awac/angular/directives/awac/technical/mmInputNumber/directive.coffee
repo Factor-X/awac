@@ -1,129 +1,117 @@
 angular
 .module('app.directives')
-.directive "numbersOnly", ($filter, translationService, $locale) ->
+.directive "numbersOnly", ($filter, $log, translationService, $locale) ->
     restrict: 'A'
     require: "ngModel"
     link: (scope, element, attrs, modelCtrl) ->
 
+
+        convertToString = (value, decimal) ->
+            if !value? || isNaN value
+                return ""
+            value=value.toFixed(decimal)
+            formats = $locale.NUMBER_FORMATS
+            return value.toString().split('.').join(formats.DECIMAL_SEP)
+
+        convertToFloat = (viewValue) ->
+            if viewValue == ""
+                return NaN
+            formats = $locale.NUMBER_FORMATS
+            sep = formats.DECIMAL_SEP
+            value = viewValue.split(sep).join('.')
+            return value
+
+
         scope.$watch attrs.numbersOnly, () ->
+            scope.lastValidValue = ""
 
-            if attrs.numbersOnly == "integer" || attrs.numbersOnly == "double" || attrs.numbersOnly == "percent"
+            found = false
+            format = angular.noop
+            parse = angular.noop
 
-                scope.lastValidValue=""
+            # INTEGER
+            if attrs.numbersOnly == "integer"
+                found = true
 
-                if  attrs.numbersOnly == "integer"
-                    errorMessage = $filter('translateText')('ONLY_INTEGER')
-                    nbDecimal = 0
-                else
-                    errorMessage = $filter('translateText')('ONLY_NUMBER')
-                    nbDecimal = 3
+                format = (modelValue) ->
+                    v = modelValue
+                    return convertToString(v, 0)
 
-                scope.$root.$on '$localeChangeSuccess', (event, current, previous) ->
-                    if modelCtrl.$modelValue?
-                        result = convertToString(parseFloat(modelCtrl.$modelValue))
-                        if result?
-                            modelCtrl.$setViewValue result.toString()
-                            modelCtrl.$render()
+                parse = (viewValue) ->
+                    errorMessage = null
 
-                modelCtrl.$parsers.unshift (viewValue) ->
-
-                    console.log "je suis la valeur visuel : "+viewValue
-
-
-                    if viewValue == ""
+                    viewValue = convertToFloat(viewValue.trim())
+                    if viewValue == ''
                         return null
-
-                    result = convertToFloat(viewValue)
-
-                    if isNaN result
-                        displayError()
-                        if scope.lastValidValue?
-                            resultString = scope.lastValidValue.toString()
-                            if  attrs.numbersOnly == "percent"
-                                resultToDisplay = (scope.lastValidValue*100).toString()
-                            else
-                                resultToDisplay = scope.lastValidValue.toString()
-                        else
-                            resultString = ""
-                            resultToDisplay =""
-                        modelCtrl.$setViewValue resultToDisplay
-                        modelCtrl.$render()
+                    regexFloat = new RegExp("^(\\-|\\+)?([0-9]+|Infinity)?$")
+                    if regexFloat.test(viewValue)
+                        parseResult = viewValue
                     else
-                        if  attrs.numbersOnly == "percent"
-                            result=result/100
-                        scope.lastValidValue = result
-                        resultString = result.toString()
-                    if resultString == ""
-                        return null
-                    console.log " == > la nouvelle valeur-model est : "+resultString
-                    return  resultString
+                        parseResult = null
+                        errorMessage = $filter('translateText')('ONLY_INTEGER')
 
-
-                modelCtrl.$formatters.unshift (modelValue) ->
-                    return scope.displayValue(modelValue)
-
-                scope.displayValue = (modelValue) ->
-                    console.log "je suis la valeur model : "+modelValue
-                    result=parseFloat(modelValue)
-                    if  attrs.numbersOnly == "percent"
-                        result=angular.copy(result)*100
-                    viewValue =  convertToString(result)
-
-                    console.log " == > la nouvelle valeur-view est : "+viewValue
-                    return viewValue
-
-                displayError = ->
-                    # try to display the message like a error message.
-                    # used by the mmAwacQuestion directive
                     if scope.setErrorMessage?
                         scope.setErrorMessage(errorMessage)
 
-                convertToString = (value) ->
+                    return parseResult
 
-                    if !value? || isNaN value
-                        return ""
+            # DOUBLE
+            if attrs.numbersOnly == "double"
+                found = true
 
-                    value=value.toFixed(nbDecimal)
+                format = (modelValue) ->
+                    v = modelValue
+                    return convertToString(v, 3)
 
-                    formats = $locale.NUMBER_FORMATS
-                    result= value.toString().replace(new RegExp("\\.", "g"), formats.DECIMAL_SEP)
+                parse = (viewValue) ->
+                    errorMessage = null
 
-                convertToFloat = (viewValue) ->
-                    if viewValue == ""
-                        return NaN
-
-                    formats = $locale.NUMBER_FORMATS
-
-                    decimalRegex = formats.DECIMAL_SEP
-                    if decimalRegex == "."
-                        decimalRegex = "\\."
-
-                    value = viewValue.replace(new RegExp(decimalRegex, "g"), ".")
-
-                    return filterFloat value
-
-                #
-                # filter a string to float
-                #
-                filterFloat = (value) ->
-                    if value.isNaN
-                        return NaN
-                    if  attrs.numbersOnly == "integer"
-                        regexFloat = new RegExp("^(\\-|\\+)?([0-9]+|Infinity)?$")
+                    viewValue = convertToFloat(viewValue.trim())
+                    if viewValue == ''
+                        return null
+                    regexFloat = new RegExp("^(\\-|\\+)?([0-9]+(\\.[0-9]*)?|Infinity)?$")
+                    if regexFloat.test(viewValue)
+                        parseResult = viewValue
                     else
-                        regexFloat = new RegExp("^(\\-|\\+)?([0-9]+(\\.[0-9]*)?|Infinity)?$")
+                        parseResult = null
+                        errorMessage = $filter('translateText')('ONLY_NUMBER')
 
-                    return Number(value)  if regexFloat.test(value)
-                    return NaN
+                    if scope.setErrorMessage?
+                        scope.setErrorMessage(errorMessage)
 
-                #
-                # first initialization : save first value and display it
-                #
+                    return parseResult
+
+
+            # PERCENT
+            if attrs.numbersOnly == "percent"
+                found = true
+
+                format = (modelValue) ->
+                    v = modelValue * 100.0
+                    return convertToString(v,3)
+
+                parse = (viewValue) ->
+                    errorMessage = null
+
+                    viewValue = convertToFloat(viewValue.trim())
+                    if viewValue == ''
+                        return null
+                    regexFloat = new RegExp("^(\\-|\\+)?([0-9]+(\\.[0-9]*)?|Infinity)?$")
+                    if regexFloat.test(viewValue)
+                        parseResult = viewValue * 0.01
+                    else
+                        parseResult = null
+                        errorMessage = $filter('translateText')('ONLY_NUMBER')
+
+                    if scope.setErrorMessage?
+                        scope.setErrorMessage(errorMessage)
+
+                    return parseResult
+
+            if found
                 if modelCtrl.$modelValue?
-                    console.log "je suis l'initilaization !! la valueToDisplay est : "+valueToDisplay
-                    scope.lastValidValue = parseFloat(modelCtrl.$modelValue)
-                    # first displaying
-                    valueToDisplay = scope.displayValue(scope.lastValidValue)
-                    console.log "=> la valeur de initilaization visuel est "+valueToDisplay
-                    modelCtrl.$setViewValue(valueToDisplay)
+                    modelCtrl.$setViewValue format(modelCtrl.$modelValue)
                     modelCtrl.$render()
+                modelCtrl.$parsers.unshift parse
+                modelCtrl.$formatters.unshift format
+

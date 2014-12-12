@@ -36,6 +36,7 @@ angular
             if result.success
                 $scope.loadCodeLabels()
                 messageFlash.displaySuccess translationService.get "CHANGES_SAVED"
+                translationService.reinitialize()
 
     $scope.ignoreChanges = false
 

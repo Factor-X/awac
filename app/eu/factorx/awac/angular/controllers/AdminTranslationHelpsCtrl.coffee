@@ -38,6 +38,7 @@ angular
         downloadService.postJson "/awac/admin/translations/wysiwyg/update", _.omit(f, 'original'), (result) ->
             if result.success
                 f.original = f.content
+                translationService.reinitialize()
 
 
     $scope.editorOptions =
