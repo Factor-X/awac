@@ -25,8 +25,6 @@ div
 
         mm-awac-section(title-code="AM24")
 
-            mm-awac-question(question-code="AM25",ng-optional="true")
-
             mm-awac-repetition-name(question-code="AM26")
             mm-awac-repetition-question(question-set-code="AM26", ng-iteration="itLevel1", ng-repeat="itLevel1 in getRepetitionMapByQuestionSet('AM26')")
 
@@ -76,7 +74,6 @@ div
         .horizontal_separator
         mm-awac-section(title-code="AM63")
 
-            mm-awac-question(question-code="AM64",ng-optional="true")
             mm-awac-question(question-code="AM65")
             mm-awac-question(question-code="AM66")
             mm-awac-question(question-code="AM67", ng-condition="getAnswer('AM66').value == '1'")
