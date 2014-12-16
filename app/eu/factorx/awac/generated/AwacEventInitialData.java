@@ -1924,9 +1924,9 @@ if (aev43 == null) {
         // == AEV44
         // Indiquez la consommation moyenne des voitures, (en litres par 100 km)
 
-        aev44 = (IntegerQuestion) questionService.findByCode(QuestionCode.AEV44);
+        aev44 = (DoubleQuestion) questionService.findByCode(QuestionCode.AEV44);
 if (aev44 == null) {
-    aev44 = new IntegerQuestion(aev42, 0, QuestionCode.AEV44, null);
+    aev44 = new DoubleQuestion(aev42, 0, QuestionCode.AEV44, null);
     JPA.em().persist(aev44);
 
     // cleanup the driver
@@ -2155,9 +2155,9 @@ if (aev48 == null) {
         // == AEV49
         // Indiquez la consommation moyenne des autocars (en litres par 100 km)
 
-        aev49 = (IntegerQuestion) questionService.findByCode(QuestionCode.AEV49);
+        aev49 = (DoubleQuestion) questionService.findByCode(QuestionCode.AEV49);
 if (aev49 == null) {
-    aev49 = new IntegerQuestion(aev42, 0, QuestionCode.AEV49, null);
+    aev49 = new DoubleQuestion(aev42, 0, QuestionCode.AEV49, null);
     JPA.em().persist(aev49);
 
     // cleanup the driver
@@ -2656,9 +2656,9 @@ if (aev68 == null) {
         // == AEV74
         // Consommation moyenne en litres au 100 km
 
-        aev74 = (IntegerQuestion) questionService.findByCode(QuestionCode.AEV74);
+        aev74 = (DoubleQuestion) questionService.findByCode(QuestionCode.AEV74);
 if (aev74 == null) {
-    aev74 = new IntegerQuestion(aev67, 0, QuestionCode.AEV74, null);
+    aev74 = new DoubleQuestion(aev67, 0, QuestionCode.AEV74, null);
     JPA.em().persist(aev74);
 
     // cleanup the driver
@@ -3261,9 +3261,9 @@ if (aev100 == null) {
         // == AEV101
         // Consommation moyenne (l/100 km)
 
-        aev101 = (IntegerQuestion) questionService.findByCode(QuestionCode.AEV101);
+        aev101 = (DoubleQuestion) questionService.findByCode(QuestionCode.AEV101);
 if (aev101 == null) {
-    aev101 = new IntegerQuestion(aev98, 0, QuestionCode.AEV101, null);
+    aev101 = new DoubleQuestion(aev98, 0, QuestionCode.AEV101, null);
     JPA.em().persist(aev101);
 
     // cleanup the driver

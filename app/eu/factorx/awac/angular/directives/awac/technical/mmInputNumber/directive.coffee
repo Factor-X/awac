@@ -5,11 +5,21 @@ angular
     require: "ngModel"
     link: (scope, element, attrs, modelCtrl) ->
 
+        scope.format = (v) ->
+            return v
+        scope.parse = modelCtrl.$rollbackViewValue
+
+        modelCtrl.$parsers.unshift (v) ->
+            return scope.parse(v)
+        modelCtrl.$formatters.unshift (v) ->
+            return scope.format(v)
+
+
 
         convertToString = (value, decimal) ->
             if !value? || isNaN value
                 return ""
-            value=value.toFixed(decimal)
+            value=parseFloat(value).toFixed(decimal)
             formats = $locale.NUMBER_FORMATS
             return value.toString().split('.').join(formats.DECIMAL_SEP)
 
@@ -22,22 +32,28 @@ angular
             return value
 
 
+        if attrs.numbersOnly == ''
+            found = true
+
+            scope.format = (v) ->
+                return v
+            scope.parse = (v) ->
+                return v
+
         scope.$watch attrs.numbersOnly, () ->
             scope.lastValidValue = ""
 
             found = false
-            format = angular.noop
-            parse = angular.noop
 
             # INTEGER
             if attrs.numbersOnly == "integer"
                 found = true
 
-                format = (modelValue) ->
+                scope.format = (modelValue) ->
                     v = modelValue
                     return convertToString(v, 0)
 
-                parse = (viewValue) ->
+                scope.parse = (viewValue) ->
                     errorMessage = null
 
                     viewValue = convertToFloat(viewValue.trim())
@@ -59,11 +75,11 @@ angular
             if attrs.numbersOnly == "double"
                 found = true
 
-                format = (modelValue) ->
+                scope.format = (modelValue) ->
                     v = modelValue
                     return convertToString(v, 3)
 
-                parse = (viewValue) ->
+                scope.parse = (viewValue) ->
                     errorMessage = null
 
                     viewValue = convertToFloat(viewValue.trim())
@@ -86,11 +102,11 @@ angular
             if attrs.numbersOnly == "percent"
                 found = true
 
-                format = (modelValue) ->
+                scope.format = (modelValue) ->
                     v = modelValue * 100.0
                     return convertToString(v,3)
 
-                parse = (viewValue) ->
+                scope.parse = (viewValue) ->
                     errorMessage = null
 
                     viewValue = convertToFloat(viewValue.trim())
@@ -108,10 +124,15 @@ angular
 
                     return parseResult
 
+            if attrs.numbersOnly == ''
+                found = true
+
+                scope.format = (v) ->
+                    return v
+                scope.parse = (v) ->
+                    return v
+
             if found
                 if modelCtrl.$modelValue?
-                    modelCtrl.$setViewValue format(modelCtrl.$modelValue)
+                    modelCtrl.$setViewValue scope.format(modelCtrl.$modelValue)
                     modelCtrl.$render()
-                modelCtrl.$parsers.unshift parse
-                modelCtrl.$formatters.unshift format
-

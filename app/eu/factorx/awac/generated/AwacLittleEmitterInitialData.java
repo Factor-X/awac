@@ -893,9 +893,9 @@ if (ap7 == null) {
         // == AP8
         // Nombre d'équivalents temps plein (ETP) sur l'année
 
-        ap8 = (IntegerQuestion) questionService.findByCode(QuestionCode.AP8);
+        ap8 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP8);
 if (ap8 == null) {
-    ap8 = new IntegerQuestion(ap2, 0, QuestionCode.AP8, null);
+    ap8 = new DoubleQuestion(ap2, 0, QuestionCode.AP8, null);
     JPA.em().persist(ap8);
 
     // cleanup the driver
@@ -2959,9 +2959,9 @@ if (ap73 == null) {
         // == AP76
         // Consommation moyenne (l/100km)
 
-        ap76 = (IntegerQuestion) questionService.findByCode(QuestionCode.AP76);
+        ap76 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP76);
 if (ap76 == null) {
-    ap76 = new IntegerQuestion(ap70, 0, QuestionCode.AP76, null);
+    ap76 = new DoubleQuestion(ap70, 0, QuestionCode.AP76, null);
     JPA.em().persist(ap76);
 
     // cleanup the driver
@@ -3296,9 +3296,9 @@ if (ap87 == null) {
         // == AP90
         // Consommation moyenne (L/100km)
 
-        ap90 = (IntegerQuestion) questionService.findByCode(QuestionCode.AP90);
+        ap90 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP90);
 if (ap90 == null) {
-    ap90 = new IntegerQuestion(ap81, 0, QuestionCode.AP90, null);
+    ap90 = new DoubleQuestion(ap81, 0, QuestionCode.AP90, null);
     JPA.em().persist(ap90);
 
     // cleanup the driver
@@ -3532,9 +3532,9 @@ if (ap97 == null) {
         // == AP98
         // Consommation moyenne des véhicules (l/100km)
 
-        ap98 = (IntegerQuestion) questionService.findByCode(QuestionCode.AP98);
+        ap98 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP98);
 if (ap98 == null) {
-    ap98 = new IntegerQuestion(ap95, 0, QuestionCode.AP98, null);
+    ap98 = new DoubleQuestion(ap95, 0, QuestionCode.AP98, null);
     JPA.em().persist(ap98);
 
     // cleanup the driver
@@ -3905,9 +3905,9 @@ if (ap112 == null) {
         // == AP116
         // Consommation moyenne (L/100km)
 
-        ap116 = (IntegerQuestion) questionService.findByCode(QuestionCode.AP116);
+        ap116 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP116);
 if (ap116 == null) {
-    ap116 = new IntegerQuestion(ap109, 0, QuestionCode.AP116, null);
+    ap116 = new DoubleQuestion(ap109, 0, QuestionCode.AP116, null);
     JPA.em().persist(ap116);
 
     // cleanup the driver
@@ -4172,9 +4172,9 @@ if (ap127 == null) {
         // == AP131
         // Consommation moyenne (L/100km)
 
-        ap131 = (IntegerQuestion) questionService.findByCode(QuestionCode.AP131);
+        ap131 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP131);
 if (ap131 == null) {
-    ap131 = new IntegerQuestion(ap124, 0, QuestionCode.AP131, null);
+    ap131 = new DoubleQuestion(ap124, 0, QuestionCode.AP131, null);
     JPA.em().persist(ap131);
 
     // cleanup the driver
