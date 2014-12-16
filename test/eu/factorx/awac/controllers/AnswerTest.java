@@ -66,13 +66,8 @@ public class AnswerTest extends AbstractBaseModelTest {
         JsonNode jsonResponse = Json.parse(content);
         SaveAnswersResultDTO saveAnswerResultDto = Json.fromJson(jsonResponse, SaveAnswersResultDTO.class);
 
-        Logger.info("jsonNode: " + jsonResponse.toString());
-        //Logger.info("findPath:" + jsonResponse.findPath("lastname").asText());
-        //Logger.info("lastname:" + loginResult.getPerson().getLastName());
-
         // verify lastupdate
         //TODO should return a date, but for now on it returns null
-        //assertEquals("10102014",saveAnswerResultDto.getLastUpdate());
         assertEquals(null, saveAnswerResultDto.getLastUpdate());
 
     } // end of saveActionSuccess test
@@ -112,7 +107,7 @@ public class AnswerTest extends AbstractBaseModelTest {
         result = saveData("10002", IDENTIFIER_USER1);
 
         //check is the value was saved
-        assertFalse("test lock, 4 : work but should be not", answerValueEquals(IDENTIFIER_USER1,QuestionCode.A1,10002));
+        assertFalse("test lock, 4 : work but should be not", answerValueEquals(IDENTIFIER_USER1,QuestionCode.A2,10002));
 
         // 5. user2 valid questionSet A1
         result = lockOrValideQuestionSet(IDENTIFIER_USER2, false, true);
@@ -122,7 +117,7 @@ public class AnswerTest extends AbstractBaseModelTest {
         // 6. user1 save data (expected error)
         result = saveData("10003", IDENTIFIER_USER1);
 
-        assertFalse("test lock, 6 : work but should be not", answerValueEquals(IDENTIFIER_USER1,QuestionCode.A1,10003));
+        assertFalse("test lock, 6 : work but should be not", answerValueEquals(IDENTIFIER_USER1,QuestionCode.A2,10003));
 
         // 7. unlock
         result = lockOrValideQuestionSet(IDENTIFIER_USER1, true, false);
@@ -243,10 +238,7 @@ public class AnswerTest extends AbstractBaseModelTest {
 
         for (AnswerLineDTO answerLineDTO : formDTO.getAnswersSave().getListAnswers()) {
             if (answerLineDTO.getQuestionKey().equals(questionCode.getKey())) {
-                if (answerLineDTO.getValue().equals(valueExpected)) {
-                    return true;
-                }
-                return false;
+                return answerLineDTO.getValue().equals(valueExpected);
             }
         }
         assertEquals("Not found questionSet for "+questionCode, false, true);
