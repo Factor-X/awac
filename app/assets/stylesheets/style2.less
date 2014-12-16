@@ -138,16 +138,16 @@
     padding: 0;
     position: relative;
     height: 96px;
+    min-width: 100%;
+    max-width: 100%;
+    width: 100%;
 
     .site_menu {
         margin: 0;
         padding: 0;
-
-        position: absolute;
-        left: 0;
-        top: 0;
         width: 75%;
         border-left: solid 4px transparent;
+        float:left;
 
         .menu_enterprise {
             margin: 0;
@@ -214,14 +214,8 @@
         margin: 0;
         padding: 4px;
         display: table;
-
-        position: absolute;
-        right: 0;
-        top: 0;
         width: 25%;
-
         border-spacing: 0;
-
         button {
             &:not(:first-child) {
                 margin-left: 4px;
