@@ -19,7 +19,7 @@ angular
         convertToString = (value, decimal) ->
             if !value? || isNaN value
                 return ""
-            value=value.toFixed(decimal)
+            value=parseFloat(value).toFixed(decimal)
             formats = $locale.NUMBER_FORMATS
             return value.toString().split('.').join(formats.DECIMAL_SEP)
 
