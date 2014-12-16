@@ -89,10 +89,10 @@ angular
                         else if answerType == 'INTEGER'
                             directiveName = "integer-question"
                         else if answerType == 'DOUBLE'
-                            if scope.getQuestion().unitCategoryId != null || scope.getQuestion().unitCategoryId != undefined
-                                directiveName = "real-with-unit-question"
-                            else
+                            if not scope.getQuestion().unitCategoryId
                                 directiveName = "real-question"
+                            else
+                                directiveName = "real-with-unit-question"
                         else if answerType == 'PERCENTAGE'
                             directiveName = "percentage-question"
                         else if answerType == 'STRING'
