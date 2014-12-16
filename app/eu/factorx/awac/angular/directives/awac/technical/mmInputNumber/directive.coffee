@@ -5,13 +5,15 @@ angular
     require: "ngModel"
     link: (scope, element, attrs, modelCtrl) ->
 
-        scope.format = angular.noop
+        scope.format = (v) ->
+            return v
         scope.parse = modelCtrl.$rollbackViewValue
 
         modelCtrl.$parsers.unshift (v) ->
             return scope.parse(v)
         modelCtrl.$formatters.unshift (v) ->
             return scope.format(v)
+
 
 
         convertToString = (value, decimal) ->
@@ -30,11 +32,18 @@ angular
             return value
 
 
+        if attrs.numbersOnly == ''
+            found = true
+
+            scope.format = (v) ->
+                return v
+            scope.parse = (v) ->
+                return v
+
         scope.$watch attrs.numbersOnly, () ->
             scope.lastValidValue = ""
 
             found = false
-
 
             # INTEGER
             if attrs.numbersOnly == "integer"
@@ -114,6 +123,14 @@ angular
                         scope.setErrorMessage(errorMessage)
 
                     return parseResult
+
+            if attrs.numbersOnly == ''
+                found = true
+
+                scope.format = (v) ->
+                    return v
+                scope.parse = (v) ->
+                    return v
 
             if found
                 if modelCtrl.$modelValue?
