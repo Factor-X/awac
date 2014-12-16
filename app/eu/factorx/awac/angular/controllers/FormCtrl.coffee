@@ -298,7 +298,6 @@ angular
                 console.log "ERROR : this question was not found : " + code
                 return null
             if question.unitCategoryId == null || question.unitCategoryId == undefined
-                console.log "ERROR : there is no unitCategoryId for this question : " + code
                 return null
             return $scope.o.unitCategories[question.unitCategoryId]
 

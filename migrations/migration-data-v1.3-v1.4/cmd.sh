@@ -3,5 +3,7 @@
 export PGPASSWORD=play
 
 # add desrption to product
+psql -h localhost -U play -d awac -w <  ./CELDL-482.sql
+
 
 
