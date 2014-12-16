@@ -2047,9 +2047,9 @@ if (a11 == null) {
         // == A12
         // Quel est le nombre d'employés sur l'année du bilan?
 
-        a12 = (IntegerQuestion) questionService.findByCode(QuestionCode.A12);
+        a12 = (DoubleQuestion) questionService.findByCode(QuestionCode.A12);
 if (a12 == null) {
-    a12 = new IntegerQuestion(a1, 0, QuestionCode.A12, null);
+    a12 = new DoubleQuestion(a1, 0, QuestionCode.A12, null);
     JPA.em().persist(a12);
 
     // cleanup the driver
@@ -3254,9 +3254,9 @@ if (a409 == null) {
         // == A410
         // Consommation moyenne (L/100km)
 
-        a410 = (IntegerQuestion) questionService.findByCode(QuestionCode.A410);
+        a410 = (DoubleQuestion) questionService.findByCode(QuestionCode.A410);
 if (a410 == null) {
-    a410 = new IntegerQuestion(a407, 0, QuestionCode.A410, null);
+    a410 = new DoubleQuestion(a407, 0, QuestionCode.A410, null);
     JPA.em().persist(a410);
 
     // cleanup the driver
@@ -3639,9 +3639,9 @@ if (a509 == null) {
         // == A510
         // Consommation moyenne (L/100km)
 
-        a510 = (IntegerQuestion) questionService.findByCode(QuestionCode.A510);
+        a510 = (DoubleQuestion) questionService.findByCode(QuestionCode.A510);
 if (a510 == null) {
-    a510 = new IntegerQuestion(a507, 0, QuestionCode.A510, null);
+    a510 = new DoubleQuestion(a507, 0, QuestionCode.A510, null);
     JPA.em().persist(a510);
 
     // cleanup the driver
@@ -4024,9 +4024,9 @@ if (a609 == null) {
         // == A610
         // Consommation moyenne (L/100km)
 
-        a610 = (IntegerQuestion) questionService.findByCode(QuestionCode.A610);
+        a610 = (DoubleQuestion) questionService.findByCode(QuestionCode.A610);
 if (a610 == null) {
-    a610 = new IntegerQuestion(a607, 0, QuestionCode.A610, null);
+    a610 = new DoubleQuestion(a607, 0, QuestionCode.A610, null);
     JPA.em().persist(a610);
 
     // cleanup the driver
@@ -5614,9 +5614,9 @@ if (a227 == null) {
         // == A228
         // Facteur d'émission en tCO2e par unité ci-dessus
 
-        a228 = (IntegerQuestion) questionService.findByCode(QuestionCode.A228);
+        a228 = (DoubleQuestion) questionService.findByCode(QuestionCode.A228);
 if (a228 == null) {
-    a228 = new IntegerQuestion(a224, 0, QuestionCode.A228, null);
+    a228 = new DoubleQuestion(a224, 0, QuestionCode.A228, null);
     JPA.em().persist(a228);
 
     // cleanup the driver
@@ -7966,9 +7966,9 @@ if (a241 == null) {
         // == A242
         // Facteur d'émission en tCO2e par unité ci-dessus
 
-        a242 = (IntegerQuestion) questionService.findByCode(QuestionCode.A242);
+        a242 = (DoubleQuestion) questionService.findByCode(QuestionCode.A242);
 if (a242 == null) {
-    a242 = new IntegerQuestion(a238, 0, QuestionCode.A242, null);
+    a242 = new DoubleQuestion(a238, 0, QuestionCode.A242, null);
     JPA.em().persist(a242);
 
     // cleanup the driver
@@ -8839,9 +8839,9 @@ if (a336 == null) {
         // == A337
         // Emissions directes totales - Scope 1 (tCO2e)
 
-        a337 = (IntegerQuestion) questionService.findByCode(QuestionCode.A337);
+        a337 = (DoubleQuestion) questionService.findByCode(QuestionCode.A337);
 if (a337 == null) {
-    a337 = new IntegerQuestion(a334, 0, QuestionCode.A337, null);
+    a337 = new DoubleQuestion(a334, 0, QuestionCode.A337, null);
     JPA.em().persist(a337);
 
     // cleanup the driver
@@ -8878,9 +8878,9 @@ if (a337 == null) {
         // == A338
         // Emissions indirectes totales - Scope 2 (tCO2e)
 
-        a338 = (IntegerQuestion) questionService.findByCode(QuestionCode.A338);
+        a338 = (DoubleQuestion) questionService.findByCode(QuestionCode.A338);
 if (a338 == null) {
-    a338 = new IntegerQuestion(a334, 0, QuestionCode.A338, null);
+    a338 = new DoubleQuestion(a334, 0, QuestionCode.A338, null);
     JPA.em().persist(a338);
 
     // cleanup the driver

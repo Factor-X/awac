@@ -4569,9 +4569,9 @@ if (am114 == null) {
         // == AM115
         // Consommation moyenne (l/100km)
 
-        am115 = (IntegerQuestion) questionService.findByCode(QuestionCode.AM115);
+        am115 = (DoubleQuestion) questionService.findByCode(QuestionCode.AM115);
 if (am115 == null) {
-    am115 = new IntegerQuestion(am111, 0, QuestionCode.AM115, null);
+    am115 = new DoubleQuestion(am111, 0, QuestionCode.AM115, null);
     JPA.em().persist(am115);
 
     // cleanup the driver

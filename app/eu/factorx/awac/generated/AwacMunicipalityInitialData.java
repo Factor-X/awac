@@ -2530,9 +2530,9 @@ if (ac409 == null) {
         // == AC410
         // Consommation moyenne (L/100km)
 
-        ac410 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC410);
+        ac410 = (DoubleQuestion) questionService.findByCode(QuestionCode.AC410);
 if (ac410 == null) {
-    ac410 = new IntegerQuestion(ac407, 0, QuestionCode.AC410, null);
+    ac410 = new DoubleQuestion(ac407, 0, QuestionCode.AC410, null);
     JPA.em().persist(ac410);
 
     // cleanup the driver
@@ -2915,9 +2915,9 @@ if (ac509 == null) {
         // == AC510
         // Consommation moyenne (L/100km)
 
-        ac510 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC510);
+        ac510 = (DoubleQuestion) questionService.findByCode(QuestionCode.AC510);
 if (ac510 == null) {
-    ac510 = new IntegerQuestion(ac507, 0, QuestionCode.AC510, null);
+    ac510 = new DoubleQuestion(ac507, 0, QuestionCode.AC510, null);
     JPA.em().persist(ac510);
 
     // cleanup the driver
@@ -3300,9 +3300,9 @@ if (ac609 == null) {
         // == AC610
         // Consommation moyenne (L/100km)
 
-        ac610 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC610);
+        ac610 = (DoubleQuestion) questionService.findByCode(QuestionCode.AC610);
 if (ac610 == null) {
-    ac610 = new IntegerQuestion(ac607, 0, QuestionCode.AC610, null);
+    ac610 = new DoubleQuestion(ac607, 0, QuestionCode.AC610, null);
     JPA.em().persist(ac610);
 
     // cleanup the driver
@@ -4770,9 +4770,9 @@ if (ac141 == null) {
         // == AC142
         // Emissions directes totales du projet (tCO²e)
 
-        ac142 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC142);
+        ac142 = (DoubleQuestion) questionService.findByCode(QuestionCode.AC142);
 if (ac142 == null) {
-    ac142 = new IntegerQuestion(ac139, 0, QuestionCode.AC142, null);
+    ac142 = new DoubleQuestion(ac139, 0, QuestionCode.AC142, null);
     JPA.em().persist(ac142);
 
     // cleanup the driver
@@ -4809,9 +4809,9 @@ if (ac142 == null) {
         // == AC143
         // Emissions indirectes totales du projet (tCO²e)
 
-        ac143 = (IntegerQuestion) questionService.findByCode(QuestionCode.AC143);
+        ac143 = (DoubleQuestion) questionService.findByCode(QuestionCode.AC143);
 if (ac143 == null) {
-    ac143 = new IntegerQuestion(ac139, 0, QuestionCode.AC143, null);
+    ac143 = new DoubleQuestion(ac139, 0, QuestionCode.AC143, null);
     JPA.em().persist(ac143);
 
     // cleanup the driver
