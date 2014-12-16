@@ -704,6 +704,10 @@ angular
                                             #test if the data is valid
                                             if answer.value != null
                                                 answered++
+
+            console.log "total list : "
+            console.log listTotal
+
             if answered == 0
                 percentage = 0
             else

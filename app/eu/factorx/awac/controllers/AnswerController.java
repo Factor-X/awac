@@ -236,8 +236,8 @@ public class AnswerController extends AbstractController {
             }
         }
 
-		Set<QuestionSet> questionSets = form.getQuestionSets();
-		List<QuestionSetDTO> questionSetDTOs = toQuestionSetDTOs(new ArrayList<>(questionSets), questionSetAnswers, period);
+        Set<QuestionSet> questionSets = form.getQuestionSets();
+        List<QuestionSetDTO> questionSetDTOs = toQuestionSetDTOs(new ArrayList<>(questionSets), questionSetAnswers, period);
 
         List<QuestionAnswer> questionAnswers = questionAnswerService.findByParameters(new QuestionAnswerSearchParameter().appendForm(form).appendPeriod(period).appendScope(scope));
         List<AnswerLineDTO> answerLineDTOs = toAnswerLineDTOs(questionAnswers);
@@ -425,7 +425,7 @@ public class AnswerController extends AbstractController {
     @Security.Authenticated(SecuredController.class)
     public Result getPeriodsForComparison(Long scopeId) {
 
-        if(securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)){
+        if (securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)) {
             return getPeriodsForComparisonByOrganization(scopeId);
         }
         Scope scope = scopeService.findById(scopeId);
@@ -447,13 +447,13 @@ public class AnswerController extends AbstractController {
                 periodDTOs.add(conversionService.convert(period, PeriodDTO.class));
 
             } else if (securedController.getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.PRODUCT)) {
-              //restrict by period by site
-              for (Period periodToTest : ((Product) scope).getListPeriodAvailable()) {
-                if (periodToTest.equals(period)) {
-                  periodDTOs.add(conversionService.convert(period, PeriodDTO.class));
-                  break;
+                //restrict by period by site
+                for (Period periodToTest : ((Product) scope).getListPeriodAvailable()) {
+                    if (periodToTest.equals(period)) {
+                        periodDTOs.add(conversionService.convert(period, PeriodDTO.class));
+                        break;
+                    }
                 }
-              }
             }
         }
 
@@ -488,8 +488,7 @@ public class AnswerController extends AbstractController {
                 }
             } else if (organizationCustomer.getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.ORG)) {
                 periodDTOs.add(conversionService.convert(period, PeriodDTO.class));
-            }
-            else if (organizationCustomer.getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.PRODUCT)) {
+            } else if (organizationCustomer.getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.PRODUCT)) {
                 //TODO
             }
         }
@@ -736,21 +735,6 @@ public class AnswerController extends AbstractController {
         List<QuestionSetAnswer> questionSetAnswersList = questionSetAnswerService.findByParameters(new QuestionSetAnswerSearchParameter(false).appendForm(form).appendPeriod(period)
                 .appendScope(scope));
 
-        //control locker
-        for (int i = questionSetAnswersList.size() - 1; i >= 0; i--) {
-            QuestionSetAnswer questionSetAnswer = questionSetAnswersList.get(i);
-            if (questionSetAnswer.getAuditInfo() != null) {
-                if (questionSetAnswer.getAuditInfo().getDataLocker() != null && !questionSetAnswer.getAuditInfo().getDataLocker().equals(securedController.getCurrentUser())) {
-                    questionSetAnswersList.remove(i);
-                    //throw new MyrmexRuntimeException("This questionSet " + questionSetAnswer.getQuestionSet().getCode() + " is loked by " + questionSetAnswer.getAuditInfo().getDataLocker().getIdentifier());
-                }
-                if (questionSetAnswer.getAuditInfo().getDataValidator() != null) {
-                    questionSetAnswersList.remove(i);
-                    //throw new MyrmexRuntimeException("This questionSet " + questionSetAnswer.getQuestionSet().getCode() + " is validate");
-                }
-            }
-        }
-
         Map<Map<QuestionCode, Integer>, QuestionSetAnswer> questionSetAnswersMap = byRepetitionMap(questionSetAnswersList);
 
         Map<String, Map<Map<String, Integer>, QuestionAnswer>> questionAnswersMap = asQuestionAnswersMap(questionSetAnswersList);
@@ -772,7 +756,7 @@ public class AnswerController extends AbstractController {
     }
 
     private static Map<Map<QuestionCode, Integer>, QuestionSetAnswer> byRepetitionMap(List<QuestionSetAnswer> questionSetAnswers) {
-        Map<Map<QuestionCode, Integer>, QuestionSetAnswer> res = new HashMap<Map<QuestionCode, Integer>, QuestionSetAnswer>();
+        Map<Map<QuestionCode, Integer>, QuestionSetAnswer> res = new HashMap<>();
         for (QuestionSetAnswer questionSetAnswer : questionSetAnswers) {
             res.put(getNormalizedRepetitionMap(questionSetAnswer), questionSetAnswer);
             res.putAll(byRepetitionMap(questionSetAnswer.getChildren()));
@@ -852,6 +836,16 @@ public class AnswerController extends AbstractController {
         // get QuestionSetAnswer
         QuestionSetAnswer questionSetAnswer = findOrCreateQuestionSetAnswer(period, scope, questionSet, answerLineDTO, existingQuestionSetAnswers);
 
+        //find the questionSetAnswerParent
+        QuestionSetAnswer questionSetAnswerFirstParent = getFirstParent(questionSetAnswer);
+
+        //if the firstParent is block or validate, stop save
+        if (questionSetAnswerFirstParent.getAuditInfo() != null &&
+                ((questionSetAnswerFirstParent.getAuditInfo().getDataLocker() != null && !questionSetAnswerFirstParent.getAuditInfo().getDataLocker().equals(securedController.getCurrentUser())) ||
+                        questionSetAnswerFirstParent.getAuditInfo().getDataValidator() != null)) {
+            return;
+        }
+
         // create and save QuestionAnswer
         QuestionAnswer questionAnswer = new QuestionAnswer(currentUser, questionSetAnswer, question);
         List<AnswerValue> answerValues = getAnswerValues(answerLineDTO, questionAnswer);
@@ -872,6 +866,7 @@ public class AnswerController extends AbstractController {
 
         // Check if QuestionSetAnswer already exists
         QuestionSetAnswer questionSetAnswer = existingQuestionSetAnswers.get(repetitionMap);
+
         if (questionSetAnswer != null) {
             return questionSetAnswer;
         }
@@ -1081,20 +1076,20 @@ public class AnswerController extends AbstractController {
                 }
 
                 break;
-			case DATE_TIME:
-				// build the answer value
-				strValue = StringUtils.trimToNull(rawAnswerValue.toString());
-				Long longValue = Long.valueOf(strValue);
-				DateTime dateTime = null;
-				if (longValue != null) {
-					dateTime = new DateTime(longValue);
-					answerValue.add(new DateTimeAnswerValue(questionAnswer, dateTime));
-				}
-				if (longValue == null || dateTime == null) {
-					throw new MyrmexFatalException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
-				}
-				break;
-		}
+            case DATE_TIME:
+                // build the answer value
+                strValue = StringUtils.trimToNull(rawAnswerValue.toString());
+                Long longValue = Long.valueOf(strValue);
+                DateTime dateTime = null;
+                if (longValue != null) {
+                    dateTime = new DateTime(longValue);
+                    answerValue.add(new DateTimeAnswerValue(questionAnswer, dateTime));
+                }
+                if (longValue == null || dateTime == null) {
+                    throw new MyrmexFatalException("the answer of the question " + question.getCode() + " cannot be saved : " + rawAnswerValue.toString());
+                }
+                break;
+        }
 
         //add comment into each answerValue
         if (answerLine.getComment() != null) {
@@ -1249,6 +1244,14 @@ public class AnswerController extends AbstractController {
         }
 
         return result;
+    }
+
+    private QuestionSetAnswer getFirstParent(QuestionSetAnswer questionSetAnswer) {
+        if (questionSetAnswer.getParent() == null) {
+            return questionSetAnswer;
+        } else {
+            return getFirstParent(questionSetAnswer.getParent());
+        }
     }
 
 }

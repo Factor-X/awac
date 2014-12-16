@@ -11,33 +11,33 @@
 
 package eu.factorx.awac.controllers;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static play.test.Helpers.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import play.Logger;
-import play.libs.Json;
-import play.mvc.Result;
-import play.test.FakeRequest;
-
 import com.fasterxml.jackson.databind.JsonNode;
-
+import eu.factorx.awac.dto.awac.get.FormDTO;
 import eu.factorx.awac.dto.awac.get.SaveAnswersResultDTO;
 import eu.factorx.awac.dto.awac.post.AnswerLineDTO;
 import eu.factorx.awac.dto.awac.post.LockQuestionSetDTO;
 import eu.factorx.awac.dto.awac.post.QuestionAnswersDTO;
 import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.models.AbstractBaseModelTest;
+import eu.factorx.awac.models.code.type.QuestionCode;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import play.Logger;
+import play.libs.Json;
+import play.mvc.Result;
+import play.test.FakeRequest;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static play.test.Helpers.*;
 
 //import play.api.mvc.AnyContent;
 //import com.avaje.ebean.Ebean;
@@ -50,6 +50,7 @@ public class AnswerTest extends AbstractBaseModelTest {
     private final String IDENTIFIER_USER1 = "user1";
     private final String IDENTIFIER_USER2 = "user2";
     private final Long FormId = 2L;
+    private final String FormString = "TAB2";
     private final Long PeriodId = 1L;
     private final String PeriodKey = "2013";
     private final Long ScopeId = 1L;
@@ -108,20 +109,20 @@ public class AnswerTest extends AbstractBaseModelTest {
         assertEquals(printError(result), 200, status(result));
 
         // 4. user1 save data (expected error)
-        result = saveData("10001", IDENTIFIER_USER1);
+        result = saveData("10002", IDENTIFIER_USER1);
 
-        assertNotEquals("work but should be not", 200, status(result));
+        //check is the value was saved
+        assertFalse("test lock, 4 : work but should be not", answerValueEquals(IDENTIFIER_USER1,QuestionCode.A1,10002));
 
         // 5. user2 valid questionSet A1
-        result = lockOrValideQuestionSet(IDENTIFIER_USER2, false,true);
+        result = lockOrValideQuestionSet(IDENTIFIER_USER2, false, true);
 
         assertEquals(printError(result), 200, status(result));
 
         // 6. user1 save data (expected error)
-        result = saveData("10001",IDENTIFIER_USER1);
+        result = saveData("10003", IDENTIFIER_USER1);
 
-        assertNotEquals("work but should be not", 200, status(result));
-
+        assertFalse("test lock, 6 : work but should be not", answerValueEquals(IDENTIFIER_USER1,QuestionCode.A1,10003));
 
         // 7. unlock
         result = lockOrValideQuestionSet(IDENTIFIER_USER1, true, false);
@@ -219,6 +220,37 @@ public class AnswerTest extends AbstractBaseModelTest {
                 saveFakeRequest
         ); // callAction
         return saveResult;
+    }
+
+    private boolean answerValueEquals(String identifier, QuestionCode questionCode, long valueExpected) {
+        // ConnectionFormDTO
+        ConnectionFormDTO cfDto = new ConnectionFormDTO(identifier, "password", "enterprise", "");
+
+        FakeRequest saveFakeRequest = new FakeRequest();
+        saveFakeRequest.withHeader("Content-type", "application/json");
+        saveFakeRequest.withSession(SecuredController.SESSION_IDENTIFIER_STORE, cfDto.getLogin());
+
+        // Call controller action
+        Result saveResult = callAction(
+                eu.factorx.awac.controllers.routes.ref.AnswerController.getByForm(FormString, PeriodKey, ScopeId),
+                saveFakeRequest
+        ); // callAction
+
+        // get LoginResultDTO
+        String content = new String(contentAsBytes(saveResult));
+        JsonNode jsonResponse = Json.parse(content);
+        FormDTO formDTO = Json.fromJson(jsonResponse, FormDTO.class);
+
+        for (AnswerLineDTO answerLineDTO : formDTO.getAnswersSave().getListAnswers()) {
+            if (answerLineDTO.getQuestionKey().equals(questionCode.getKey())) {
+                if (answerLineDTO.getValue().equals(valueExpected)) {
+                    return true;
+                }
+                return false;
+            }
+        }
+        assertEquals("Not found questionSet for "+questionCode, false, true);
+        return false;
     }
 
 }
