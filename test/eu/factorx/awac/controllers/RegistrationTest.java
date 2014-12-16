@@ -36,11 +36,11 @@ import eu.factorx.awac.service.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RegistrationTest extends AbstractNoDefaultTransactionBaseControllerTest {
 
-	private static final String email1 = "test1@test.test";
-	private static final String email2 = "test2@test.test";
+	private static final String email1 = "test1@test156.test";
+	private static final String email2 = "test2@test545.test";
 
-	private static final String identifier1 = "testtest";
-	private static final String identifier2 = "testtestt";
+	private static final String identifier1 = "testtemt8";
+	private static final String identifier2 = "tstteskt9t";
 
 	private static final String organizationName1 = "testOrganization";
 	private static final String organizationName2 = "testOrganizationn";
@@ -159,7 +159,7 @@ public class RegistrationTest extends AbstractNoDefaultTransactionBaseController
 
 		//analyse result
 		// expecting an HTTP 401 return code
-		assertEquals(printError(result),404, status(result));
+		assertEquals(printError(result),500, status(result));
 
 	} // end of authenticateSuccess test
 
