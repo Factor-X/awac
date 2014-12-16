@@ -33,7 +33,7 @@ $ heroku git:clone --app awac-dev
 ## Copy distribution binary file to local git repository
 
 ```sh
-$ cp "$AWAC_HOME/target/universal/awac-1.0-SNAPSHOT.zip" "$SOME_DIR/heroku/awac-dev"
+$ cp "$AWAC_HOME/target/universal/awac-1.0-SNAPSHOT.zip" "$SOME_DIR/heroku/awac-dev/"
 ```
 
 ## Commit changes
