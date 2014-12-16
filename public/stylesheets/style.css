@@ -189,6 +189,7 @@ select {
 .data_menu > div {
     display: inline-block;
     padding-top: 2px;
+    padding-left: 2px;
     vertical-align: middle;
 }
 
