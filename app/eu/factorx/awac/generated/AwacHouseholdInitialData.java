@@ -65,7 +65,7 @@ public class AwacHouseholdInitialData {
 
     private Form form1,form2,form3,form4,form5;
     private QuestionSet am2,am3,am7,am13,am23,am24,am26,am48,am63,am72,am110,am111,am117,am118,am122,am126,am130,am500,am134,am140,am600,am143,am147,am150,am153,am156,am160,am168,am169,am171,am175;
-    private Question am4,am5,am6,am8,am9,am10,am11,am12,am14,am15,am16,am17,am18,am19,am20,am21,am22,am25,am27,am28,am29,am30,am31,am32,am33,am34,am35,am36,am37,am38,am39,am40,am41,am42,am43,am44,am45,am46,am47,am49,am50,am51,am52,am53,am54,am55,am56,am57,am58,am59,am60,am61,am62,am64,am65,am66,am67,am68,am69,am70,am71,am73,am74,am75,am76,am77,am78,am79,am80,am81,am82,am83,am84,am85,am86,am87,am88,am89,am90,am91,am92,am93,am94,am95,am96,am97,am98,am99,am100,am101,am102,am103,am104,am105,am106,am107,am108,am109,am112,am113,am114,am115,am116,am119,am120,am121,am123,am124,am125,am127,am128,am129,am131,am132,am133,am135,am136,am137,am138,am139,am141,am142,am144,am145,am146,am148,am149,am151,am152,am154,am155,am157,am158,am159,am161,am166,am170,am172,am173,am174,am176,am177,am178,am179;
+    private Question am4,am5,am6,am8,am9,am10,am11,am12,am14,am15,am16,am17,am18,am19,am20,am21,am22,am27,am28,am29,am30,am31,am32,am33,am34,am35,am36,am37,am38,am39,am40,am41,am42,am43,am44,am45,am46,am47,am49,am50,am51,am52,am53,am54,am55,am56,am57,am58,am59,am60,am61,am62,am65,am66,am67,am68,am69,am70,am71,am73,am74,am75,am76,am77,am78,am79,am80,am81,am82,am83,am84,am85,am86,am87,am88,am89,am90,am91,am92,am93,am94,am95,am96,am97,am98,am99,am100,am101,am102,am103,am104,am105,am106,am107,am108,am109,am112,am113,am114,am115,am116,am119,am120,am121,am123,am124,am125,am127,am128,am129,am131,am132,am133,am135,am136,am137,am138,am139,am141,am142,am144,am145,am146,am148,am149,am151,am152,am154,am155,am157,am158,am159,am161,am166,am172,am173,am174,am177,am178,am179;
 
     private UnitCategory energyUnits;
     private UnitCategory massUnits;
@@ -163,7 +163,7 @@ public class AwacHouseholdInitialData {
         // delete old questions
 		{
 			List<Question> allQuestions = questionService.findAll();
-            List<String> codes = Arrays.asList("AM4", "AM5", "AM6", "AM8", "AM9", "AM10", "AM11", "AM12", "AM14", "AM15", "AM16", "AM17", "AM18", "AM19", "AM20", "AM21", "AM22", "AM25", "AM27", "AM28", "AM29", "AM30", "AM31", "AM32", "AM33", "AM34", "AM35", "AM36", "AM37", "AM38", "AM39", "AM40", "AM41", "AM42", "AM43", "AM44", "AM45", "AM46", "AM47", "AM49", "AM50", "AM51", "AM52", "AM53", "AM54", "AM55", "AM56", "AM57", "AM58", "AM59", "AM60", "AM61", "AM62", "AM64", "AM65", "AM66", "AM67", "AM68", "AM69", "AM70", "AM71", "AM73", "AM74", "AM75", "AM76", "AM77", "AM78", "AM79", "AM80", "AM81", "AM82", "AM83", "AM84", "AM85", "AM86", "AM87", "AM88", "AM89", "AM90", "AM91", "AM92", "AM93", "AM94", "AM95", "AM96", "AM97", "AM98", "AM99", "AM100", "AM101", "AM102", "AM103", "AM104", "AM105", "AM106", "AM107", "AM108", "AM109", "AM112", "AM113", "AM114", "AM115", "AM116", "AM119", "AM120", "AM121", "AM123", "AM124", "AM125", "AM127", "AM128", "AM129", "AM131", "AM132", "AM133", "AM135", "AM136", "AM137", "AM138", "AM139", "AM141", "AM142", "AM144", "AM145", "AM146", "AM148", "AM149", "AM151", "AM152", "AM154", "AM155", "AM157", "AM158", "AM159", "AM161", "AM166", "AM170", "AM172", "AM173", "AM174", "AM176", "AM177", "AM178", "AM179");
+            List<String> codes = Arrays.asList("AM4", "AM5", "AM6", "AM8", "AM9", "AM10", "AM11", "AM12", "AM14", "AM15", "AM16", "AM17", "AM18", "AM19", "AM20", "AM21", "AM22", "AM27", "AM28", "AM29", "AM30", "AM31", "AM32", "AM33", "AM34", "AM35", "AM36", "AM37", "AM38", "AM39", "AM40", "AM41", "AM42", "AM43", "AM44", "AM45", "AM46", "AM47", "AM49", "AM50", "AM51", "AM52", "AM53", "AM54", "AM55", "AM56", "AM57", "AM58", "AM59", "AM60", "AM61", "AM62", "AM65", "AM66", "AM67", "AM68", "AM69", "AM70", "AM71", "AM73", "AM74", "AM75", "AM76", "AM77", "AM78", "AM79", "AM80", "AM81", "AM82", "AM83", "AM84", "AM85", "AM86", "AM87", "AM88", "AM89", "AM90", "AM91", "AM92", "AM93", "AM94", "AM95", "AM96", "AM97", "AM98", "AM99", "AM100", "AM101", "AM102", "AM103", "AM104", "AM105", "AM106", "AM107", "AM108", "AM109", "AM112", "AM113", "AM114", "AM115", "AM116", "AM119", "AM120", "AM121", "AM123", "AM124", "AM125", "AM127", "AM128", "AM129", "AM131", "AM132", "AM133", "AM135", "AM136", "AM137", "AM138", "AM139", "AM141", "AM142", "AM144", "AM145", "AM146", "AM148", "AM149", "AM151", "AM152", "AM154", "AM155", "AM157", "AM158", "AM159", "AM161", "AM166", "AM172", "AM173", "AM174", "AM177", "AM178", "AM179");
 
 			for (Question q : new ArrayList<>(allQuestions)) {
 				if (codes.contains(q.getCode().getKey()) || !q.getCode().getKey().matches("AM[0-9]+")) {
@@ -246,7 +246,6 @@ public class AwacHouseholdInitialData {
         createQuestionAM20();
         createQuestionAM21();
         createQuestionAM22();
-        createQuestionAM25();
         createQuestionAM27();
         createQuestionAM28();
         createQuestionAM29();
@@ -282,7 +281,6 @@ public class AwacHouseholdInitialData {
         createQuestionAM60();
         createQuestionAM61();
         createQuestionAM62();
-        createQuestionAM64();
         createQuestionAM65();
         createQuestionAM66();
         createQuestionAM67();
@@ -365,11 +363,9 @@ public class AwacHouseholdInitialData {
         createQuestionAM159();
         createQuestionAM161();
         createQuestionAM166();
-        createQuestionAM170();
         createQuestionAM172();
         createQuestionAM173();
         createQuestionAM174();
-        createQuestionAM176();
         createQuestionAM177();
         createQuestionAM178();
         createQuestionAM179();
@@ -1274,28 +1270,6 @@ if (am22 == null) {
 }
 
     }
-    private void createQuestionAM25() {
-        // == AM25
-        // Pièces documentaires liées au chauffage
-
-        am25 = (DocumentQuestion) questionService.findByCode(QuestionCode.AM25);
-if (am25 == null) {
-    am25 = new DocumentQuestion(am24, 0, QuestionCode.AM25);
-    JPA.em().persist(am25);
-} else {
-    if (!am25.getQuestionSet().equals(am24) && am24.getQuestions().contains(am25)) {
-        am24.getQuestions().remove(am25);
-        JPA.em().persist(am24);
-    }
-    if (am25.getQuestionSet().equals(am24) && !am24.getQuestions().contains(am25)) {
-        am24.getQuestions().add(am25);
-        JPA.em().persist(am24);
-    }
-    am25.setOrderIndex(0);
-    JPA.em().persist(am25);
-}
-
-    }
     private void createQuestionAM27() {
         // == AM27
         // Source d'énergie
@@ -1604,7 +1578,7 @@ if (am34 == null) {
     }
     private void createQuestionAM35() {
         // == AM35
-        // Prix unitaire du gaz naturel (au m³)
+        // Prix unitaire du gaz naturel (au l)
 
         
 am35 = (DoubleQuestion) questionService.findByCode(QuestionCode.AM35);
@@ -1667,7 +1641,7 @@ if (am35 == null) {
     }
     private void createQuestionAM36() {
         // == AM36
-        // Prix unitaire du propane (au m³)
+        // Prix unitaire du propane (au l)
 
         
 am36 = (DoubleQuestion) questionService.findByCode(QuestionCode.AM36);
@@ -1730,7 +1704,7 @@ if (am36 == null) {
     }
     private void createQuestionAM37() {
         // == AM37
-        // Prix unitaire du butane (au m³)
+        // Prix unitaire du butane (au l)
 
         
 am37 = (DoubleQuestion) questionService.findByCode(QuestionCode.AM37);
@@ -2485,7 +2459,7 @@ if (am54 == null) {
     }
     private void createQuestionAM55() {
         // == AM55
-        // Prix unitaire du gaz naturel (au m³)
+        // Prix unitaire du gaz naturel (au l)
 
         
 am55 = (DoubleQuestion) questionService.findByCode(QuestionCode.AM55);
@@ -2548,7 +2522,7 @@ if (am55 == null) {
     }
     private void createQuestionAM56() {
         // == AM56
-        // Prix unitaire du propane (au m³)
+        // Prix unitaire du propane (au l)
 
         
 am56 = (DoubleQuestion) questionService.findByCode(QuestionCode.AM56);
@@ -2611,7 +2585,7 @@ if (am56 == null) {
     }
     private void createQuestionAM57() {
         // == AM57
-        // Prix unitaire du butane (au m³)
+        // Prix unitaire du butane (au l)
 
         
 am57 = (DoubleQuestion) questionService.findByCode(QuestionCode.AM57);
@@ -2906,28 +2880,6 @@ if (am62 == null) {
 }
 
 
-
-    }
-    private void createQuestionAM64() {
-        // == AM64
-        // Pièces documentaires liées à l'électricité
-
-        am64 = (DocumentQuestion) questionService.findByCode(QuestionCode.AM64);
-if (am64 == null) {
-    am64 = new DocumentQuestion(am63, 0, QuestionCode.AM64);
-    JPA.em().persist(am64);
-} else {
-    if (!am64.getQuestionSet().equals(am63) && am63.getQuestions().contains(am64)) {
-        am63.getQuestions().remove(am64);
-        JPA.em().persist(am63);
-    }
-    if (am64.getQuestionSet().equals(am63) && !am63.getQuestions().contains(am64)) {
-        am63.getQuestions().add(am64);
-        JPA.em().persist(am63);
-    }
-    am64.setOrderIndex(0);
-    JPA.em().persist(am64);
-}
 
     }
     private void createQuestionAM65() {
@@ -4645,7 +4597,7 @@ if (am116 == null) {
     }
     private void createQuestionAM119() {
         // == AM119
-        // Nombre de trajets aller et retour par jour
+        // Nombre de trajets par jour
 
         am119 = (IntegerQuestion) questionService.findByCode(QuestionCode.AM119);
 if (am119 == null) {
@@ -4766,7 +4718,7 @@ if (am121 == null) {
     }
     private void createQuestionAM123() {
         // == AM123
-        // Nombre de trajets aller et retour par jour
+        // Nombre de trajets par jour
 
         am123 = (IntegerQuestion) questionService.findByCode(QuestionCode.AM123);
 if (am123 == null) {
@@ -4887,7 +4839,7 @@ if (am125 == null) {
     }
     private void createQuestionAM127() {
         // == AM127
-        // Nombre de trajets aller et retour par jour
+        // Nombre de trajets par jour
 
         am127 = (IntegerQuestion) questionService.findByCode(QuestionCode.AM127);
 if (am127 == null) {
@@ -5008,7 +4960,7 @@ if (am129 == null) {
     }
     private void createQuestionAM131() {
         // == AM131
-        // Nombre de trajets aller et retour par jour
+        // Nombre de trajets par jour
 
         am131 = (IntegerQuestion) questionService.findByCode(QuestionCode.AM131);
 if (am131 == null) {
@@ -5853,28 +5805,6 @@ if (am166 == null) {
 
 
     }
-    private void createQuestionAM170() {
-        // == AM170
-        // Pièces documentaires liées à l'alimentation
-
-        am170 = (DocumentQuestion) questionService.findByCode(QuestionCode.AM170);
-if (am170 == null) {
-    am170 = new DocumentQuestion(am169, 0, QuestionCode.AM170);
-    JPA.em().persist(am170);
-} else {
-    if (!am170.getQuestionSet().equals(am169) && am169.getQuestions().contains(am170)) {
-        am169.getQuestions().remove(am170);
-        JPA.em().persist(am169);
-    }
-    if (am170.getQuestionSet().equals(am169) && !am169.getQuestions().contains(am170)) {
-        am169.getQuestions().add(am170);
-        JPA.em().persist(am169);
-    }
-    am170.setOrderIndex(0);
-    JPA.em().persist(am170);
-}
-
-    }
     private void createQuestionAM172() {
         // == AM172
         // Avec viande rouge (nombre de repas par semaine)
@@ -5989,28 +5919,6 @@ if (am174 == null) {
     ((NumericQuestion)am174).setDriver(null);
 
     JPA.em().persist(am174);
-}
-
-    }
-    private void createQuestionAM176() {
-        // == AM176
-        // Pièces documentaires liées aux achats
-
-        am176 = (DocumentQuestion) questionService.findByCode(QuestionCode.AM176);
-if (am176 == null) {
-    am176 = new DocumentQuestion(am175, 0, QuestionCode.AM176);
-    JPA.em().persist(am176);
-} else {
-    if (!am176.getQuestionSet().equals(am175) && am175.getQuestions().contains(am176)) {
-        am175.getQuestions().remove(am176);
-        JPA.em().persist(am175);
-    }
-    if (am176.getQuestionSet().equals(am175) && !am175.getQuestions().contains(am176)) {
-        am175.getQuestions().add(am176);
-        JPA.em().persist(am175);
-    }
-    am176.setOrderIndex(0);
-    JPA.em().persist(am176);
 }
 
     }

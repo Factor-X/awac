@@ -285,7 +285,6 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
 
     $rootScope.closeableForms = false
     $rootScope.closedForms = false
-    $rootScope.language = null
 
     console.log "$rootScope.instanceName == ", $rootScope.instanceName
     downloadService.getJson '/awac/translations/available/' + $rootScope.instanceName, (result) ->
@@ -304,11 +303,8 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                 $rootScope.languages.push
                     value: 'en'
                     label: 'English'
-
-            if ($rootScope.languages.length > 0)
-                translationService.initialize($rootScope.languages[0].value)
-                $rootScope.language = $rootScope.languages[0].value
-        return
+            translationService.initialize($rootScope.languages[0].value)
+            $rootScope.language = $rootScope.languages[0].value
 
     $rootScope.$watch 'language', (lang) ->
         if lang
@@ -346,15 +342,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
     # logout the current user
     #
     $rootScope.logout = () ->
-        downloadService.postJson '/awac/logout', null, (result) ->
-            console.log 'logout !! '
-            $rootScope.currentPerson = null
-            $rootScope.periodSelectedKey = null
-            $rootScope.scopeSelectedId = null
-            $rootScope.mySites = null
-            $rootScope.organizationName = null
-            # $location.path('/login')
-            location.href = '/' + $rootScope.instanceName
+        $rootScope.nav '/logout'
 
 
     $rootScope.testForm = (period, scope) ->
@@ -370,7 +358,6 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                             if period + "" == periodToFind.key + ""
                                 return true
         return false
-
     #
     # success after login => store some datas, display the path
     #
