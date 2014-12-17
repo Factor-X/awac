@@ -2,7 +2,7 @@
  *
  * Instant Play Framework
  * AWAC
- *                       
+ *
  *
  * Copyright (c) 2014 Factor-X.
  * Author Gaston Hollands
@@ -17,6 +17,7 @@ import java.util.Map;
 import eu.factorx.awac.common.Constants;
 import eu.factorx.awac.models.association.AccountProductAssociation;
 import eu.factorx.awac.models.business.Product;
+import eu.factorx.awac.models.code.type.ScopeTypeCode;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
@@ -167,7 +168,7 @@ public class AuthenticationController extends AbstractController {
 				accountService.saveOrUpdate(account);
 
 				// create site & period
-				if (InterfaceTypeCode.EVENT.equals(interfaceTypeCode)) {
+				if (InterfaceTypeCode.EVENT.getScopeTypeCode().equals(ScopeTypeCode.PRODUCT)) {
 					Product product = new Product(org, "YourProduct" + lastName);
 					product.getListPeriodAvailable().add(periodService.findLastYear());
 					productService.saveOrUpdate(product);
@@ -176,16 +177,6 @@ public class AuthenticationController extends AbstractController {
 					apa.setAccount(account);
 					apa.setProduct(product);
 					accountProductAssociationService.saveOrUpdate(apa);
-				} else {
-					Site site = new Site(org, "YourSite");
-					site.setOrganizationalStructure("ORGANIZATION_STRUCTURE_1");
-					site.getListPeriodAvailable().add(periodService.findLastYear());
-					siteService.saveOrUpdate(site);
-
-					AccountSiteAssociation asa = new AccountSiteAssociation();
-					asa.setAccount(account);
-					asa.setSite(site);
-					accountSiteAssociationService.saveOrUpdate(asa);
 				}
 
 				response().setCookie(cookieName, identifier);

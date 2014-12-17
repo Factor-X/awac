@@ -285,6 +285,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
 
     $rootScope.closeableForms = false
     $rootScope.closedForms = false
+    $rootScope.language = null
 
     console.log "$rootScope.instanceName == ", $rootScope.instanceName
     downloadService.getJson '/awac/translations/available/' + $rootScope.instanceName, (result) ->
@@ -303,8 +304,11 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                 $rootScope.languages.push
                     value: 'en'
                     label: 'English'
-            translationService.initialize($rootScope.languages[0].value)
-            $rootScope.language = $rootScope.languages[0].value
+
+            if ($rootScope.languages.length > 0)
+                translationService.initialize($rootScope.languages[0].value)
+                $rootScope.language = $rootScope.languages[0].value
+        return
 
     $rootScope.$watch 'language', (lang) ->
         if lang
@@ -358,6 +362,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                             if period + "" == periodToFind.key + ""
                                 return true
         return false
+
     #
     # success after login => store some datas, display the path
     #

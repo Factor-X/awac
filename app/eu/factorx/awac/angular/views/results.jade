@@ -78,16 +78,16 @@ div.results.pdf-able
                                 span(ng-bind-html="'IMPACTS_PARTITION' | translate")
                             br
 
-
-                            table(ng-show="$root.instanceName == 'household' || $root.instanceName == 'event' || $root.instanceName == 'littleemitter' ")
-                                tr
-                                    td
-                                        .diagram(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.leftSvgDonuts.R_1 | trustAsHtml")
-                                        span &nbsp;
-                                        .diagram(ng-show="rightTotalEmissions>0", style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.rightSvgDonuts.R_1 | trustAsHtml")
-                                    td(style="width: 2em")
-                                    td
-                                        mm-awac-result-legend(ng-model="o.reportDTOs.R_1")
+                            center
+                                table(ng-show="$root.instanceName == 'household' || $root.instanceName == 'event' || $root.instanceName == 'littleemitter' ")
+                                    tr
+                                        td
+                                            .diagram(style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.leftSvgDonuts.R_1 | trustAsHtml")
+                                            span &nbsp;
+                                            .diagram(ng-show="rightTotalEmissions>0", style="display:inline-block; max-width: 5cm; max-height: 5cm;", ng-bind-html="o.rightSvgDonuts.R_1 | trustAsHtml")
+                                        td(style="width: 2em")
+                                        td
+                                            mm-awac-result-legend(ng-model="o.reportDTOs.R_1")
 
 
 
