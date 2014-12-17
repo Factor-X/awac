@@ -192,6 +192,12 @@ angular
                 if n != o
                     scope.$root.$broadcast('CONDITION')
 
+
+
+
+            scope.$on 'FORM_LOADING_FINISH', (event, args) ->
+                scope.testVisibility(element)
+
             #
             # call the CONDITION event :
             # test the condition of this element

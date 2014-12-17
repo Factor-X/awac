@@ -202,6 +202,8 @@ public class RegistrationController extends AbstractController {
 	@Transactional(readOnly = false)
 	public Result enterpriseRegistration() {
 
+        Logger.warn("----------->je uis enterpriseRegistration ");
+
 		EnterpriseAccountCreationDTO dto = extractDTOFromRequest(EnterpriseAccountCreationDTO.class);
 
 		// control organization name
@@ -212,11 +214,12 @@ public class RegistrationController extends AbstractController {
 		organizationService.saveOrUpdate(organization);
 
 		//create administrator
-		Account account = null;
+		Account account;
 		try {
 			account = createAdministrator(dto.getPerson(), dto.getPassword(), organization);
 		} catch (MyrmexException e) {
-			return notFound(new ExceptionsDTO(e.getToClientMessage()));
+            e.printStackTrace();
+			throw new MyrmexRuntimeException(e.getToClientMessage());
 		}
 
 		//create site

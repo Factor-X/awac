@@ -8,7 +8,10 @@ public class CodeLabelDTO extends DTO {
 
 	private String label;
 
-	public CodeLabelDTO(String key, String label) {
+    public CodeLabelDTO() {
+    }
+
+    public CodeLabelDTO(String key, String label) {
 		super();
 		this.key = key;
 		this.label = label;
