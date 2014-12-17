@@ -64,7 +64,7 @@ public class AwacLittleEmitterInitialData {
     private AwacCalculatorService awacCalculatorService;
 
     private Form form1,form2,form3,form4,form5,form6;
-    private QuestionSet ap2,ap14,ap15,ap17,ap41,ap51,ap53,ap56,ap58,ap61,ap62,ap65,ap69,ap70,ap78,ap81,ap91,ap93,ap95,ap106,ap108,ap109,ap121,ap123,ap124,ap600,ap134,ap140,ap142,ap143,ap144,ap151,ap152,ap159,ap161,ap187,ap189;
+    private QuestionSet ap2,ap14,ap15,ap17,ap41,ap51,ap53,ap56,ap58,ap61,ap62,ap65,ap69,ap70,ap78,ap81,ap91,ap93,ap95,ap106,ap108,ap109,ap121,ap123,ap124,ap900,ap600,ap134,ap140,ap142,ap143,ap144,ap151,ap152,ap159,ap161,ap187,ap189;
     private Question ap5,ap6,ap7,ap8,ap9,ap10,ap11,ap12,ap13,ap16,ap18,ap19,ap20,ap21,ap22,ap23,ap24,ap25,ap500,ap501,ap26,ap27,ap28,ap29,ap30,ap31,ap32,ap33,ap34,ap35,ap36,ap37,ap38,ap42,ap43,ap44,ap45,ap46,ap47,ap48,ap49,ap50,ap52,ap54,ap55,ap57,ap59,ap60,ap63,ap64,ap66,ap67,ap68,ap71,ap73,ap76,ap77,ap79,ap80,ap82,ap83,ap84,ap85,ap86,ap87,ap90,ap92,ap94,ap96,ap97,ap98,ap99,ap100,ap101,ap102,ap103,ap104,ap105,ap107,ap110,ap112,ap116,ap117,ap118,ap119,ap120,ap122,ap125,ap127,ap131,ap132,ap133,ap135,ap136,ap137,ap138,ap139,ap141,ap145,ap146,ap147,ap148,ap149,ap150,ap153,ap154,ap155,ap156,ap157,ap158,ap160,ap162,ap163,ap164,ap165,ap166,ap188,ap190,ap191,ap192,ap193,ap194,ap195,ap196;
 
     private UnitCategory energyUnits;
@@ -179,7 +179,7 @@ public class AwacLittleEmitterInitialData {
 		// delete old question_sets
 		{
 			List<QuestionSet> allQuestionSets = questionSetService.findAll();
-            List<String> codes = Arrays.asList("AP2", "AP14", "AP15", "AP17", "AP41", "AP51", "AP53", "AP56", "AP58", "AP61", "AP62", "AP65", "AP69", "AP70", "AP78", "AP81", "AP91", "AP93", "AP95", "AP106", "AP108", "AP109", "AP121", "AP123", "AP124", "AP600", "AP134", "AP140", "AP142", "AP143", "AP144", "AP151", "AP152", "AP159", "AP161", "AP187", "AP189");
+            List<String> codes = Arrays.asList("AP2", "AP14", "AP15", "AP17", "AP41", "AP51", "AP53", "AP56", "AP58", "AP61", "AP62", "AP65", "AP69", "AP70", "AP78", "AP81", "AP91", "AP93", "AP95", "AP106", "AP108", "AP109", "AP121", "AP123", "AP124", "AP900", "AP600", "AP134", "AP140", "AP142", "AP143", "AP144", "AP151", "AP152", "AP159", "AP161", "AP187", "AP189");
 
 			for (QuestionSet qs : new ArrayList<>(allQuestionSets)) {
 				if (codes.contains(qs.getCode().getKey()) || !qs.getCode().getKey().matches("AP[0-9]+")) {
@@ -223,6 +223,7 @@ public class AwacLittleEmitterInitialData {
         createQuestionSetAP121();
         createQuestionSetAP123();
         createQuestionSetAP124();
+        createQuestionSetAP900();
         createQuestionSetAP600();
         createQuestionSetAP134();
         createQuestionSetAP140();
@@ -680,6 +681,15 @@ public class AwacLittleEmitterInitialData {
         if( ap124 == null ) {
             ap124 = new QuestionSet(QuestionCode.AP124, true, ap108);
             JPA.em().persist(ap124);
+        }
+    }
+    private void createQuestionSetAP900() {
+        // == AP900
+        // Train international
+        ap900 = questionSetService.findByCode(QuestionCode.AP900);
+        if( ap900 == null ) {
+            ap900 = new QuestionSet(QuestionCode.AP900, false, ap123);
+            JPA.em().persist(ap900);
         }
     }
     private void createQuestionSetAP600() {
@@ -3153,7 +3163,7 @@ if (ap84 == null) {
     }
     private void createQuestionAP85() {
         // == AP85
-        // Nombre de trajets aller-retour par jour
+        // Nombre de trajets par jour
 
         ap85 = (IntegerQuestion) questionService.findByCode(QuestionCode.AP85);
 if (ap85 == null) {
@@ -4980,7 +4990,7 @@ if (ap163 == null) {
     }
     private void createQuestionAP164() {
         // == AP164
-        // Indiquez le volume annuel jeté
+        // Indiquez le volume annuel produit
 
         
 ap164 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP164);
@@ -5023,7 +5033,7 @@ if (ap164 == null) {
     }
     private void createQuestionAP165() {
         // == AP165
-        // Indiquez la quantité annuelle jetée
+        // Indiquez la quantité annuelle produite
 
         
 ap165 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP165);
@@ -5067,7 +5077,7 @@ if (ap165 == null) {
     }
     private void createQuestionAP166() {
         // == AP166
-        // Indiquez la quantité annuelle jetée
+        // Indiquez la quantité annuelle produite
 
         
 ap166 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP166);
@@ -5309,7 +5319,7 @@ if (ap193 == null) {
     }
     private void createQuestionAP194() {
         // == AP194
-        // Produits alimentaires
+        // Produits alimentaires et boissons
 
         
 ap194 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP194);
@@ -5353,7 +5363,7 @@ if (ap194 == null) {
     }
     private void createQuestionAP195() {
         // == AP195
-        // Autres produits manufacturés
+        // Produits électriques et électroniques
 
         
 ap195 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP195);
