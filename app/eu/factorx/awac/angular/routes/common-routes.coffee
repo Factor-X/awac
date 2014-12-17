@@ -87,6 +87,13 @@ initializeCommonRoutes = (defaultResolve) ->
                 anonymousAllowed: true
             }
         )
+        .when('/logout', {
+                resolve: angular.extend({
+                    helpPage: () ->
+                        return 'help_product_manager'
+                }, logoutResolve)
+            }
+        )
         .when('/noScope', {
                 templateUrl: '$/angular/views/no_scope.html'
                 controller: 'NoScopeCtrl'

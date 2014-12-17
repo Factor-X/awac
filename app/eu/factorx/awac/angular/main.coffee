@@ -36,6 +36,18 @@ angular.module("tmh.dynamicLocale").config (tmhDynamicLocaleProvider)->
 # Routes
 #
 
+logoutResolve=
+    logout:($rootScope,downloadService) ->
+        console.log 'logout !! '
+        $rootScope.currentPerson = null
+        $rootScope.periodSelectedKey = null
+        $rootScope.scopeSelectedId = null
+        $rootScope.mySites = null
+        $rootScope.organizationName = null
+        downloadService.postJson '/awac/logout', null, (result) ->
+            location.href = '/' + $rootScope.instanceName
+
+
 defaultResolve =
     testConnection: ($http, $rootScope, $location, downloadService) ->
 
