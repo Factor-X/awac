@@ -12,6 +12,16 @@ angular
     link: (scope, element) ->
         directiveService.autoScopeImpl scope
 
+        typicalResultLabelKeyByInterfaceType =
+            household: 'TYPICAL_HOUSEHOLD_TITLE'
+            littleemitter: 'TYPICAL_LITTLEEMITTER_TITLE'
+            event: 'TYPICAL_EVENT_TITLE'
+
+        idealResultLabelKeyByInterfaceType =
+            household: 'IDEAL_HOUSEHOLD_TITLE'
+            littleemitter: 'IDEAL_LITTLEEMITTER_TITLE'
+            event: 'IDEAL_EVENT_TITLE'
+
         scope.showAll = true
 
         scope.getLeftTotalScope1 = () ->
@@ -88,18 +98,22 @@ angular
                 total += rl.rightScope3Value
             total
 
-        scope.getIdealMapTotal = () ->
-            return undefined unless scope.ngIdealMap
-            console.log "scope.ngIdealMap", scope.ngIdealMap
-            total = 0;
-            for value in scope.ngIdealMap
-                total += value
-            total
-
         scope.getTypeMapTotal = () ->
             return undefined unless scope.ngTypeMap
-            console.log "scope.ngTypeMap", scope.ngTypeMap
             total = 0;
-            for value in scope.ngTypeMap
-                total += value
-            total
+            for k, v of scope.ngTypeMap
+                total += parseFloat(v)
+            return total
+
+        scope.getIdealMapTotal = () ->
+            return undefined unless scope.ngIdealMap
+            total = 0;
+            for k, v of scope.ngIdealMap
+                total += parseFloat(v)
+            return total
+
+        scope.getTypicalResultLabelKey = () ->
+            return typicalResultLabelKeyByInterfaceType[scope.$root.instanceName]
+
+        scope.getIdealResultLabelKey = () ->
+            return idealResultLabelKeyByInterfaceType[scope.$root.instanceName]
