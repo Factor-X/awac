@@ -45,6 +45,7 @@ logoutResolve=
         $rootScope.mySites = null
         $rootScope.organizationName = null
         downloadService.postJson '/awac/logout', null, (result) ->
+            location.href = '/' + $rootScope.instanceName
 
 
 defaultResolve =

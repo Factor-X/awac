@@ -22,7 +22,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 
+import play.Application;
 import play.Logger;
+import play.api.mvc.SimpleResult;
 import play.db.jpa.Transactional;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -47,6 +49,7 @@ import eu.factorx.awac.util.KeyGenerator;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import eu.factorx.awac.util.email.messages.EmailMessage;
 import eu.factorx.awac.util.email.service.EmailService;
+
 
 @org.springframework.stereotype.Controller
 public class AuthenticationController extends AbstractController {
@@ -120,8 +123,15 @@ public class AuthenticationController extends AbstractController {
 
 		Account account = null;
 
+        // wait a while to be sure async session clear is done
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            // do nothing
+        }
 
-		if ( (connectionFormDTO.getLogin()==null) && (connectionFormDTO.getPassword()==null) ) {
+
+        if ( (connectionFormDTO.getLogin()==null) && (connectionFormDTO.getPassword()==null) ) {
 
             InterfaceTypeCode interfaceTypeCode =InterfaceTypeCode.getByKey(connectionFormDTO.getInterfaceName());
 
@@ -248,8 +258,7 @@ public class AuthenticationController extends AbstractController {
 	public Result logout() {
 
 		session().clear();
-
-		return ok(new ReturnDTO());
+        return ok(new ReturnDTO());
 	}
 
 
