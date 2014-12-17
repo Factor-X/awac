@@ -1172,7 +1172,7 @@ if (aev19 == null) {
     }
     private void createQuestionAEV20() {
         // == AEV20
-        // Prix unitaire du gaz naturel (au m³)
+        // Prix unitaire du gaz naturel (au l)
 
         
 aev20 = (DoubleQuestion) questionService.findByCode(QuestionCode.AEV20);
@@ -1922,7 +1922,7 @@ if (aev43 == null) {
     }
     private void createQuestionAEV44() {
         // == AEV44
-        // Indiquez la consommation moyenne des voitures, (en litres par 100 km)
+        // &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Indiquez la consommation moyenne des voitures, (L/100 km)
 
         aev44 = (DoubleQuestion) questionService.findByCode(QuestionCode.AEV44);
 if (aev44 == null) {
@@ -1961,7 +1961,7 @@ if (aev44 == null) {
     }
     private void createQuestionAEV45() {
         // == AEV45
-        // Part des véhicules roulant au diesel
+        // &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Part des véhicules roulant au diesel
 
         aev45 = (PercentageQuestion) questionService.findByCode(QuestionCode.AEV45);
 if (aev45 == null) {
@@ -2019,7 +2019,7 @@ if (aev45 == null) {
     }
     private void createQuestionAEV46() {
         // == AEV46
-        // Part des véhicules roulant à l'essence
+        // &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Part des véhicules roulant à l'essence
 
         aev46 = (PercentageQuestion) questionService.findByCode(QuestionCode.AEV46);
 if (aev46 == null) {
@@ -2153,7 +2153,7 @@ if (aev48 == null) {
     }
     private void createQuestionAEV49() {
         // == AEV49
-        // Indiquez la consommation moyenne des autocars (en litres par 100 km)
+        // &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Indiquez la consommation moyenne des autocars (L/100 km)
 
         aev49 = (DoubleQuestion) questionService.findByCode(QuestionCode.AEV49);
 if (aev49 == null) {
@@ -2527,7 +2527,7 @@ if (aev61 == null) {
     }
     private void createQuestionAEV62() {
         // == AEV62
-        // Nombre de vols/an
+        // Nombre de passagers pour la catégorie de vol
 
         aev62 = (IntegerQuestion) questionService.findByCode(QuestionCode.AEV62);
 if (aev62 == null) {
@@ -2566,7 +2566,7 @@ if (aev62 == null) {
     }
     private void createQuestionAEV63() {
         // == AEV63
-        // Distance moyenne aller-retour
+        // Distance totale (aller-retour)
 
         
 aev63 = (DoubleQuestion) questionService.findByCode(QuestionCode.AEV63);
@@ -2654,7 +2654,7 @@ if (aev68 == null) {
     }
     private void createQuestionAEV74() {
         // == AEV74
-        // Consommation moyenne en litres au 100 km
+        // Indiquez la consommation moyenne des véhicules (L/100 km)
 
         aev74 = (DoubleQuestion) questionService.findByCode(QuestionCode.AEV74);
 if (aev74 == null) {
@@ -3213,7 +3213,7 @@ if (aev95 == null) {
     }
     private void createQuestionAEV99() {
         // == AEV99
-        // Transport
+        // Nom du produit/matériel transporté
 
         aev99 = (StringQuestion) questionService.findByCode(QuestionCode.AEV99);
 if (aev99 == null) {
@@ -3360,7 +3360,7 @@ if (aev103 == null) {
     }
     private void createQuestionAEV104() {
         // == AEV104
-        // Distance moyenne d'un trajet (aller+retour)
+        // Distance d'un trajet
 
         
 aev104 = (DoubleQuestion) questionService.findByCode(QuestionCode.AEV104);

@@ -93,7 +93,9 @@ angular
                             $scope.$root.mySites.push result.data
 
                             #refresh
-                            $scope.getParams().refreshMyProducts()
+                            console.log "$scope.getParams()"
+                            console.log $scope.getParams()
+                            $scope.getParams().refreshMyProduct()
 
                             #close window
                             $scope.close()
