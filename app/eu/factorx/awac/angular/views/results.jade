@@ -322,7 +322,9 @@ div.results.pdf-able
                         br
 
                         div.results_disclaimer
-                            span.results_disclaimer_text(ng-bind-html="'RESULTS_DISCLAIMER' | translate")
+                            span.results_disclaimer_text(ng-hide="$root.instanceName == 'household' || $root.instanceName == 'event' || $root.instanceName == 'littleemitter'", ng-bind-html="'RESULTS_DISCLAIMER' | translate")
+                            span.results_disclaimer_text(ng-show="$root.instanceName == 'household' || $root.instanceName == 'event' || $root.instanceName == 'littleemitter'", ng-bind-html="'RESULTS_DISCLAIMER_SIMPLE' | translate")
+
                         br
                         br
                         br
