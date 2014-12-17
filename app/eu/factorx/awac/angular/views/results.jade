@@ -155,7 +155,16 @@ div.results.pdf-able
                             br
 
                             center
-                                mm-awac-result-legend(ng-model="o.reportDTOs.R_1", mode="numbers")
+                                mm-awac-result-legend(ng-hide="$root.instanceName == 'household' || $root.instanceName == 'event' || $root.instanceName == 'littleemitter'", ng-model="o.reportDTOs.R_1", mode="numbers")
+
+                                mm-awac-result-legend-simple(
+                                ng-show="$root.instanceName == 'household' || $root.instanceName == 'event' || $root.instanceName == 'littleemitter'",
+                                ng-model="o.reportDTOs.R_1",
+                                ng-ideal="o.idealMap",
+                                ng-type="o.typeMap",
+                                ng-ideal-color="o.idealColor",
+                                ng-type-color="o.typeColor"
+                                )
 
                         div(ng-show="current_tab == 4")
                             h2

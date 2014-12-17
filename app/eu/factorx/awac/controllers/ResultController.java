@@ -18,6 +18,7 @@ import eu.factorx.awac.models.reporting.ReportResult;
 import eu.factorx.awac.service.*;
 import eu.factorx.awac.service.impl.reporting.*;
 import eu.factorx.awac.util.BusinessErrorType;
+import eu.factorx.awac.util.Colors;
 import eu.factorx.awac.util.MyrmexFatalException;
 import jxl.read.biff.BiffException;
 import jxl.write.WriteException;
@@ -304,6 +305,20 @@ public class ResultController extends AbstractController {
 				// 2.6. Add references
 				resultsDTO.getTypeMap().putAll(type);
 				resultsDTO.getIdealMap().putAll(ideal);
+
+				int c = 0;
+				Double totalValue = 0.0;
+				for (ReportResultIndicatorAggregation aggregation : reportResultAggregation.getReportResultIndicatorAggregationList()) {
+					totalValue += aggregation.getTotalValue();
+				}
+				if (totalValue > 0) {
+					c = 1;
+				} else {
+					c = 0;
+				}
+
+				resultsDTO.setTypeColor("#" + Colors.makeGoodColorForSerieElement(c, c + 2));
+				resultsDTO.setIdealColor("#" + Colors.makeGoodColorForSerieElement(c + 1, c + 2));
 
 			} else if (awacCalculator.getInterfaceTypeCode().equals(InterfaceTypeCode.LITTLEEMITTER)) {
 

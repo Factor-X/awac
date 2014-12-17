@@ -4,21 +4,45 @@ angular
     restrict: "E"
     scope: directiveService.autoScope
         ngModel: '='
-        ngMode: '='
+        ngIdeal: '='
+        ngType: '='
+        ngIdealColor: '='
+        ngTypeColor: '='
     templateUrl: "$/angular/templates/mm-awac-result-legend-simple.html"
     replace: true
     link: (scope, element) ->
         directiveService.autoScopeImpl scope
 
-        scope.getNumber = (rl) ->
+        scope.getNumber = (indicator) ->
             return undefined unless scope.ngModel
-            return undefined unless rl
+            return undefined unless indicator
             result = null
             index = 0
             for l in scope.ngModel.reportLines
-                if l.leftScope1Value + l.leftScope2Value + l.leftScope3Value + l.leftOutOfScopeValue + l.rightScope1Value + l.rightScope2Value + l.rightScope3Value + l.rightOutOfScopeValue > 0
-                    index += 1
-                    if l.indicatorName == rl.indicatorName
-                        result = index
-                        break
+                index += 1
+                if l.indicatorName == indicator
+                    result = index
+                    break
+            result
+
+        scope.getLeftTotal = (indicator) ->
+            return undefined unless scope.ngModel
+            return undefined unless indicator
+            result = null
+            index = 0
+            for l in scope.ngModel.reportLines
+                if l.indicatorName == indicator
+                    result = l.leftScope1Value + l.leftScope2Value + l.leftScope3Value
+                    break
+            result
+
+        scope.getRightTotal = (indicator) ->
+            return undefined unless scope.ngModel
+            return undefined unless indicator
+            result = null
+            index = 0
+            for l in scope.ngModel.reportLines
+                if l.indicatorName == indicator
+                    result = l.rightScope1Value + l.rightScope2Value + l.rightScope3Value
+                    break
             result
