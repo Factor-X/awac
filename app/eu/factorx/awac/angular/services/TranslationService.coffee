@@ -9,7 +9,7 @@ angular
         svc.initialize svc.lang
 
     svc.initialize = (lang) ->
-        return
+        console.log("translationService.initialize('" + lang + "')")
         $http(
             method: "GET"
             url: "/awac/translations/" + lang
