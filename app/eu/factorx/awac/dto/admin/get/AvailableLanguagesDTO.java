@@ -5,11 +5,14 @@ import eu.factorx.awac.dto.validation.annotations.NotNull;
 
 public class AvailableLanguagesDTO extends DTO {
 
-    private boolean frEnabled;
-    private boolean nlEnabled;
-    private boolean enEnabled;
+    private boolean frEnabled = false;
+    private boolean nlEnabled = false;
+    private boolean enEnabled = false;
 
-    public AvailableLanguagesDTO(boolean frEnabled, boolean nlEnabled, boolean enEnabled) {
+	public AvailableLanguagesDTO() {
+	}
+
+	public AvailableLanguagesDTO(boolean frEnabled, boolean nlEnabled, boolean enEnabled) {
         this.frEnabled = frEnabled;
         this.nlEnabled = nlEnabled;
         this.enEnabled = enEnabled;

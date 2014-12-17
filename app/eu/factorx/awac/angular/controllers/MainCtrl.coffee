@@ -303,6 +303,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                 $rootScope.languages.push
                     value: 'en'
                     label: 'English'
+
             translationService.initialize($rootScope.languages[0].value)
             $rootScope.language = $rootScope.languages[0].value
 
@@ -366,6 +367,7 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
                             if period + "" == periodToFind.key + ""
                                 return true
         return false
+
     #
     # success after login => store some datas, display the path
     #

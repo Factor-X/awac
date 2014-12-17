@@ -84,7 +84,12 @@ public class TranslationController extends AbstractController {
 
         AwacCalculator awacCalculator = awacCalculatorService.findByCode(new InterfaceTypeCode(calculatorName));
 
-        AvailableLanguagesDTO result = new AvailableLanguagesDTO(awacCalculator.isFrEnabled(), awacCalculator.isNlEnabled(), awacCalculator.isEnEnabled());
+		AvailableLanguagesDTO result;
+		if (awacCalculator == null) {
+			result = new AvailableLanguagesDTO();
+		} else {
+			result = new AvailableLanguagesDTO(awacCalculator.isFrEnabled(), awacCalculator.isNlEnabled(), awacCalculator.isEnEnabled());
+		}
 
         return ok(result);
     }
