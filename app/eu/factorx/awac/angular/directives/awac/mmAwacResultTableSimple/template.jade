@@ -59,12 +59,14 @@ ng-virtual
 
             tr
                 td
-                td.align-right.scope1(colspan="4", style="color: {{ ngModel.leftColor }}")
+                td.align-right.scope1(style="color: {{ ngModel.leftColor }}")
                     span.period-footer(style="color: {{ ngModel.leftColor }}; border-top-color: {{ ngModel.leftColor }}")
-                td.align-right.scope1(colspan="4", ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
+                td.align-right.scope1(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
                     span.period-footer(style="color: {{ ngModel.rightColor }}; border-top-color: {{ ngModel.rightColor }}")
-                td &nbsp;
-                td &nbsp;
+                td.align-right.scope1(ng-show="getTypeMapTotal() > 0", style="color: {{ ngModel.rightColor }}")
+                    span.period-footer(style="color: {{ ngModel.rightColor }}; border-top-color: {{ ngModel.rightColor }}")
+                td.align-right.scope1(ng-show="getIdealMapTotal() > 0", style="color: {{ ngModel.rightColor }}")
+                    span.period-footer(style="color: {{ ngModel.rightColor }}; border-top-color: {{ ngModel.rightColor }}")
 
     div
         input(type="checkbox", ng-model="showAll")
