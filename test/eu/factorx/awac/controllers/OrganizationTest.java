@@ -70,13 +70,8 @@ public class OrganizationTest extends AbstractBaseControllerTest {
 	@Autowired
 	private AccountSiteAssociationService accountSiteAssociationService;
 
-
-	private final String ORGANISATION_NAME = "Factor-X";
 	private final String USER1_IDENTIFIER = "user1";
 	private final String USER2_IDENTIFIER = "user2";
-	private final String SITE_NAME = "P3";
-
-
 
   	@Test
 	public void _001_getAllAccounts() {
