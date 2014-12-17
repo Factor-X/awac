@@ -157,11 +157,15 @@ div.results.pdf-able
                             center
                                 mm-awac-result-legend(ng-model="o.reportDTOs.R_1", mode="numbers")
 
-                        div(ng-show="current_tab == 4")
+                        div(ng-show="(current_tab == 4) && ($root.instanceName == 'enterprise' || $root.instanceName == 'municipality')")
                             h2
                                 span(ng-bind-html="'NUMBERS' | translate")
                             mm-awac-result-table(ng-model="o.reportDTOs.R_1")
 
+                        div(ng-show="(current_tab == 4) && ($root.instanceName == 'household' || $root.instanceName == 'event' || $root.instanceName == 'littleemitter')")
+                            h2
+                                span(ng-bind-html="'NUMBERS' | translate")
+                            mm-awac-result-table-simple(ng-model="o.reportDTOs.R_1", ng-type-map="o.typeMap", ng-ideal-map="o.idealMap")
 
                         div(ng-show="current_tab == 5")
                             h2

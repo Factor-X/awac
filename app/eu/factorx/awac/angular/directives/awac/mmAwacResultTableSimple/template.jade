@@ -1,0 +1,72 @@
+ng-virtual
+    table.indicators_table
+        thead
+            tr
+                th
+                th
+                    span.period-header.wrapped(style="color: {{ ngModel.leftColor }}; border-bottom-color: {{ ngModel.leftColor }}")
+                        span Emissions {{ngModel.leftPeriod}}
+                        span  (tCO2e)
+
+                th(ng-show="ngModel.rightPeriod!=null")
+                    span.period-header.wrapped(style="color: {{ ngModel.rightColor }}; border-bottom-color: {{ ngModel.rightColor }}")
+                        span Emissions {{ngModel.rightPeriod}}
+                        span  (tCO2e)
+
+                th
+                    span.period-header.wrapped
+                        span {{ getIdealResultTitle()
+                        span  (tCO2e)
+
+                th
+                    span.period-header.wrapped
+                        span Emissions Ménage idéal
+                        span  (tCO2e)
+
+        tbody
+            tr(ng-repeat="rl in ngModel.reportLines | orderBy:'order'", ng-show="showAll || (rl.leftScope1Value + rl.leftScope2Value + rl.leftScope3Value + rl.leftOutOfScopeValue + rl.rightScope1Value + rl.rightScope2Value + rl.rightScope3Value + rl.rightOutOfScopeValue > 0)")
+                td
+                    span(ng-bind-html="rl.indicatorName | translate")
+
+                td.align-right.scope1(style="color: {{ ngModel.leftColor }}")
+                    span(ng-bind-html="(rl.leftScope1Value + rl.leftScope2Value + rl.leftScope3Value) | numberToI18NOrLess", ng-show="(rl.leftScope1Value + rl.leftScope2Value + rl.leftScope3Value) > 0")
+
+                td.align-right.scope1(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
+                    span(ng-bind-html="(rl.rightScope1Value + rl.rightScope2Value + rl.rightScope3Value) | numberToI18NOrLess", ng-show="(rl.rightScope1Value + rl.rightScope2Value + rl.rightScope3Value) > 0")
+
+                td.align-right.scope1
+                    span(ng-bind-html="ngTypeMap[rl.indicatorName] | numberToI18NOrLess")
+
+                td.align-right.scope1
+                    span(ng-bind-html="ngIdealMap[rl.indicatorName] | numberToI18NOrLess")
+
+        tfoot
+            tr
+                td(style="text-align: right")
+                    span(ng-bind-html="'RESULTS_TOTAL' | translate")
+
+                td.align-right.scope1(style="color: {{ ngModel.leftColor }}")
+                    span(ng-bind-html="getLeftTotal() | numberToI18NOrLess")
+
+                td.align-right.scope1(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
+                    span(ng-bind-html="getRightTotal() | numberToI18NOrLess")
+
+                td
+                    span {{ getTypeMapTotal() | numberToI18NOrLess }}
+
+                td
+                    span {{ getIdealMapTotal() | numberToI18NOrLess }}
+
+            tr
+                td
+                td.align-right.scope1(colspan="4", style="color: {{ ngModel.leftColor }}")
+                    span.period-footer(style="color: {{ ngModel.leftColor }}; border-top-color: {{ ngModel.leftColor }}")
+                td.align-right.scope1(colspan="4", ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
+                    span.period-footer(style="color: {{ ngModel.rightColor }}; border-top-color: {{ ngModel.rightColor }}")
+                td &nbsp;
+                td &nbsp;
+
+    div
+        input(type="checkbox", ng-model="showAll")
+        label
+            span(ng-bind-html="'SHOW_ALL_INDICATORS' | translate")
