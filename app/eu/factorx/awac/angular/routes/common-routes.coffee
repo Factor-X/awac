@@ -88,7 +88,6 @@ initializeCommonRoutes = (defaultResolve) ->
             }
         )
         .when('/logout', {
-                redirectTo:'/login'
                 resolve: angular.extend({
                     helpPage: () ->
                         return 'help_product_manager'
