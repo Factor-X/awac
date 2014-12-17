@@ -1,7 +1,6 @@
 package eu.factorx.awac.dto.admin.get;
 
 import eu.factorx.awac.dto.DTO;
-import eu.factorx.awac.dto.validation.annotations.NotNull;
 
 public class AvailableLanguagesDTO extends DTO {
 
