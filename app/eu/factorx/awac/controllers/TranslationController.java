@@ -12,6 +12,9 @@ import eu.factorx.awac.models.forms.AwacCalculator;
 import eu.factorx.awac.service.AwacCalculatorService;
 import eu.factorx.awac.service.CodeLabelService;
 import eu.factorx.awac.service.WysiwygDocumentService;
+import eu.factorx.awac.util.BusinessErrorType;
+import eu.factorx.awac.util.MyrmexException;
+import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import play.Logger;
@@ -86,7 +89,7 @@ public class TranslationController extends AbstractController {
 
 		AvailableLanguagesDTO result;
 		if (awacCalculator == null) {
-			result = new AvailableLanguagesDTO();
+			throw new MyrmexRuntimeException("Cannot find awac calculator identified by '" + calculatorName + "'");
 		} else {
 			result = new AvailableLanguagesDTO(awacCalculator.isFrEnabled(), awacCalculator.isNlEnabled(), awacCalculator.isEnEnabled());
 		}
