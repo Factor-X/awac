@@ -1,13 +1,5 @@
 package eu.factorx.awac.service.impl;
 
-import java.io.IOException;
-
-import jxl.read.biff.BiffException;
-import jxl.write.WriteException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
 import eu.factorx.awac.service.ResultSvgGeneratorService;
 import eu.factorx.awac.service.SvgGenerator;
@@ -16,6 +8,13 @@ import eu.factorx.awac.service.impl.reporting.MergedReportResultIndicatorAggrega
 import eu.factorx.awac.service.impl.reporting.ReportResultAggregation;
 import eu.factorx.awac.service.impl.reporting.ReportResultIndicatorAggregation;
 import eu.factorx.awac.util.Table;
+import jxl.read.biff.BiffException;
+import jxl.write.WriteException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.util.Map;
 
 @Component
 public class ResultSvgGeneratorServiceImpl implements ResultSvgGeneratorService {
@@ -52,6 +51,39 @@ public class ResultSvgGeneratorServiceImpl implements ResultSvgGeneratorService 
 		return svgGenerator.getHistogram(scopeTable);
 	}
 
+
+	@Override
+	public String getWebWithReferences(ReportResultAggregation reportResultAggregation, Map<String, Double> type, Map<String, Double> ideal) {
+		Table scopeTable = new Table();
+		fillTableWithResultData(reportResultAggregation, scopeTable, null);
+
+		for (String s : type.keySet()) {
+			boolean found = false;
+			for (int i = 0; i < scopeTable.getRowCount(); i++) {
+				if (scopeTable.getCell(0, i).equals(s)) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				scopeTable.setCell(0, scopeTable.getRowCount(), s);
+				for (int i = 1; i < scopeTable.getColumnCount(); i++) {
+					scopeTable.setCell(i, scopeTable.getRowCount() - 1, 0.0);
+				}
+			}
+		}
+
+		int col = scopeTable.getColumnCount();
+
+		for (int i = 0; i < scopeTable.getRowCount(); i++) {
+			String indicator = (String) scopeTable.getCell(0, i);
+			scopeTable.setCell(col, i, type.get(indicator));
+			scopeTable.setCell(col + 1, i, ideal.get(indicator));
+		}
+		return svgGenerator.getWeb(scopeTable);
+	}
+
+
 	// ----------
 
 	@Override
@@ -77,6 +109,7 @@ public class ResultSvgGeneratorServiceImpl implements ResultSvgGeneratorService 
 		return svgGenerator.getDonut(scopeTable, mergedReportResultAggregation.getRightPeriod().getLabel());
 	}
 
+
 	@Override
 	public String getWeb(MergedReportResultAggregation mergedReportResultAggregation) {
 		Table scopeTable = new Table();
@@ -89,6 +122,37 @@ public class ResultSvgGeneratorServiceImpl implements ResultSvgGeneratorService 
 		Table scopeTable = new Table();
 		fillTableWithResultDataForHistogram(mergedReportResultAggregation, scopeTable, null);
 		return svgGenerator.getHistogram(scopeTable);
+	}
+
+	@Override
+	public String getWebWithReferences(MergedReportResultAggregation mergedReportResultAggregation, Map<String, Double> type, Map<String, Double> ideal) {
+		Table scopeTable = new Table();
+		fillTableWithResultData(mergedReportResultAggregation, scopeTable, null);
+
+		for (String s : type.keySet()) {
+			boolean found = false;
+			for (int i = 0; i < scopeTable.getRowCount(); i++) {
+				if (scopeTable.getCell(0, i).equals(s)) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				scopeTable.setCell(0, scopeTable.getRowCount(), s);
+				for (int i = 1; i < scopeTable.getColumnCount(); i++) {
+					scopeTable.setCell(i, scopeTable.getRowCount() - 1, 0.0);
+				}
+			}
+		}
+
+		int col = scopeTable.getColumnCount();
+
+		for (int i = 0; i < scopeTable.getRowCount(); i++) {
+			String indicator = (String) scopeTable.getCell(0, i);
+			scopeTable.setCell(col, i, type.get(indicator));
+			scopeTable.setCell(col + 1, i, ideal.get(indicator));
+		}
+		return svgGenerator.getWeb(scopeTable);
 	}
 
 	//
