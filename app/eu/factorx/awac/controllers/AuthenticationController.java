@@ -100,6 +100,10 @@ public class AuthenticationController extends AbstractController {
 			if (account.getOrganization().getInterfaceCode().equals(interfaceTypeCode)) {
 				return ok(conversionService.convert(securedController.getCurrentUser(), LoginResultDTO.class));
 			}
+            else{
+                //logout !!
+                logout();
+            }
 
 		}
         //the error must be empty to do not be displayed !
