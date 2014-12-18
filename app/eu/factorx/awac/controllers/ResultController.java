@@ -153,7 +153,10 @@ public class ResultController extends AbstractController {
 
 		LanguageCode lang = securedController.getCurrentUser().getPerson().getDefaultLanguage();
 		InterfaceTypeCode interfaceCode = securedController.getCurrentUser().getOrganization().getInterfaceCode();
-		byte[] bytes = resultPdfGeneratorService.generate(lang, scopes, period, comparedPeriod, interfaceCode);
+		AwacCalculator awacCalculator = awacCalculatorService.findByCode(interfaceCode);
+		Map<String, Double> type = getTypicalResultValues(interfaceCode);
+		Map<String, Double> ideal = getIdealResultValues(interfaceCode);
+		byte[] bytes = resultPdfGeneratorService.generate(awacCalculator, lang, scopes, period, comparedPeriod, interfaceCode, type, ideal);
 
 		DownloadFileDTO downloadFileDTO = new DownloadFileDTO();
 		downloadFileDTO.setFilename("export_bilanGES_" + DateTime.now().toString("YMd-HH:mm").replace(':', 'h') + ".pdf");
@@ -170,7 +173,7 @@ public class ResultController extends AbstractController {
 	private Result getSimpleReportAsXls(Period period, List<Scope> scopes) throws IOException, WriteException, BiffException {
 		LanguageCode lang = securedController.getCurrentUser().getPerson().getDefaultLanguage();
 		InterfaceTypeCode interfaceCode = securedController.getCurrentUser().getOrganization().getInterfaceCode();
-		byte[] content = resultExcelGeneratorService.generateExcelInStream(lang, scopes, period, interfaceCode);
+		byte[] content = resultExcelGeneratorService.generateExcelInStream(lang, scopes, period, interfaceCode, getTypicalResultValues(interfaceCode), getIdealResultValues(interfaceCode));
 
 		DownloadFileDTO downloadFileDTO = new DownloadFileDTO();
 		downloadFileDTO.setFilename("export_bilanGES_" + DateTime.now().toString("YMd-HH:mm").replace(':', 'h') + ".xls");
@@ -183,7 +186,7 @@ public class ResultController extends AbstractController {
 	private Result getComparedReportAsXls(Period period, Period comparedPeriod, List<Scope> scopes) throws IOException, WriteException, BiffException {
 		LanguageCode lang = securedController.getCurrentUser().getPerson().getDefaultLanguage();
 		InterfaceTypeCode interfaceCode = securedController.getCurrentUser().getOrganization().getInterfaceCode();
-		byte[] content = resultExcelGeneratorService.generateComparedExcelInStream(lang, scopes, period, comparedPeriod, interfaceCode);
+		byte[] content = resultExcelGeneratorService.generateComparedExcelInStream(lang, scopes, period, comparedPeriod, interfaceCode, getTypicalResultValues(interfaceCode), getIdealResultValues(interfaceCode));
 
 		DownloadFileDTO downloadFileDTO = new DownloadFileDTO();
 		downloadFileDTO.setFilename("export_bilanGES_" + DateTime.now().toString("YMd-HH:mm").replace(':', 'h') + ".xls");
@@ -197,7 +200,8 @@ public class ResultController extends AbstractController {
 		ResultsDTO resultsDTO = new ResultsDTO();
 
 		// 1. Compute the ReportResult
-		AwacCalculator awacCalculator = awacCalculatorService.findByCode(scopes.get(0).getOrganization().getInterfaceCode());
+		InterfaceTypeCode interfaceCode = scopes.get(0).getOrganization().getInterfaceCode();
+		AwacCalculator awacCalculator = awacCalculatorService.findByCode(interfaceCode);
 		ReportResultCollection allReportResultsLeft = reportResultService.getReportResults(awacCalculator, scopes, period);
 		ReportResultCollection allReportResultsRight = reportResultService.getReportResults(awacCalculator, scopes, comparedPeriod);
 
@@ -223,7 +227,11 @@ public class ResultController extends AbstractController {
 			resultsDTO.getRightSvgDonuts().put(reportKey, resultSvgGeneratorService.getRightDonut(awacCalculator, mergedReportResultAggregation));
 
 			// 2.4. Each ReportResult is rendered to a SVG string - HISTOGRAM
-			resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getHistogram(awacCalculator, mergedReportResultAggregation));
+			if (InterfaceTypeCode.HOUSEHOLD.equals(interfaceCode) || InterfaceTypeCode.LITTLEEMITTER.equals(interfaceCode) || InterfaceTypeCode.HOUSEHOLD.equals(interfaceCode)) {
+				resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getSimpleHistogram(awacCalculator, mergedReportResultAggregation));
+			} else {
+				resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getHistogram(awacCalculator, mergedReportResultAggregation));
+			}
 
 			// 2.5. Each ReportResult is rendered to a SVG string - WEB
 			InterfaceTypeCode interfaceTypeCode = awacCalculator.getInterfaceTypeCode();
@@ -278,7 +286,8 @@ public class ResultController extends AbstractController {
 		ResultsDTO resultsDTO = new ResultsDTO();
 
 		// 1. Compute the ReportResult
-		AwacCalculator awacCalculator = awacCalculatorService.findByCode(scopes.get(0).getOrganization().getInterfaceCode());
+		InterfaceTypeCode interfaceCode = scopes.get(0).getOrganization().getInterfaceCode();
+		AwacCalculator awacCalculator = awacCalculatorService.findByCode(interfaceCode);
 		ReportResultCollection allReportResults = reportResultService.getReportResults(awacCalculator, scopes, period);
 		List<ReportLogEntry> logEntries = allReportResults.getLogEntries();
 
@@ -296,7 +305,11 @@ public class ResultController extends AbstractController {
 			resultsDTO.getLeftSvgDonuts().put(reportKey, resultSvgGeneratorService.getDonut(awacCalculator, reportResultAggregation));
 
 			// 2.4. Each ReportResult is rendered to a SVG string - HISTOGRAM
-			resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getHistogram(awacCalculator, reportResultAggregation));
+			if (InterfaceTypeCode.HOUSEHOLD.equals(interfaceCode) || InterfaceTypeCode.LITTLEEMITTER.equals(interfaceCode) || InterfaceTypeCode.HOUSEHOLD.equals(interfaceCode)) {
+				resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getSimpleHistogram(awacCalculator, reportResultAggregation));
+			} else {
+				resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getHistogram(awacCalculator, reportResultAggregation));
+			}
 
 			// 2.5. Each ReportResult is rendered to a SVG string - WEB
 			InterfaceTypeCode interfaceTypeCode = awacCalculator.getInterfaceTypeCode();

@@ -46,3 +46,15 @@ angular
                     result = l.rightScope1Value + l.rightScope2Value + l.rightScope3Value
                     break
             result
+
+        scope.isTypicalShown = () ->
+            for k,v of scope.ngType
+                if v > 0
+                    return true
+            return false
+
+        scope.isIdealShown = () ->
+            for k,v of scope.ngIdeal
+                if v > 0
+                    return true
+            return false

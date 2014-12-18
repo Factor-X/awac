@@ -18,7 +18,6 @@ import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Product;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.business.Site;
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.code.type.LanguageCode;
 import eu.factorx.awac.models.code.type.ScopeTypeCode;
 import eu.factorx.awac.models.data.question.QuestionSet;
@@ -54,11 +53,12 @@ public class SecuredController extends Security.Authenticator {
     private AccountSiteAssociationService accountSiteAssociationService;
     @Autowired
     private AccountProductAssociationService accountProductAssociationService;
+
     @Override
     public String getUsername(Context ctx) {
 
+        Logger.warn("---- getUsername =>" + ctx.request().cookies().get("PLAY_SESSION").value() + " <=> " + ctx.session().entrySet());
 
-        Logger.warn("getUsername : "+ctx.session().get(SESSION_IDENTIFIER_STORE)+"->"+ctx.session().entrySet());
         return ctx.session().get(SESSION_IDENTIFIER_STORE);
     }
 
@@ -94,25 +94,23 @@ public class SecuredController extends Security.Authenticator {
 
         //if the login and the password are ok, refresh the session
         Context.current().session().clear();
-        Logger.warn("je stock l'identifier "+account.getIdentifier()+" à la sssions");
-        try{
-        throw new Exception();
-        }
-        catch (Exception e){
-        e.printStackTrace();
+        Logger.warn("je stock l'identifier " + account.getIdentifier() + " à la sssions");
+        try {
+            throw new Exception();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         Context.current().session().put(SecuredController.SESSION_IDENTIFIER_STORE, account.getIdentifier());
         Context.current().session().put(SecuredController.SESSION_DEFAULT_LANGUAGE_STORE, account.getPerson().getDefaultLanguage().getKey());
     }
 
-    public void logout(){
-    Logger.warn("logout !! ");
-    try{
-        throw new Exception();
-    }
-    catch (Exception e){
-        e.printStackTrace();
-    }
+    public void logout() {
+        Logger.warn("logout !! ");
+        try {
+            throw new Exception();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         Context.current().session().clear();
     }
@@ -121,7 +119,7 @@ public class SecuredController extends Security.Authenticator {
         return new LanguageCode(Context.current().session().get(SESSION_DEFAULT_LANGUAGE_STORE));
     }
 
-    public void controlDataAccess(Form form, Period period, Scope scope){//},boolean returnErrorMessage) {
+    public void controlDataAccess(Form form, Period period, Scope scope) {//},boolean returnErrorMessage) {
 
         if (form == null) {
             throw new MyrmexRuntimeException(BusinessErrorType.WRONG_RIGHT);
@@ -230,12 +228,10 @@ public class SecuredController extends Security.Authenticator {
                     res.add(accountSiteAssociation.getSite());
                 }
             }
-        }
-        else if (getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.ORG)) {
+        } else if (getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.ORG)) {
             // add organization
             res.add(account.getOrganization());
-        }
-        else if (getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.PRODUCT)) {
+        } else if (getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.PRODUCT)) {
             // add authorized product
             for (AccountProductAssociation accountProductAssociation : accountProductAssociationService.findByAccount(account)) {
                 if (accountProductAssociation.getProduct().getListPeriodAvailable().contains(period)) {
