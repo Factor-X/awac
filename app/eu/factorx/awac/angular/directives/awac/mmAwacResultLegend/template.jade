@@ -16,7 +16,7 @@
                 th(colspan="2")
                     span.period-header(style="color: {{ {false: ngModel.rightColor, true: ''}[getMode()!='numbers'] }}; border-bottom-color: {{ {false: ngModel.rightColor, true: ''}[getMode()!='numbers'] }}") {{ngModel.rightPeriod}}
         tbody
-            tr(ng-repeat="line in ngModel.reportLines | filter:{color: '!!'}")
+            tr(ng-repeat="line in getReportLines()")
                 td
                     span.circled-number(ng-show="getMode()=='numbers' && getNumber(line) != null") {{ getNumber(line) }}
                     span.chart-legend-bullet-color(ng-hide="getMode()=='numbers'", style="background: {{ line.color }}")
@@ -37,7 +37,7 @@
     br(ng-show="getMode()=='numbers'")
     br(ng-show="getMode()=='numbers'")
 
-    table(ng-show="getMode()=='numbers'")
+    table(ng-show="getMode()=='numbers' && !isSimple()")
         tr
             td(ng-bind-html="'SCOPE_1' | translate")
             td
