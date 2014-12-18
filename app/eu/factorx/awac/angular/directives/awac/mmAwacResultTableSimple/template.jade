@@ -13,12 +13,12 @@ ng-virtual
                         span Emissions {{ngModel.rightPeriod}}
                         span  (tCO2e)
 
-                th(ng-show="getTypeMapTotal() > 0")
+                th(ng-show="getTypicalResultTotal() > 0")
                     span.period-header.wrapped
                         span(ng-bind-html="getTypicalResultLabelKey() | translate")
                         span  (tCO2e)
 
-                th(ng-show="getIdealMapTotal() > 0")
+                th(ng-show="getIdealResultTotal() > 0")
                     span.period-header.wrapped
                         span(ng-bind-html="getIdealResultLabelKey() | translate")
                         span  (tCO2e)
@@ -34,10 +34,10 @@ ng-virtual
                 td.align-right.scope1(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
                     span(ng-bind-html="(rl.rightScope1Value + rl.rightScope2Value + rl.rightScope3Value) | numberToI18NOrLess", ng-show="(rl.rightScope1Value + rl.rightScope2Value + rl.rightScope3Value) > 0")
 
-                td.align-right.scope1(ng-show="getTypeMapTotal() > 0")
+                td.align-right.scope1(ng-show="getTypicalResultTotal() > 0")
                     span(ng-bind-html="ngTypeMap[rl.indicatorName] | numberToI18NOrLess")
 
-                td.align-right.scope1(ng-show="getIdealMapTotal() > 0")
+                td.align-right.scope1(ng-show="getIdealResultTotal() > 0")
                     span(ng-bind-html="ngIdealMap[rl.indicatorName] | numberToI18NOrLess")
 
         tfoot
@@ -51,11 +51,11 @@ ng-virtual
                 td.align-right.scope1(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
                     span(ng-bind-html="getRightTotal() | numberToI18NOrLess")
 
-                td.align-right.scope1(ng-show="getTypeMapTotal() > 0")
-                    span {{ getTypeMapTotal() | numberToI18NOrLess }}
+                td.align-right.scope1(ng-show="getTypicalResultTotal() > 0")
+                    span {{ getTypicalResultTotal() | numberToI18NOrLess }}
 
-                td.align-right.scope1(ng-show="getIdealMapTotal() > 0")
-                    span {{ getIdealMapTotal() | numberToI18NOrLess }}
+                td.align-right.scope1(ng-show="getIdealResultTotal() > 0")
+                    span {{ getIdealResultTotal() | numberToI18NOrLess }}
 
             tr
                 td
@@ -63,9 +63,9 @@ ng-virtual
                     span.period-footer(style="color: {{ ngModel.leftColor }}; border-top-color: {{ ngModel.leftColor }}")
                 td.align-right.scope1(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
                     span.period-footer(style="color: {{ ngModel.rightColor }}; border-top-color: {{ ngModel.rightColor }}")
-                td.align-right.scope1(ng-show="getTypeMapTotal() > 0", style="color: {{ ngModel.rightColor }}")
+                td.align-right.scope1(ng-show="getTypicalResultTotal() > 0", style="color: {{ ngModel.rightColor }}")
                     span.period-footer(style="color: {{ ngModel.rightColor }}; border-top-color: {{ ngModel.rightColor }}")
-                td.align-right.scope1(ng-show="getIdealMapTotal() > 0", style="color: {{ ngModel.rightColor }}")
+                td.align-right.scope1(ng-show="getIdealResultTotal() > 0", style="color: {{ ngModel.rightColor }}")
                     span.period-footer(style="color: {{ ngModel.rightColor }}; border-top-color: {{ ngModel.rightColor }}")
 
     div

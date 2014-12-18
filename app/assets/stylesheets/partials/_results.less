@@ -198,7 +198,7 @@
                         border-left: dotted #666 1px;
                         border-right: dotted #666 1px;
 
-                        &:first-child{
+                        &:first-child {
                             width: 100%;
                             white-space: nowrap;
                         }
@@ -226,13 +226,15 @@
                         padding: 0.5em 1em;
                         border-top: solid #666 2px;
                     }
+                    & > td:last-child {
+                        border-right: dotted #666 1px;
+                    }
                     & > td.scope1 {
-                        border-left: dotted 2px #666;
+                        border-left: dotted #666 2px;
                     }
                     & > td.out-of-scope {
-                        border-right: dotted 2px #666;
+                        border-right: dotted #666 2px;
                     }
-
                 }
 
             }

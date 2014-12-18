@@ -12,45 +12,17 @@ angular
     link: (scope, element) ->
         directiveService.autoScopeImpl scope
 
-        typicalResultLabelKeyByInterfaceType =
+        typicalResultLabelKeys =
             household: 'TYPICAL_HOUSEHOLD_TITLE'
             littleemitter: 'TYPICAL_LITTLEEMITTER_TITLE'
             event: 'TYPICAL_EVENT_TITLE'
 
-        idealResultLabelKeyByInterfaceType =
+        idealResultLabelKeys =
             household: 'IDEAL_HOUSEHOLD_TITLE'
             littleemitter: 'IDEAL_LITTLEEMITTER_TITLE'
             event: 'IDEAL_EVENT_TITLE'
 
         scope.showAll = true
-
-        scope.getLeftTotalScope1 = () ->
-            return undefined unless scope.ngModel
-            total = 0;
-            for rl in scope.ngModel.reportLines
-                total += rl.leftScope1Value
-            total
-
-        scope.getLeftTotalScope2 = () ->
-            return undefined unless scope.ngModel
-            total = 0;
-            for rl in scope.ngModel.reportLines
-                total += rl.leftScope2Value
-            total
-
-        scope.getLeftTotalScope3 = () ->
-            return undefined unless scope.ngModel
-            total = 0;
-            for rl in scope.ngModel.reportLines
-                total += rl.leftScope3Value
-            total
-
-        scope.getLeftTotalOutOfScope = () ->
-            return undefined unless scope.ngModel
-            total = 0;
-            for rl in scope.ngModel.reportLines
-                total += rl.leftOutOfScopeValue
-            total
 
         scope.getLeftTotal = () ->
             return undefined unless scope.ngModel
@@ -59,34 +31,6 @@ angular
                 total += rl.leftScope1Value
                 total += rl.leftScope2Value
                 total += rl.leftScope3Value
-            total
-
-        scope.getRightTotalScope1 = () ->
-            return undefined unless scope.ngModel
-            total = 0;
-            for rl in scope.ngModel.reportLines
-                total += rl.rightScope1Value
-            total
-
-        scope.getRightTotalScope2 = () ->
-            return undefined unless scope.ngModel
-            total = 0;
-            for rl in scope.ngModel.reportLines
-                total += rl.rightScope2Value
-            total
-
-        scope.getRightTotalScope3 = () ->
-            return undefined unless scope.ngModel
-            total = 0;
-            for rl in scope.ngModel.reportLines
-                total += rl.rightScope3Value
-            total
-
-        scope.getRightTotalOutOfScope = () ->
-            return undefined unless scope.ngModel
-            total = 0;
-            for rl in scope.ngModel.reportLines
-                total += rl.rightOutOfScopeValue
             total
 
         scope.getRightTotal = () ->
@@ -98,14 +42,14 @@ angular
                 total += rl.rightScope3Value
             total
 
-        scope.getTypeMapTotal = () ->
+        scope.getTypicalResultTotal = () ->
             return undefined unless scope.ngTypeMap
             total = 0;
             for k, v of scope.ngTypeMap
                 total += parseFloat(v)
             return total
 
-        scope.getIdealMapTotal = () ->
+        scope.getIdealResultTotal = () ->
             return undefined unless scope.ngIdealMap
             total = 0;
             for k, v of scope.ngIdealMap
@@ -113,7 +57,7 @@ angular
             return total
 
         scope.getTypicalResultLabelKey = () ->
-            return typicalResultLabelKeyByInterfaceType[scope.$root.instanceName]
+            return typicalResultLabelKeys[scope.$root.instanceName]
 
         scope.getIdealResultLabelKey = () ->
-            return idealResultLabelKeyByInterfaceType[scope.$root.instanceName]
+            return idealResultLabelKeys[scope.$root.instanceName]
