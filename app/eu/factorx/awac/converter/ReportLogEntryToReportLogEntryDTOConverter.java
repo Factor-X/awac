@@ -60,16 +60,19 @@ public class ReportLogEntryToReportLogEntryDTOConverter implements Converter<Rep
             ActivityTypeCode adActivityTypeCode = activityData.getActivityType();
             ActivitySourceCode adActivitySource = activityData.getActivitySource();
 
-            return new ReportLogNoSuitableFactorEntryDTO(
-                activityCategory.getKey(),
-                activitySubCategory.getKey(),
-                biUnit.getSymbol(),
-                activityData.getValue(),
-                adUnit.getSymbol(),
-                icIndicatorCategory.getKey(),
-                adActivityTypeCode.getKey(),
-                adActivitySource.getKey());
+            ReportLogNoSuitableFactorEntryDTO reportLogNoSuitableFactorEntryDTO = new ReportLogNoSuitableFactorEntryDTO();
 
+
+            reportLogNoSuitableFactorEntryDTO.setBiActivityCategory(activityCategory.getKey());
+            reportLogNoSuitableFactorEntryDTO.setBiActivitySubCategory(activitySubCategory.getKey());
+            reportLogNoSuitableFactorEntryDTO.setBiUnit(biUnit.getSymbol());
+            reportLogNoSuitableFactorEntryDTO.setAdValue(activityData.getValue());
+            reportLogNoSuitableFactorEntryDTO.setAdUnit(adUnit.getSymbol());
+            reportLogNoSuitableFactorEntryDTO.setBiIndicatorCategory(icIndicatorCategory.getKey());
+            reportLogNoSuitableFactorEntryDTO.setAdActivityType(adActivityTypeCode.getKey());
+            reportLogNoSuitableFactorEntryDTO.setAdActivitySource(adActivitySource.getKey());
+
+            return reportLogNoSuitableFactorEntryDTO;
         }
 
         if (entry instanceof LowerRankInGroup) {

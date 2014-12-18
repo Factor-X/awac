@@ -1,6 +1,8 @@
 package eu.factorx.awac.service.impl;
 
 import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import eu.factorx.awac.models.forms.AwacCalculator;
 import eu.factorx.awac.service.ResultSvgGeneratorService;
 import eu.factorx.awac.service.SvgGenerator;
 import eu.factorx.awac.service.impl.reporting.MergedReportResultAggregation;
@@ -27,35 +29,35 @@ public class ResultSvgGeneratorServiceImpl implements ResultSvgGeneratorService 
 	//
 
 	@Override
-	public String getDonut(ReportResultAggregation reportResult) throws IOException, WriteException, BiffException {
+	public String getDonut(AwacCalculator awacCalculator, ReportResultAggregation reportResult) throws IOException, WriteException, BiffException {
 		IndicatorIsoScopeCode reportScope = reportResult.getReportRestrictedScope();
 		Table scopeTable = new Table();
-		fillTableWithResultData(reportResult, scopeTable, reportScope);
+		fillTableWithResultData(awacCalculator, reportResult, scopeTable, reportScope);
 		return svgGenerator.getDonut(scopeTable, reportResult.getPeriod().getLabel());
 	}
 
 
 	@Override
-	public String getWeb(ReportResultAggregation reportResult) throws IOException, WriteException, BiffException {
+	public String getWeb(AwacCalculator awacCalculator, ReportResultAggregation reportResult) throws IOException, WriteException, BiffException {
 		IndicatorIsoScopeCode reportScope = reportResult.getReportRestrictedScope();
 		Table scopeTable = new Table();
-		fillTableWithResultData(reportResult, scopeTable, null);
+		fillTableWithResultData(awacCalculator, reportResult, scopeTable, null);
 		return svgGenerator.getWeb(scopeTable);
 	}
 
 
 	@Override
-	public String getHistogram(ReportResultAggregation reportResult) throws IOException, WriteException, BiffException {
+	public String getHistogram(AwacCalculator awacCalculator, ReportResultAggregation reportResult) throws IOException, WriteException, BiffException {
 		Table scopeTable = new Table();
-		fillTableWithResultDataForHistogram(reportResult, scopeTable, null);
+		fillTableWithResultDataForHistogram(awacCalculator, reportResult, scopeTable, null);
 		return svgGenerator.getHistogram(scopeTable);
 	}
 
 
 	@Override
-	public String getWebWithReferences(ReportResultAggregation reportResultAggregation, Map<String, Double> type, Map<String, Double> ideal) {
+	public String getWebWithReferences(AwacCalculator awacCalculator, ReportResultAggregation reportResultAggregation, Map<String, Double> type, Map<String, Double> ideal) {
 		Table scopeTable = new Table();
-		fillTableWithResultData(reportResultAggregation, scopeTable, null);
+		fillTableWithResultData(awacCalculator, reportResultAggregation, scopeTable, null);
 
 		for (String s : type.keySet()) {
 			boolean found = false;
@@ -87,10 +89,10 @@ public class ResultSvgGeneratorServiceImpl implements ResultSvgGeneratorService 
 	// ----------
 
 	@Override
-	public String getLeftDonut(MergedReportResultAggregation mergedReportResultAggregation) {
+	public String getLeftDonut(AwacCalculator awacCalculator, MergedReportResultAggregation mergedReportResultAggregation) {
 		IndicatorIsoScopeCode reportScope = mergedReportResultAggregation.getReportRestrictedScope();
 		Table scopeTable = new Table();
-		fillTableWithResultData(mergedReportResultAggregation, scopeTable, reportScope);
+		fillTableWithResultData(awacCalculator, mergedReportResultAggregation, scopeTable, reportScope);
 		for (int i = 0; i < scopeTable.getRowCount(); i++) {
 			scopeTable.setCell(2, i, null);
 		}
@@ -98,10 +100,10 @@ public class ResultSvgGeneratorServiceImpl implements ResultSvgGeneratorService 
 	}
 
 	@Override
-	public String getRightDonut(MergedReportResultAggregation mergedReportResultAggregation) {
+	public String getRightDonut(AwacCalculator awacCalculator, MergedReportResultAggregation mergedReportResultAggregation) {
 		IndicatorIsoScopeCode reportScope = mergedReportResultAggregation.getReportRestrictedScope();
 		Table scopeTable = new Table();
-		fillTableWithResultData(mergedReportResultAggregation, scopeTable, reportScope);
+		fillTableWithResultData(awacCalculator, mergedReportResultAggregation, scopeTable, reportScope);
 		for (int i = 0; i < scopeTable.getRowCount(); i++) {
 			scopeTable.setCell(1, i, scopeTable.getCell(2, i));
 			scopeTable.setCell(2, i, null);
@@ -111,23 +113,23 @@ public class ResultSvgGeneratorServiceImpl implements ResultSvgGeneratorService 
 
 
 	@Override
-	public String getWeb(MergedReportResultAggregation mergedReportResultAggregation) {
+	public String getWeb(AwacCalculator awacCalculator, MergedReportResultAggregation mergedReportResultAggregation) {
 		Table scopeTable = new Table();
-		fillTableWithResultData(mergedReportResultAggregation, scopeTable, null);
+		fillTableWithResultData(awacCalculator, mergedReportResultAggregation, scopeTable, null);
 		return svgGenerator.getWeb(scopeTable);
 	}
 
 	@Override
-	public String getHistogram(MergedReportResultAggregation mergedReportResultAggregation) {
+	public String getHistogram(AwacCalculator awacCalculator, MergedReportResultAggregation mergedReportResultAggregation) {
 		Table scopeTable = new Table();
-		fillTableWithResultDataForHistogram(mergedReportResultAggregation, scopeTable, null);
+		fillTableWithResultDataForHistogram(awacCalculator, mergedReportResultAggregation, scopeTable, null);
 		return svgGenerator.getHistogram(scopeTable);
 	}
 
 	@Override
-	public String getWebWithReferences(MergedReportResultAggregation mergedReportResultAggregation, Map<String, Double> type, Map<String, Double> ideal) {
+	public String getWebWithReferences(AwacCalculator awacCalculator, MergedReportResultAggregation mergedReportResultAggregation, Map<String, Double> type, Map<String, Double> ideal) {
 		Table scopeTable = new Table();
-		fillTableWithResultData(mergedReportResultAggregation, scopeTable, null);
+		fillTableWithResultData(awacCalculator, mergedReportResultAggregation, scopeTable, null);
 
 		for (String s : type.keySet()) {
 			boolean found = false;
@@ -159,7 +161,10 @@ public class ResultSvgGeneratorServiceImpl implements ResultSvgGeneratorService 
 	// Util
 	//
 
-	private void fillTableWithResultData(ReportResultAggregation reportResult, Table scopeTable, IndicatorIsoScopeCode restrictedScopeType) {
+	private void fillTableWithResultData(AwacCalculator awacCalculator, ReportResultAggregation reportResult, Table scopeTable, IndicatorIsoScopeCode restrictedScopeType) {
+		boolean considerAll = awacCalculator.getInterfaceTypeCode().equals(InterfaceTypeCode.HOUSEHOLD) ||
+			awacCalculator.getInterfaceTypeCode().equals(InterfaceTypeCode.EVENT) ||
+			awacCalculator.getInterfaceTypeCode().equals(InterfaceTypeCode.LITTLEEMITTER);
 
 		for (ReportResultIndicatorAggregation reportResultIndicatorAggregation : reportResult.getReportResultIndicatorAggregationList()) {
 
@@ -177,7 +182,7 @@ public class ResultSvgGeneratorServiceImpl implements ResultSvgGeneratorService 
 				v = reportResultIndicatorAggregation.getOutOfScopeValue();
 			}
 
-			if (v > 0) {
+			if (considerAll || v > 0) {
 				int row = scopeTable.getRowCount();
 				scopeTable.setCell(0, row, reportResultIndicatorAggregation.getIndicator());
 				scopeTable.setCell(1, row, v);
@@ -186,7 +191,10 @@ public class ResultSvgGeneratorServiceImpl implements ResultSvgGeneratorService 
 
 	}
 
-	private void fillTableWithResultData(MergedReportResultAggregation mergedReportResultAggregation, Table scopeTable, IndicatorIsoScopeCode restrictedScopeType) {
+	private void fillTableWithResultData(AwacCalculator awacCalculator, MergedReportResultAggregation mergedReportResultAggregation, Table scopeTable, IndicatorIsoScopeCode restrictedScopeType) {
+		boolean considerAll = awacCalculator.getInterfaceTypeCode().equals(InterfaceTypeCode.HOUSEHOLD) ||
+			awacCalculator.getInterfaceTypeCode().equals(InterfaceTypeCode.EVENT) ||
+			awacCalculator.getInterfaceTypeCode().equals(InterfaceTypeCode.LITTLEEMITTER);
 
 		for (MergedReportResultIndicatorAggregation mergedReportResultIndicatorAggregation : mergedReportResultAggregation.getMergedReportResultIndicatorAggregationList()) {
 			double left = 0;
@@ -209,7 +217,7 @@ public class ResultSvgGeneratorServiceImpl implements ResultSvgGeneratorService 
 				right = mergedReportResultIndicatorAggregation.getRightOutOfScopeValue();
 			}
 
-			if (left + right > 0) {
+			if (considerAll || (left + right) > 0) {
 				int row = scopeTable.getRowCount();
 				scopeTable.setCell(0, row, mergedReportResultIndicatorAggregation.getIndicator());
 				scopeTable.setCell(1, row, left);
@@ -220,7 +228,11 @@ public class ResultSvgGeneratorServiceImpl implements ResultSvgGeneratorService 
 
 	}
 
-	private void fillTableWithResultDataForHistogram(ReportResultAggregation reportResult, Table scopeTable, IndicatorIsoScopeCode restrictedScopeType) {
+	private void fillTableWithResultDataForHistogram(AwacCalculator awacCalculator, ReportResultAggregation reportResult, Table scopeTable, IndicatorIsoScopeCode restrictedScopeType) {
+
+		boolean considerAll = awacCalculator.getInterfaceTypeCode().equals(InterfaceTypeCode.HOUSEHOLD) ||
+			awacCalculator.getInterfaceTypeCode().equals(InterfaceTypeCode.EVENT) ||
+			awacCalculator.getInterfaceTypeCode().equals(InterfaceTypeCode.LITTLEEMITTER);
 
 		for (ReportResultIndicatorAggregation reportResultIndicatorAggregation : reportResult.getReportResultIndicatorAggregationList()) {
 
@@ -244,7 +256,7 @@ public class ResultSvgGeneratorServiceImpl implements ResultSvgGeneratorService 
 				v4 = reportResultIndicatorAggregation.getOutOfScopeValue();
 			}
 
-			if ((v1 != null && v1 > 0) || (v2 != null && v2 > 0) || (v3 != null && v3 > 0) || (v4 != null && v4 > 0)) {
+			if (considerAll || (v1 != null && v1 > 0) || (v2 != null && v2 > 0) || (v3 != null && v3 > 0) || (v4 != null && v4 > 0)) {
 				int row = scopeTable.getRowCount();
 				scopeTable.setCell(0, row, reportResultIndicatorAggregation.getIndicator());
 				scopeTable.setCell(1, row, v1);
@@ -256,7 +268,10 @@ public class ResultSvgGeneratorServiceImpl implements ResultSvgGeneratorService 
 
 	}
 
-	private void fillTableWithResultDataForHistogram(MergedReportResultAggregation mergedReportResultAggregation, Table scopeTable, IndicatorIsoScopeCode restrictedScopeType) {
+	private void fillTableWithResultDataForHistogram(AwacCalculator awacCalculator, MergedReportResultAggregation mergedReportResultAggregation, Table scopeTable, IndicatorIsoScopeCode restrictedScopeType) {
+		boolean considerAll = awacCalculator.getInterfaceTypeCode().equals(InterfaceTypeCode.HOUSEHOLD) ||
+			awacCalculator.getInterfaceTypeCode().equals(InterfaceTypeCode.EVENT) ||
+			awacCalculator.getInterfaceTypeCode().equals(InterfaceTypeCode.LITTLEEMITTER);
 
 		for (MergedReportResultIndicatorAggregation mergedReportResultIndicatorAggregation : mergedReportResultAggregation.getMergedReportResultIndicatorAggregationList()) {
 			Double left1 = null;
@@ -292,7 +307,7 @@ public class ResultSvgGeneratorServiceImpl implements ResultSvgGeneratorService 
 				right4 = mergedReportResultIndicatorAggregation.getRightOutOfScopeValue();
 			}
 
-			if ((left1 != null && left1 > 0) || (left2 != null && left2 > 0) || (left3 != null && left3 > 0) || (left4 != null && left4 > 0) || (right1 != null && right1 > 0) || (right2 != null && right2 > 0) || (right3 != null && right3 > 0) || (right4 != null && right4 > 0)) {
+			if (considerAll || (left1 != null && left1 > 0) || (left2 != null && left2 > 0) || (left3 != null && left3 > 0) || (left4 != null && left4 > 0) || (right1 != null && right1 > 0) || (right2 != null && right2 > 0) || (right3 != null && right3 > 0) || (right4 != null && right4 > 0)) {
 				int row = scopeTable.getRowCount();
 				scopeTable.setCell(0, row, mergedReportResultIndicatorAggregation.getIndicator());
 
