@@ -200,7 +200,8 @@ public class ResultController extends AbstractController {
 		ResultsDTO resultsDTO = new ResultsDTO();
 
 		// 1. Compute the ReportResult
-		AwacCalculator awacCalculator = awacCalculatorService.findByCode(scopes.get(0).getOrganization().getInterfaceCode());
+		InterfaceTypeCode interfaceCode = scopes.get(0).getOrganization().getInterfaceCode();
+		AwacCalculator awacCalculator = awacCalculatorService.findByCode(interfaceCode);
 		ReportResultCollection allReportResultsLeft = reportResultService.getReportResults(awacCalculator, scopes, period);
 		ReportResultCollection allReportResultsRight = reportResultService.getReportResults(awacCalculator, scopes, comparedPeriod);
 
@@ -226,7 +227,11 @@ public class ResultController extends AbstractController {
 			resultsDTO.getRightSvgDonuts().put(reportKey, resultSvgGeneratorService.getRightDonut(awacCalculator, mergedReportResultAggregation));
 
 			// 2.4. Each ReportResult is rendered to a SVG string - HISTOGRAM
-			resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getHistogram(awacCalculator, mergedReportResultAggregation));
+			if (InterfaceTypeCode.HOUSEHOLD.equals(interfaceCode) || InterfaceTypeCode.LITTLEEMITTER.equals(interfaceCode) || InterfaceTypeCode.HOUSEHOLD.equals(interfaceCode)) {
+				resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getSimpleHistogram(awacCalculator, mergedReportResultAggregation));
+			} else {
+				resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getHistogram(awacCalculator, mergedReportResultAggregation));
+			}
 
 			// 2.5. Each ReportResult is rendered to a SVG string - WEB
 			InterfaceTypeCode interfaceTypeCode = awacCalculator.getInterfaceTypeCode();
@@ -281,7 +286,8 @@ public class ResultController extends AbstractController {
 		ResultsDTO resultsDTO = new ResultsDTO();
 
 		// 1. Compute the ReportResult
-		AwacCalculator awacCalculator = awacCalculatorService.findByCode(scopes.get(0).getOrganization().getInterfaceCode());
+		InterfaceTypeCode interfaceCode = scopes.get(0).getOrganization().getInterfaceCode();
+		AwacCalculator awacCalculator = awacCalculatorService.findByCode(interfaceCode);
 		ReportResultCollection allReportResults = reportResultService.getReportResults(awacCalculator, scopes, period);
 		List<ReportLogEntry> logEntries = allReportResults.getLogEntries();
 
@@ -299,7 +305,11 @@ public class ResultController extends AbstractController {
 			resultsDTO.getLeftSvgDonuts().put(reportKey, resultSvgGeneratorService.getDonut(awacCalculator, reportResultAggregation));
 
 			// 2.4. Each ReportResult is rendered to a SVG string - HISTOGRAM
-			resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getHistogram(awacCalculator, reportResultAggregation));
+			if (InterfaceTypeCode.HOUSEHOLD.equals(interfaceCode) || InterfaceTypeCode.LITTLEEMITTER.equals(interfaceCode) || InterfaceTypeCode.HOUSEHOLD.equals(interfaceCode)) {
+				resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getSimpleHistogram(awacCalculator, reportResultAggregation));
+			} else {
+				resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getHistogram(awacCalculator, reportResultAggregation));
+			}
 
 			// 2.5. Each ReportResult is rendered to a SVG string - WEB
 			InterfaceTypeCode interfaceTypeCode = awacCalculator.getInterfaceTypeCode();
