@@ -149,18 +149,10 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
         return byteArrayOutputStream.toByteArray();
     }
 
-//	typicalResultLabelKeys =
-//	household: 'TYPICAL_HOUSEHOLD_TITLE'
-//	littleemitter: 'TYPICAL_LITTLEEMITTER_TITLE'
-//	event: 'TYPICAL_EVENT_TITLE'
-//
-//	idealResultLabelKeys =
-//	household: 'IDEAL_HOUSEHOLD_TITLE'
-//	littleemitter: 'IDEAL_LITTLEEMITTER_TITLE'
-//	event: 'IDEAL_EVENT_TITLE'
-
 	private void writeTable(String search, String organization, String sites, String period, LanguageCode lang, WritableWorkbook wb, ReportResultCollection allReportResults, WritableCellFormat cellFormat, InterfaceTypeCode interfaceTypeCode, Map<String, Double> typicalResultValues, Map<String, Double> idealResultValues) throws WriteException {
 		if (InterfaceTypeCode.HOUSEHOLD.equals(interfaceTypeCode) || InterfaceTypeCode.LITTLEEMITTER.equals(interfaceTypeCode) || InterfaceTypeCode.EVENT.equals(interfaceTypeCode)) {
+			String typicalResultLabel = translate(getTypicalResultLabelKey(interfaceTypeCode), CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)";
+			String idealResultLabel = translate(getIdealResultLabelKey(interfaceTypeCode), CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)";
 			for (ReportResult reportResult : allReportResults.getReportResults()) {
 				String reportKey = reportResult.getReport().getCode().getKey();
 
@@ -172,12 +164,9 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 
 					Map<String, List<Double>> scopeValuesByIndicator = reportResultService.getScopeValuesByIndicator(reportResult);
 
-					sheet.addCell(new Label(1, 4, translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
-					sheet.addCell(new Label(2, 4, translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
-					sheet.addCell(new Label(3, 4, translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
-//					sheet.addCell(new Label(2, 4, translate("SCOPE_2", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
-//					sheet.addCell(new Label(3, 4, translate("SCOPE_3", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
-//					sheet.addCell(new Label(4, 4, translate("OUT_OF_SCOPE", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2)", cellFormat));
+					sheet.addCell(new Label(1, 4, "Emissions " + period + " (tCO2e)", cellFormat));
+					sheet.addCell(new Label(2, 4, typicalResultLabel, cellFormat));
+					sheet.addCell(new Label(3, 4, idealResultLabel, cellFormat));
 
 					int index = 5;
 					for (Map.Entry<String, List<Double>> row : scopeValuesByIndicator.entrySet()) {
@@ -241,7 +230,7 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 		}
     }
 
-    private void writeExplanation(WritableWorkbook wb, String organization, String sites, String period, LanguageCode lang, ReportResultCollection allReportResults, WritableCellFormat cellFormat) throws WriteException {
+	private void writeExplanation(WritableWorkbook wb, String organization, String sites, String period, LanguageCode lang, ReportResultCollection allReportResults, WritableCellFormat cellFormat) throws WriteException {
         WritableSheet sheet = wb.createSheet("Explication", wb.getNumberOfSheets());
 
         insertHeader(sheet, null, organization, sites, period, cellFormat);
@@ -895,5 +884,30 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 
     }
 
+	private String getIdealResultLabelKey(InterfaceTypeCode interfaceTypeCode) {
+		if (InterfaceTypeCode.HOUSEHOLD.equals(interfaceTypeCode)) {
+			return "TYPICAL_HOUSEHOLD_TITLE";
+		}
+		if (InterfaceTypeCode.LITTLEEMITTER.equals(interfaceTypeCode)) {
+			return "TYPICAL_LITTLEEMITTER_TITLE";
+		}
+		if (InterfaceTypeCode.EVENT.equals(interfaceTypeCode)) {
+			return "TYPICAL_EVENT_TITLE";
+		}
+		return null;
+	}
+
+	private String getTypicalResultLabelKey(InterfaceTypeCode interfaceTypeCode) {
+		if (InterfaceTypeCode.HOUSEHOLD.equals(interfaceTypeCode)) {
+			return "IDEAL_HOUSEHOLD_TITLE";
+		}
+		if (InterfaceTypeCode.LITTLEEMITTER.equals(interfaceTypeCode)) {
+			return "IDEAL_LITTLEEMITTER_TITLE";
+		}
+		if (InterfaceTypeCode.EVENT.equals(interfaceTypeCode)) {
+			return "IDEAL_EVENT_TITLE";
+		}
+		return null;
+	}
 
 }
