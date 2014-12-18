@@ -151,6 +151,7 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 
 	private void writeTable(String search, String organization, String sites, String period, LanguageCode lang, WritableWorkbook wb, ReportResultCollection allReportResults, WritableCellFormat cellFormat, InterfaceTypeCode interfaceTypeCode, Map<String, Double> typicalResultValues, Map<String, Double> idealResultValues) throws WriteException {
 		if (InterfaceTypeCode.HOUSEHOLD.equals(interfaceTypeCode) || InterfaceTypeCode.LITTLEEMITTER.equals(interfaceTypeCode) || InterfaceTypeCode.EVENT.equals(interfaceTypeCode)) {
+			String resultLabel = translate("SCOPE_SIMPLE", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)";
 			String typicalResultLabel = translate(getTypicalResultLabelKey(interfaceTypeCode), CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)";
 			String idealResultLabel = translate(getIdealResultLabelKey(interfaceTypeCode), CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)";
 			for (ReportResult reportResult : allReportResults.getReportResults()) {
@@ -164,14 +165,13 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 
 					Map<String, List<Double>> scopeValuesByIndicator = reportResultService.getScopeValuesByIndicator(reportResult);
 
-					sheet.addCell(new Label(1, 4, "Emissions " + period + " (tCO2e)", cellFormat));
+					sheet.addCell(new Label(1, 4, resultLabel, cellFormat));
 					sheet.addCell(new Label(2, 4, typicalResultLabel, cellFormat));
 					sheet.addCell(new Label(3, 4, idealResultLabel, cellFormat));
 
 					int index = 5;
 					for (Map.Entry<String, List<Double>> row : scopeValuesByIndicator.entrySet()) {
 
-						Logger.info("row: " + row);
 						CodeLabel codeLabel = codeLabelService.findCodeLabelByCode(new Code(CodeList.INDICATOR, row.getKey()));
 
 						sheet.addCell(new Label(0, index, codeLabel.getLabel(lang)));
@@ -648,8 +648,8 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
             }
         }
 
-        writeComparisionTable(r_1, "Résultat", null, organization, sites, period.getLabel() + " / " + comparedPeriod.getLabel(), lang, wb, merged, cellFormat);
-        writeComparisionTable(r_1, "Résultat facteurs constants", comparedPeriod.getLabel(), organization, sites, period.getLabel() + " / " + comparedPeriod.getLabel(), lang, wb, mergedReportResultCEFCollectionAggregation, cellFormat);
+        writeComparisionTable(r_1, "Résultat", null, organization, sites, period.getLabel() + " / " + comparedPeriod.getLabel(), lang, wb, merged, cellFormat, interfaceCode, typicalResultValues, idealResultValues);
+        writeComparisionTable(r_1, "Résultat facteurs constants", comparedPeriod.getLabel(), organization, sites, period.getLabel() + " / " + comparedPeriod.getLabel(), lang, wb, mergedReportResultCEFCollectionAggregation, cellFormat, interfaceCode, typicalResultValues, idealResultValues);
 
         // 2.3 Survey
         for (Scope scope : scopes) {
@@ -728,58 +728,101 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
         return content;
     }
 
-    private void writeComparisionTable(String search, String title, String cefPeriod, String organization, String sites, String period, LanguageCode lang, WritableWorkbook wb, MergedReportResultCollectionAggregation merged, WritableCellFormat cellFormat) throws WriteException {
-        for (MergedReportResultAggregation aggregation : merged.getMergedReportResultAggregations()) {
-            String reportKey = aggregation.getReportCode();
+    private void writeComparisionTable(String search, String title, String cefPeriod, String organization, String sites, String period, LanguageCode lang, WritableWorkbook wb, MergedReportResultCollectionAggregation merged, WritableCellFormat cellFormat, InterfaceTypeCode interfaceTypeCode, Map<String, Double> typicalResultValues, Map<String, Double> idealResultValues) throws WriteException {
+		if (InterfaceTypeCode.HOUSEHOLD.equals(interfaceTypeCode) || InterfaceTypeCode.LITTLEEMITTER.equals(interfaceTypeCode) || InterfaceTypeCode.EVENT.equals(interfaceTypeCode)) {
+			String typicalResultLabel = translate(getTypicalResultLabelKey(interfaceTypeCode), CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)";
+			String idealResultLabel = translate(getIdealResultLabelKey(interfaceTypeCode), CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)";
+			for (MergedReportResultAggregation aggregation : merged.getMergedReportResultAggregations()) {
+				String reportKey = aggregation.getReportCode();
+				String leftResultLabel = translate("SCOPE_SIMPLE", CodeList.TRANSLATIONS_INTERFACE, lang) + " " + aggregation.getLeftPeriod().getLabel() + " (tCO2e)";
+				String rightResultLabel = translate("SCOPE_SIMPLE", CodeList.TRANSLATIONS_INTERFACE, lang) + " " + aggregation.getRightPeriod().getLabel() + " (tCO2e)";
 
-            if (reportKey.equals(search)) {
+				if (reportKey.equals(search)) {
 
-                WritableSheet sheet = wb.createSheet(title, wb.getNumberOfSheets());
+					WritableSheet sheet = wb.createSheet(title, wb.getNumberOfSheets());
 
-                insertHeader(sheet, cefPeriod, organization, sites, period, cellFormat);
+					insertHeader(sheet, cefPeriod, organization, sites, period, cellFormat);
 
-                List<MergedReportResultIndicatorAggregation> scopeValuesByIndicator = aggregation.getMergedReportResultIndicatorAggregationList();
+					List<MergedReportResultIndicatorAggregation> scopeValuesByIndicator = aggregation.getMergedReportResultIndicatorAggregationList();
 
-                sheet.addCell(new Label(0, 5, "Indicator", cellFormat));
+					sheet.addCell(new Label(0, 5, "Indicator", cellFormat));
 
-                sheet.addCell(new Label(1, 5, translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
-                sheet.addCell(new Label(2, 5, translate("SCOPE_2", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
-                sheet.addCell(new Label(3, 5, translate("SCOPE_3", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
-                sheet.addCell(new Label(4, 5, translate("OUT_OF_SCOPE", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2)", cellFormat));
-
-                sheet.addCell(new Label(5, 5, translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
-                sheet.addCell(new Label(6, 5, translate("SCOPE_2", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
-                sheet.addCell(new Label(7, 5, translate("SCOPE_3", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
-                sheet.addCell(new Label(8, 5, translate("OUT_OF_SCOPE", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2)", cellFormat));
-
-                sheet.addCell(new Label(1, 4, aggregation.getLeftPeriod().getLabel(), cellFormat));
-                sheet.addCell(new Label(5, 4, aggregation.getRightPeriod().getLabel(), cellFormat));
-
-                sheet.mergeCells(1, 4, 4, 4);
-                sheet.mergeCells(5, 4, 8, 4);
+					sheet.addCell(new Label(1, 5, leftResultLabel, cellFormat));
+					sheet.addCell(new Label(2, 5, rightResultLabel, cellFormat));
+					sheet.addCell(new Label(3, 5, typicalResultLabel, cellFormat));
+					sheet.addCell(new Label(4, 5, idealResultLabel, cellFormat));
 
 
-                int index = 6;
-                for (MergedReportResultIndicatorAggregation row : scopeValuesByIndicator) {
+					int index = 6;
+					for (MergedReportResultIndicatorAggregation row : scopeValuesByIndicator) {
 
-                    CodeLabel codeLabel = codeLabelService.findCodeLabelByCode(new Code(CodeList.INDICATOR, row.getIndicator()));
+						String indicatorKey = row.getIndicator();
+						CodeLabel codeLabel = codeLabelService.findCodeLabelByCode(new Code(CodeList.INDICATOR, indicatorKey));
 
-                    sheet.addCell(new Label(0, index, codeLabel.getLabel(lang)));
+						sheet.addCell(new Label(0, index, codeLabel.getLabel(lang)));
 
-                    sheet.addCell(new Number(1, index, row.getLeftScope1Value()));
-                    sheet.addCell(new Number(2, index, row.getLeftScope2Value()));
-                    sheet.addCell(new Number(3, index, row.getLeftScope3Value()));
-                    sheet.addCell(new Number(4, index, row.getLeftOutOfScopeValue()));
+						sheet.addCell(new Number(1, index, row.getLeftScope1Value() + row.getLeftScope2Value() + row.getLeftScope3Value() + row.getLeftOutOfScopeValue()));
+						sheet.addCell(new Number(2, index, row.getRightScope1Value() + row.getRightScope2Value() + row.getRightScope3Value() + row.getRightOutOfScopeValue()));
+						sheet.addCell(new Number(3, index, typicalResultValues.get(indicatorKey)));
+						sheet.addCell(new Number(4, index, idealResultValues.get(indicatorKey)));
 
-                    sheet.addCell(new Number(5, index, row.getRightScope1Value()));
-                    sheet.addCell(new Number(6, index, row.getRightScope2Value()));
-                    sheet.addCell(new Number(7, index, row.getRightScope3Value()));
-                    sheet.addCell(new Number(8, index, row.getRightOutOfScopeValue()));
+						index++;
+					}
+				}
+			}
+		} else {
+			for (MergedReportResultAggregation aggregation : merged.getMergedReportResultAggregations()) {
+				String reportKey = aggregation.getReportCode();
 
-                    index++;
-                }
-            }
-        }
+				if (reportKey.equals(search)) {
+
+					WritableSheet sheet = wb.createSheet(title, wb.getNumberOfSheets());
+
+					insertHeader(sheet, cefPeriod, organization, sites, period, cellFormat);
+
+					List<MergedReportResultIndicatorAggregation> scopeValuesByIndicator = aggregation.getMergedReportResultIndicatorAggregationList();
+
+					sheet.addCell(new Label(0, 5, "Indicator", cellFormat));
+
+					sheet.addCell(new Label(1, 5, translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
+					sheet.addCell(new Label(2, 5, translate("SCOPE_2", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
+					sheet.addCell(new Label(3, 5, translate("SCOPE_3", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
+					sheet.addCell(new Label(4, 5, translate("OUT_OF_SCOPE", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2)", cellFormat));
+
+					sheet.addCell(new Label(5, 5, translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
+					sheet.addCell(new Label(6, 5, translate("SCOPE_2", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
+					sheet.addCell(new Label(7, 5, translate("SCOPE_3", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
+					sheet.addCell(new Label(8, 5, translate("OUT_OF_SCOPE", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2)", cellFormat));
+
+					sheet.addCell(new Label(1, 4, aggregation.getLeftPeriod().getLabel(), cellFormat));
+					sheet.addCell(new Label(5, 4, aggregation.getRightPeriod().getLabel(), cellFormat));
+
+					sheet.mergeCells(1, 4, 4, 4);
+					sheet.mergeCells(5, 4, 8, 4);
+
+
+					int index = 6;
+					for (MergedReportResultIndicatorAggregation row : scopeValuesByIndicator) {
+
+						CodeLabel codeLabel = codeLabelService.findCodeLabelByCode(new Code(CodeList.INDICATOR, row.getIndicator()));
+
+						sheet.addCell(new Label(0, index, codeLabel.getLabel(lang)));
+
+						sheet.addCell(new Number(1, index, row.getLeftScope1Value()));
+						sheet.addCell(new Number(2, index, row.getLeftScope2Value()));
+						sheet.addCell(new Number(3, index, row.getLeftScope3Value()));
+						sheet.addCell(new Number(4, index, row.getLeftOutOfScopeValue()));
+
+						sheet.addCell(new Number(5, index, row.getRightScope1Value()));
+						sheet.addCell(new Number(6, index, row.getRightScope2Value()));
+						sheet.addCell(new Number(7, index, row.getRightScope3Value()));
+						sheet.addCell(new Number(8, index, row.getRightOutOfScopeValue()));
+
+						index++;
+					}
+				}
+			}
+		}
     }
 
     //
@@ -884,7 +927,7 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 
     }
 
-	private String getIdealResultLabelKey(InterfaceTypeCode interfaceTypeCode) {
+	private String getTypicalResultLabelKey(InterfaceTypeCode interfaceTypeCode) {
 		if (InterfaceTypeCode.HOUSEHOLD.equals(interfaceTypeCode)) {
 			return "TYPICAL_HOUSEHOLD_TITLE";
 		}
@@ -897,7 +940,7 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 		return null;
 	}
 
-	private String getTypicalResultLabelKey(InterfaceTypeCode interfaceTypeCode) {
+	private String getIdealResultLabelKey(InterfaceTypeCode interfaceTypeCode) {
 		if (InterfaceTypeCode.HOUSEHOLD.equals(interfaceTypeCode)) {
 			return "IDEAL_HOUSEHOLD_TITLE";
 		}

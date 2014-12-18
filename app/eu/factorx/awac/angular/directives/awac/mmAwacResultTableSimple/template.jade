@@ -5,12 +5,12 @@ ng-virtual
                 th
                 th
                     span.period-header.wrapped(style="color: {{ ngModel.leftColor }}; border-bottom-color: {{ ngModel.leftColor }}")
-                        span Emissions {{ngModel.leftPeriod}}
+                        span(ng-bind-html="('SCOPE_SIMPLE' | translate) + ' ' + ngModel.leftPeriod")
                         span  (tCO2e)
 
                 th(ng-show="ngModel.rightPeriod!=null")
                     span.period-header.wrapped(style="color: {{ ngModel.rightColor }}; border-bottom-color: {{ ngModel.rightColor }}")
-                        span Emissions {{ngModel.rightPeriod}}
+                        span(ng-bind-html="('SCOPE_SIMPLE' | translate) + ' ' +  ngModel.rightPeriod")
                         span  (tCO2e)
 
                 th(ng-show="getTypicalResultTotal() > 0")
