@@ -170,7 +170,7 @@ public class ResultController extends AbstractController {
 	private Result getSimpleReportAsXls(Period period, List<Scope> scopes) throws IOException, WriteException, BiffException {
 		LanguageCode lang = securedController.getCurrentUser().getPerson().getDefaultLanguage();
 		InterfaceTypeCode interfaceCode = securedController.getCurrentUser().getOrganization().getInterfaceCode();
-		byte[] content = resultExcelGeneratorService.generateExcelInStream(lang, scopes, period, interfaceCode);
+		byte[] content = resultExcelGeneratorService.generateExcelInStream(lang, scopes, period, interfaceCode, getTypicalResultValues(interfaceCode), getIdealResultValues(interfaceCode));
 
 		DownloadFileDTO downloadFileDTO = new DownloadFileDTO();
 		downloadFileDTO.setFilename("export_bilanGES_" + DateTime.now().toString("YMd-HH:mm").replace(':', 'h') + ".xls");

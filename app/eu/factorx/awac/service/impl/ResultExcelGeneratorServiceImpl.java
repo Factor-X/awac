@@ -37,6 +37,7 @@ import jxl.write.Number;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import play.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -65,7 +66,7 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
     //
 
     @Override
-    public byte[] generateExcelInStream(LanguageCode lang, List<Scope> scopes, Period period, InterfaceTypeCode interfaceCode) throws IOException, WriteException, BiffException {
+    public byte[] generateExcelInStream(LanguageCode lang, List<Scope> scopes, Period period, InterfaceTypeCode interfaceCode, Map<String, Double> typicalResultValues, Map<String, Double> idealResultValues) throws IOException, WriteException, BiffException {
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
@@ -103,7 +104,7 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
         }
 
         // 2.1 Table
-        writeTable(r_1, organization, sites, period.getLabel(), lang, wb, allReportResults, cellFormat);
+        writeTable(r_1, organization, sites, period.getLabel(), lang, wb, allReportResults, cellFormat, interfaceCode, typicalResultValues, idealResultValues);
 
         // 2.2 Explanation
         writeExplanation(wb, organization, sites, period.getLabel(), lang, allReportResults, cellFormat);
@@ -148,40 +149,96 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
         return byteArrayOutputStream.toByteArray();
     }
 
-    private void writeTable(String search, String organization, String sites, String period, LanguageCode lang, WritableWorkbook wb, ReportResultCollection allReportResults, WritableCellFormat cellFormat) throws WriteException {
-        for (ReportResult reportResult : allReportResults.getReportResults()) {
-            String reportKey = reportResult.getReport().getCode().getKey();
+//	typicalResultLabelKeys =
+//	household: 'TYPICAL_HOUSEHOLD_TITLE'
+//	littleemitter: 'TYPICAL_LITTLEEMITTER_TITLE'
+//	event: 'TYPICAL_EVENT_TITLE'
+//
+//	idealResultLabelKeys =
+//	household: 'IDEAL_HOUSEHOLD_TITLE'
+//	littleemitter: 'IDEAL_LITTLEEMITTER_TITLE'
+//	event: 'IDEAL_EVENT_TITLE'
 
-            if (reportKey.equals(search)) {
+	private void writeTable(String search, String organization, String sites, String period, LanguageCode lang, WritableWorkbook wb, ReportResultCollection allReportResults, WritableCellFormat cellFormat, InterfaceTypeCode interfaceTypeCode, Map<String, Double> typicalResultValues, Map<String, Double> idealResultValues) throws WriteException {
+		if (InterfaceTypeCode.HOUSEHOLD.equals(interfaceTypeCode) || InterfaceTypeCode.LITTLEEMITTER.equals(interfaceTypeCode) || InterfaceTypeCode.EVENT.equals(interfaceTypeCode)) {
+			for (ReportResult reportResult : allReportResults.getReportResults()) {
+				String reportKey = reportResult.getReport().getCode().getKey();
 
-                WritableSheet sheet = wb.createSheet("Résultat", wb.getNumberOfSheets());
+				if (reportKey.equals(search)) {
 
-                insertHeader(sheet, null, organization, sites, period, cellFormat);
+					WritableSheet sheet = wb.createSheet("Résultat", wb.getNumberOfSheets());
 
-                Map<String, List<Double>> scopeValuesByIndicator = reportResultService.getScopeValuesByIndicator(reportResult);
+					insertHeader(sheet, null, organization, sites, period, cellFormat);
 
-                sheet.addCell(new Label(1, 4, translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
-                sheet.addCell(new Label(2, 4, translate("SCOPE_2", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
-                sheet.addCell(new Label(3, 4, translate("SCOPE_3", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
-                sheet.addCell(new Label(4, 4, translate("OUT_OF_SCOPE", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2)", cellFormat));
+					Map<String, List<Double>> scopeValuesByIndicator = reportResultService.getScopeValuesByIndicator(reportResult);
 
-                int index = 5;
-                for (Map.Entry<String, List<Double>> row : scopeValuesByIndicator.entrySet()) {
+					sheet.addCell(new Label(1, 4, translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
+					sheet.addCell(new Label(2, 4, translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
+					sheet.addCell(new Label(3, 4, translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
+//					sheet.addCell(new Label(2, 4, translate("SCOPE_2", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
+//					sheet.addCell(new Label(3, 4, translate("SCOPE_3", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
+//					sheet.addCell(new Label(4, 4, translate("OUT_OF_SCOPE", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2)", cellFormat));
+
+					int index = 5;
+					for (Map.Entry<String, List<Double>> row : scopeValuesByIndicator.entrySet()) {
+
+						Logger.info("row: " + row);
+						CodeLabel codeLabel = codeLabelService.findCodeLabelByCode(new Code(CodeList.INDICATOR, row.getKey()));
+
+						sheet.addCell(new Label(0, index, codeLabel.getLabel(lang)));
+
+						// total of emissions (all scopes)
+						double total = 0;
+						for (Double value : row.getValue()) {
+							total += value;
+						}
+						sheet.addCell(new Number(1, index, total));
+
+						// typical emission
+						sheet.addCell(new Number(2, index, typicalResultValues.get(row.getKey())));
+
+						// ideal emission
+						sheet.addCell(new Number(3, index, idealResultValues.get(row.getKey())));
+
+						index++;
+					}
+				}
+			}
+		} else {
+			for (ReportResult reportResult : allReportResults.getReportResults()) {
+				String reportKey = reportResult.getReport().getCode().getKey();
+
+				if (reportKey.equals(search)) {
+
+					WritableSheet sheet = wb.createSheet("Résultat", wb.getNumberOfSheets());
+
+					insertHeader(sheet, null, organization, sites, period, cellFormat);
+
+					Map<String, List<Double>> scopeValuesByIndicator = reportResultService.getScopeValuesByIndicator(reportResult);
+
+					sheet.addCell(new Label(1, 4, translate("SCOPE_1", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
+					sheet.addCell(new Label(2, 4, translate("SCOPE_2", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
+					sheet.addCell(new Label(3, 4, translate("SCOPE_3", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)", cellFormat));
+					sheet.addCell(new Label(4, 4, translate("OUT_OF_SCOPE", CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2)", cellFormat));
+
+					int index = 5;
+					for (Map.Entry<String, List<Double>> row : scopeValuesByIndicator.entrySet()) {
 
 
-                    CodeLabel codeLabel = codeLabelService.findCodeLabelByCode(new Code(CodeList.INDICATOR, row.getKey()));
+						CodeLabel codeLabel = codeLabelService.findCodeLabelByCode(new Code(CodeList.INDICATOR, row.getKey()));
 
-                    sheet.addCell(new Label(0, index, codeLabel.getLabel(lang)));
+						sheet.addCell(new Label(0, index, codeLabel.getLabel(lang)));
 
-                    sheet.addCell(new Number(1, index, row.getValue().get(1)));
-                    sheet.addCell(new Number(2, index, row.getValue().get(2)));
-                    sheet.addCell(new Number(3, index, row.getValue().get(3)));
-                    sheet.addCell(new Number(4, index, row.getValue().get(4)));
+						sheet.addCell(new Number(1, index, row.getValue().get(1)));
+						sheet.addCell(new Number(2, index, row.getValue().get(2)));
+						sheet.addCell(new Number(3, index, row.getValue().get(3)));
+						sheet.addCell(new Number(4, index, row.getValue().get(4)));
 
-                    index++;
-                }
-            }
-        }
+						index++;
+					}
+				}
+			}
+		}
     }
 
     private void writeExplanation(WritableWorkbook wb, String organization, String sites, String period, LanguageCode lang, ReportResultCollection allReportResults, WritableCellFormat cellFormat) throws WriteException {
@@ -549,7 +606,7 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
     //
 
     @Override
-    public byte[] generateComparedExcelInStream(LanguageCode lang, List<Scope> scopes, Period period, Period comparedPeriod, InterfaceTypeCode interfaceCode) throws IOException, WriteException, BiffException {
+    public byte[] generateComparedExcelInStream(LanguageCode lang, List<Scope> scopes, Period period, Period comparedPeriod, InterfaceTypeCode interfaceCode, Map<String, Double> typicalResultValues, Map<String, Double> idealResultValues) throws IOException, WriteException, BiffException {
 
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
