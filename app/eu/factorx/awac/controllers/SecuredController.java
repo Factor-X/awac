@@ -32,6 +32,7 @@ import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.Http.Context;
 import play.mvc.Result;
@@ -55,6 +56,9 @@ public class SecuredController extends Security.Authenticator {
     private AccountProductAssociationService accountProductAssociationService;
     @Override
     public String getUsername(Context ctx) {
+
+
+        Logger.warn("getUsername : "+ctx.session().get(SESSION_IDENTIFIER_STORE)+"->"+ctx.session().entrySet());
         return ctx.session().get(SESSION_IDENTIFIER_STORE);
     }
 
@@ -90,8 +94,27 @@ public class SecuredController extends Security.Authenticator {
 
         //if the login and the password are ok, refresh the session
         Context.current().session().clear();
+        Logger.warn("je stock l'identifier "+account.getIdentifier()+" à la sssions");
+        try{
+        throw new Exception();
+        }
+        catch (Exception e){
+        e.printStackTrace();
+        }
         Context.current().session().put(SecuredController.SESSION_IDENTIFIER_STORE, account.getIdentifier());
         Context.current().session().put(SecuredController.SESSION_DEFAULT_LANGUAGE_STORE, account.getPerson().getDefaultLanguage().getKey());
+    }
+
+    public void logout(){
+    Logger.warn("logout !! ");
+    try{
+        throw new Exception();
+    }
+    catch (Exception e){
+        e.printStackTrace();
+    }
+
+        Context.current().session().clear();
     }
 
     public LanguageCode getDefaultLanguage() {

@@ -256,8 +256,7 @@ public class AuthenticationController extends AbstractController {
 	// logout action cf routes
 	@Transactional(readOnly = true)
 	public Result logout() {
-
-		session().clear();
+securedController.logout();
         return ok(new ReturnDTO());
 	}
 
