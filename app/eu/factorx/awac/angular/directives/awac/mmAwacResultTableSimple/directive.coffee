@@ -6,6 +6,8 @@ angular
         ngModel: '='
         ngTypeMap: '='
         ngIdealMap: '='
+        ngTypeColor: '='
+        ngIdealColor: '='
     templateUrl: "$/angular/templates/mm-awac-result-table-simple.html"
     replace: true
     transclude: true
