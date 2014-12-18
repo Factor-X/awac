@@ -58,7 +58,7 @@ div
 
             mm-awac-question(question-code="AM49")
             mm-awac-question(question-code="AM50", ng-condition="getAnswer('AM49').value == 'AS_43'")
-            mm-awac-question(question-code="AM51", ng-condition="getAnswer('AM50').value == false")
+            mm-awac-question(question-code="AM51", ng-condition="getAnswer('AM49').value != 'AS_43' || getAnswer('AM50').value == false")
             mm-awac-question(question-code="AM52", ng-condition="getAnswer('AM51').value == '1' && getAnswer('AM49').value != 'AS_43'")
             mm-awac-question(question-code="AM53", ng-condition="getAnswer('AM51').value == '1' && getAnswer('AM49').value == 'AS_43'")
             mm-awac-question(question-code="AM54", ng-condition="getAnswer('AM51').value == '2'")

@@ -1172,7 +1172,7 @@ if (aev19 == null) {
     }
     private void createQuestionAEV20() {
         // == AEV20
-        // Prix unitaire du gaz naturel (au l)
+        // Prix unitaire du gaz naturel (au litre)
 
         
 aev20 = (DoubleQuestion) questionService.findByCode(QuestionCode.AEV20);
