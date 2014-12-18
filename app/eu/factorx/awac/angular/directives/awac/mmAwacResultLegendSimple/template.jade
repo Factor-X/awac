@@ -15,10 +15,16 @@
                     span.period-header(style="color: {{ ngModel.rightColor }}; border-bottom-color: {{ ngModel.rightColor }}") {{ngModel.rightPeriod}}
 
                 th
-                    span.period-header(style="color: {{ ngTypeColor }}; border-bottom-color: {{ ngTypeColor }}") Type
+                    span.period-header(style="color: {{ ngTypeColor }}; border-bottom-color: {{ ngTypeColor }}")
+                        span(ng-show="$root.instanceName == 'household'", ng-bind-html="'TYPICAL_HOUSEHOLD_TITLE' | translate")
+                        span(ng-show="$root.instanceName == 'event'", ng-bind-html="'TYPICAL_EVENT_TITLE' | translate")
+                        span(ng-show="$root.instanceName == 'littleemitter'", ng-bind-html="'TYPICAL_LITTLEEMITTER_TITLE' | translate")
 
                 th
-                    span.period-header(style="color: {{ ngIdealColor }}; border-bottom-color: {{ ngIdealColor }}") Ideal
+                    span.period-header(style="color: {{ ngIdealColor }}; border-bottom-color: {{ ngIdealColor }}")
+                        span(ng-show="$root.instanceName == 'household'", ng-bind-html="'IDEAL_HOUSEHOLD_TITLE' | translate")
+                        span(ng-show="$root.instanceName == 'event'", ng-bind-html="'IDEAL_EVENT_TITLE' | translate")
+                        span(ng-show="$root.instanceName == 'littleemitter'", ng-bind-html="'IDEAL_LITTLEEMITTER_TITLE' | translate")
 
 
         tbody

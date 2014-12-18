@@ -33,7 +33,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import play.Logger;
 import play.db.jpa.Transactional;
-import play.i18n.Lang;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -58,14 +57,13 @@ public class SecuredController extends Security.Authenticator {
     @Override
     public String getUsername(Context ctx) {
 
-        Logger.warn("---- getUsername =>" + ctx.request().cookies().get("PLAY_SESSION").value()+ " <=> "+ctx.session().entrySet());
+        Logger.warn("---- getUsername =>" + ctx.request().cookies().get("PLAY_SESSION").value() + " <=> " + ctx.session().entrySet());
 
         return ctx.session().get(SESSION_IDENTIFIER_STORE);
     }
 
     @Override
     public Result onUnauthorized(Context ctx) {
-
         return unauthorized(new ExceptionsDTO(BusinessErrorType.NOT_CONNECTED));
     }
 
@@ -96,8 +94,25 @@ public class SecuredController extends Security.Authenticator {
 
         //if the login and the password are ok, refresh the session
         Context.current().session().clear();
+        Logger.warn("je stock l'identifier " + account.getIdentifier() + " à la sssions");
+        try {
+            throw new Exception();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Context.current().session().put(SecuredController.SESSION_IDENTIFIER_STORE, account.getIdentifier());
         Context.current().session().put(SecuredController.SESSION_DEFAULT_LANGUAGE_STORE, account.getPerson().getDefaultLanguage().getKey());
+    }
+
+    public void logout() {
+        Logger.warn("logout !! ");
+        try {
+            throw new Exception();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Context.current().session().clear();
     }
 
     public LanguageCode getDefaultLanguage() {

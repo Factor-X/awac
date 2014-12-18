@@ -144,7 +144,7 @@ public class ReportResultServiceImpl implements ReportResultService {
         List<BaseActivityResult> baseActivityResults = getBaseActivityResults(awacCalculator, scopes, period, logEntries);
 
         for (Report report : awacCalculator.getReports()) {
-            reportResults.add(getReportResult(report, period, baseActivityResults, logEntries));
+            reportResults.add(getReportResult(report, period, baseActivityResults, logEntries, awacCalculator));
         }
 
         return new ReportResultCollection(reportResults, logEntries);
@@ -158,7 +158,7 @@ public class ReportResultServiceImpl implements ReportResultService {
         List<BaseActivityResult> baseActivityResults = getBaseActivityResultsCEF(awacCalculator, scopes, period, reference, logEntries);
 
         for (Report report : awacCalculator.getReports()) {
-            reportResults.add(getReportResult(report, period, baseActivityResults, logEntries));
+            reportResults.add(getReportResult(report, period, baseActivityResults, logEntries, awacCalculator));
         }
 
         return new ReportResultCollection(reportResults, logEntries);
@@ -409,7 +409,7 @@ public class ReportResultServiceImpl implements ReportResultService {
         return result;
     }
 
-    private ReportResult getReportResult(Report report, Period period, List<BaseActivityResult> baseActivityResults, List<ReportLogEntry> logEntries) {
+    private ReportResult getReportResult(Report report, Period period, List<BaseActivityResult> baseActivityResults, List<ReportLogEntry> logEntries, AwacCalculator awacCalculator) {
         ReportResult reportResult = new ReportResult(report);
         reportResult.setPeriod(period);
         IndicatorIsoScopeCode reportScope = report.getRestrictedScope();
