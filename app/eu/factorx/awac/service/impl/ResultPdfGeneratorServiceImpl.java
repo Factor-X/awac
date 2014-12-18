@@ -8,9 +8,11 @@ import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.IndicatorIsoScopeCode;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.code.type.LanguageCode;
+import eu.factorx.awac.models.code.type.ReportCode;
 import eu.factorx.awac.models.forms.AwacCalculator;
 import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.models.knowledge.Report;
+import eu.factorx.awac.models.knowledge.ReportIndicator;
 import eu.factorx.awac.models.reporting.BaseActivityData;
 import eu.factorx.awac.models.reporting.BaseActivityResult;
 import eu.factorx.awac.models.reporting.ReportResult;
@@ -25,10 +27,7 @@ import play.api.templates.Html;
 
 import java.io.IOException;
 import java.text.NumberFormat;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService {
@@ -40,18 +39,15 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 	@Autowired
 	private CodeLabelService codeLabelService;
 	@Autowired
-	private QuestionSetAnswerService questionSetAnswerService;
-	@Autowired
 	private PdfGenerator pdfGenerator;
-	@Autowired
-	private SvgGenerator svgGenerator;
 	@Autowired
 	private ResultSvgGeneratorService resultSvgGeneratorService;
 	@Autowired
 	private FactorValueService factorValueService;
 	@Autowired
 	private BaseActivityResultService baseActivityResultService;
-
+	@Autowired
+	private ReportService reportService;
 
 	private String translate(String code, CodeList cl, LanguageCode lang) {
 		CodeLabel codeLabel = codeLabelService.findCodeLabelByCode(new Code(cl, code));
@@ -89,17 +85,20 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 		String r_2 = null;
 		try {
 			r_2 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, IndicatorIsoScopeCode.SCOPE1);
-		} catch (Exception e) {
+		} catch (Exception ignored) {
+			r_2 = null;
 		}
 		String r_3 = null;
 		try {
 			r_3 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, IndicatorIsoScopeCode.SCOPE2);
-		} catch (Exception e) {
+		} catch (Exception ignored) {
+			r_3 = null;
 		}
 		String r_4 = null;
 		try {
 			r_4 = getReportKeyForCalculatorAndRestrictedIsoScope(awacCalculator, IndicatorIsoScopeCode.SCOPE3);
-		} catch (Exception e) {
+		} catch (Exception ignored) {
+			r_4 = null;
 		}
 
 
@@ -155,7 +154,7 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 		content += "<h1>" + translate("VALUES_BY_CATEGORY", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h1>";
 		content += "<img style=\"display: block; height: 6cm; width: auto;\" src=\"mem://svg/histogram\" /><br />";
 		content += "<br/>";
-		content += addLegend(r_1, lang, allReportResults, true);
+		content += addLegend(awacCalculator, r_1, lang, allReportResults, true);
 		content += "</div>";
 
 		// donuts
@@ -170,7 +169,7 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 			content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut\" />";
 			content += "<br/>";
 			content += "<br/>";
-			content += addLegend(r_1, lang, allReportResults, false);
+			content += addLegend(awacCalculator, r_1, lang, allReportResults, false);
 		}
 
 		// scope 1
@@ -180,7 +179,7 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 			content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut1\" />";
 			content += "<br/>";
 			content += "<br/>";
-			content += addLegend(r_2, lang, allReportResults, false);
+			content += addLegend(awacCalculator, r_2, lang, allReportResults, false);
 		}
 
 		// scope 2
@@ -189,7 +188,7 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 			content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut2\" />";
 			content += "<br/>";
 			content += "<br/>";
-			content += addLegend(r_3, lang, allReportResults, false);
+			content += addLegend(awacCalculator, r_3, lang, allReportResults, false);
 		}
 		// scope 3
 		if (r_4 != null) {
@@ -197,7 +196,7 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 			content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut3\" />";
 			content += "<br/>";
 			content += "<br/>";
-			content += addLegend(r_4, lang, allReportResults, false);
+			content += addLegend(awacCalculator, r_4, lang, allReportResults, false);
 		}
 		content += "</div>";
 
@@ -207,7 +206,7 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 		content += "<img style=\"display: inline-block; height: 10cm; width: auto;\" src=\"mem://svg/kiviat\" />";
 		content += "<br/>";
 		content += "<br/>";
-		content += addLegend(r_1, lang, allReportResults, true);
+		content += addLegend(awacCalculator, r_1, lang, allReportResults, true);
 		content += "</div>";
 
 		// 3. Explanation
@@ -313,7 +312,7 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 		content += "<h1>" + translate("VALUES_BY_CATEGORY", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h1>";
 		content += "<img style=\"display: block; height: 6cm; width: auto;\" src=\"mem://svg/histogram\" /><br />";
 		content += "<br/>";
-		content += addLegend(r_1, lang, merged, true);
+		content += addLegend(awacCalculator, r_1, lang, merged, true);
 
 		// donuts
 		content += "<h1>" + translate("IMPACTS_PARTITION", CodeList.TRANSLATIONS_INTERFACE, lang) + "</h1>";
@@ -329,7 +328,7 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 			content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donutR\" />";
 			content += "<br/>";
 			content += "<br/>";
-			content += addLegend(r_1, lang, merged, false);
+			content += addLegend(awacCalculator, r_1, lang, merged, false);
 		}
 
 		// scope 1
@@ -339,7 +338,7 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 			content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut1R\" />";
 			content += "<br/>";
 			content += "<br/>";
-			content += addLegend(r_2, lang, merged, false);
+			content += addLegend(awacCalculator, r_2, lang, merged, false);
 		}
 
 		// scope 2
@@ -349,7 +348,7 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 			content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut2R\" />";
 			content += "<br/>";
 			content += "<br/>";
-			content += addLegend(r_3, lang, merged, false);
+			content += addLegend(awacCalculator, r_3, lang, merged, false);
 		}
 
 		// scope 3
@@ -359,7 +358,7 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 			content += "<img style=\"display: inline-block; height: 4cm; width: auto;\" src=\"mem://svg/donut3R\" />";
 			content += "<br/>";
 			content += "<br/>";
-			content += addLegend(r_4, lang, merged, false);
+			content += addLegend(awacCalculator, r_4, lang, merged, false);
 		}
 
 
@@ -368,7 +367,7 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 		content += "<img style=\"display: inline-block; height: 10cm; width: auto;\" src=\"mem://svg/kiviat\" />";
 		content += "<br/>";
 		content += "<br/>";
-		content += addLegend(r_1, lang, merged, true);
+		content += addLegend(awacCalculator, r_1, lang, merged, true);
 
 		content += "</body>";
 		scala.collection.mutable.StringBuilder sb = new scala.collection.mutable.StringBuilder(content);
@@ -380,7 +379,7 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 
 	// Legend
 
-	private String addLegend(String reportKey, LanguageCode lang, ReportResultCollection allReportResults, boolean numbers) {
+	private String addLegend(AwacCalculator awacCalculator, String reportKey, LanguageCode lang, ReportResultCollection allReportResults, boolean numbers) {
 		String content = "";
 		NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag(lang.getKey()));
 		nf.setMaximumFractionDigits(12);
@@ -388,24 +387,45 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 			if (reportResult.getReport().getCode().getKey().equals(reportKey)) {
 
 				int count = 0;
-				for (Map.Entry<String, List<Double>> e : reportResultService.getScopeValuesByIndicator(reportResult).entrySet()) {
-					if (e.getValue().get(0) > 0) {
-						count++;
+
+				boolean considerAll = awacCalculator.getInterfaceTypeCode().equals(InterfaceTypeCode.HOUSEHOLD) ||
+					awacCalculator.getInterfaceTypeCode().equals(InterfaceTypeCode.EVENT) ||
+					awacCalculator.getInterfaceTypeCode().equals(InterfaceTypeCode.LITTLEEMITTER);
+				Map<String, List<Double>> scopeValuesByIndicator = reportResultService.getScopeValuesByIndicator(reportResult);
+
+				if (considerAll) {
+					count = scopeValuesByIndicator.entrySet().size();
+				} else {
+					for (Map.Entry<String, List<Double>> e : scopeValuesByIndicator.entrySet()) {
+						if (e.getValue().get(0) > 0) {
+							count++;
+						}
 					}
 				}
-				if (count > 0) {
+				if (considerAll || count > 0) {
 					int i = 0;
 					content += "<table style=\"display:table; width: auto;\">";
-					for (Map.Entry<String, List<Double>> e : reportResultService.getScopeValuesByIndicator(reportResult).entrySet()) {
-						Double total = e.getValue().get(0);
-						if (total > 0) {
+
+
+					List<ReportIndicator> reportIndicators = reportResult.getReport().getReportIndicators();
+
+					Collections.sort(reportIndicators, new Comparator<ReportIndicator>() {
+						@Override
+						public int compare(ReportIndicator o1, ReportIndicator o2) {
+							return o1.getOrderIndex().compareTo(o2.getOrderIndex());
+						}
+					});
+
+					for (ReportIndicator indicator : reportIndicators) {
+						Double total = scopeValuesByIndicator.get(indicator.getIndicator().getCode().getKey()).get(0);
+						if (considerAll || total > 0) {
 							content += "<tr>";
 							if (numbers) {
 								content += "<td><span class=\"circled-number\">" + (i + 1) + "</span></td>";
 							} else {
 								content += "<td><span style=\"display: inline-block; width: 8px; height 8px; background: #" + Colors.makeGoodColorForSerieElement(i + 1, count) + "\">&nbsp;</span></td>";
 							}
-							content += "<td>" + translate(e.getKey(), CodeList.INDICATOR, lang) + "</td>";
+							content += "<td>" + translate(indicator.getIndicator().getCode().getKey(), CodeList.INDICATOR, lang) + "</td>";
 							content += "<td style=\"text-align: right\">" + nf.format(total) + " tCO2e" + "</td>";
 							content += "</tr>";
 							i++;
@@ -418,7 +438,7 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 		return content;
 	}
 
-	private String addLegend(String reportKey, LanguageCode lang, MergedReportResultCollectionAggregation merged, boolean numbers) {
+	private String addLegend(AwacCalculator awacCalculator, String reportKey, LanguageCode lang, MergedReportResultCollectionAggregation merged, boolean numbers) {
 		String content = "";
 		NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag(lang.getKey()));
 		nf.setMaximumFractionDigits(12);
@@ -426,9 +446,34 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 			if (reportResult.getReportCode().equals(reportKey)) {
 
 				int count = 0;
-				for (MergedReportResultIndicatorAggregation e : reportResult.getMergedReportResultIndicatorAggregationList()) {
-					if (e.getLeftTotalValue() > 0 || e.getRightTotalValue() > 0) {
-						count++;
+
+
+				boolean considerAll = awacCalculator.getInterfaceTypeCode().equals(InterfaceTypeCode.HOUSEHOLD) ||
+					awacCalculator.getInterfaceTypeCode().equals(InterfaceTypeCode.EVENT) ||
+					awacCalculator.getInterfaceTypeCode().equals(InterfaceTypeCode.LITTLEEMITTER);
+				List<MergedReportResultIndicatorAggregation> mergedReportResultIndicatorAggregationList = reportResult.getMergedReportResultIndicatorAggregationList();
+
+
+//				List<ReportIndicator> reportIndicators = reportService.findByCode(new ReportCode(reportResult.getReportCode())).getReportIndicators();
+//				final Map<String, Integer> reportIndicatorsMap = new HashMap<>();
+//				for (ReportIndicator reportIndicator : reportIndicators) {
+//					reportIndicatorsMap.put(reportIndicator.getIndicator().getCode().getKey(), reportIndicator.getOrderIndex());
+//				}
+//				Collections.sort(mergedReportResultIndicatorAggregationList, new Comparator<MergedReportResultIndicatorAggregation>() {
+//					@Override
+//					public int compare(MergedReportResultIndicatorAggregation o1, MergedReportResultIndicatorAggregation o2) {
+//						return reportIndicatorsMap.get(o1.getIndicator()).compareTo(reportIndicatorsMap.get(o2.getIndicator()));
+//					}
+//				});
+
+
+				if (considerAll) {
+					count = mergedReportResultIndicatorAggregationList.size();
+				} else {
+					for (MergedReportResultIndicatorAggregation e : mergedReportResultIndicatorAggregationList) {
+						if (e.getLeftTotalValue() > 0 || e.getRightTotalValue() > 0) {
+							count++;
+						}
 					}
 				}
 
@@ -449,10 +494,14 @@ public class ResultPdfGeneratorServiceImpl implements ResultPdfGeneratorService 
 
 					content += "</thead>";
 					content += "<tbody>";
-					for (MergedReportResultIndicatorAggregation e : reportResult.getMergedReportResultIndicatorAggregationList()) {
+
+
+					for (MergedReportResultIndicatorAggregation e : mergedReportResultIndicatorAggregationList) {
+
+
 						Double left = e.getLeftTotalValue();
 						Double right = e.getRightTotalValue();
-						if (left > 0 || right > 0) {
+						if (considerAll || left > 0 || right > 0) {
 							content += "<tr>";
 							if (numbers) {
 								content += "<td><span class=\"circled-number\">" + (i + 1) + "</span></td>";
