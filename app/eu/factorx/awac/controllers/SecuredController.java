@@ -18,7 +18,6 @@ import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Product;
 import eu.factorx.awac.models.business.Scope;
 import eu.factorx.awac.models.business.Site;
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import eu.factorx.awac.models.code.type.LanguageCode;
 import eu.factorx.awac.models.code.type.ScopeTypeCode;
 import eu.factorx.awac.models.data.question.QuestionSet;
@@ -32,7 +31,9 @@ import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import play.Logger;
 import play.db.jpa.Transactional;
+import play.i18n.Lang;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -53,13 +54,18 @@ public class SecuredController extends Security.Authenticator {
     private AccountSiteAssociationService accountSiteAssociationService;
     @Autowired
     private AccountProductAssociationService accountProductAssociationService;
+
     @Override
     public String getUsername(Context ctx) {
+
+        Logger.warn("---- getUsername =>" + ctx.request().cookies().get("PLAY_SESSION").value()+ " <=> "+ctx.session().entrySet());
+
         return ctx.session().get(SESSION_IDENTIFIER_STORE);
     }
 
     @Override
     public Result onUnauthorized(Context ctx) {
+
         return unauthorized(new ExceptionsDTO(BusinessErrorType.NOT_CONNECTED));
     }
 
@@ -98,7 +104,7 @@ public class SecuredController extends Security.Authenticator {
         return new LanguageCode(Context.current().session().get(SESSION_DEFAULT_LANGUAGE_STORE));
     }
 
-    public void controlDataAccess(Form form, Period period, Scope scope){//},boolean returnErrorMessage) {
+    public void controlDataAccess(Form form, Period period, Scope scope) {//},boolean returnErrorMessage) {
 
         if (form == null) {
             throw new MyrmexRuntimeException(BusinessErrorType.WRONG_RIGHT);
@@ -207,12 +213,10 @@ public class SecuredController extends Security.Authenticator {
                     res.add(accountSiteAssociation.getSite());
                 }
             }
-        }
-        else if (getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.ORG)) {
+        } else if (getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.ORG)) {
             // add organization
             res.add(account.getOrganization());
-        }
-        else if (getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.PRODUCT)) {
+        } else if (getCurrentUser().getOrganization().getInterfaceCode().getScopeTypeCode().equals(ScopeTypeCode.PRODUCT)) {
             // add authorized product
             for (AccountProductAssociation accountProductAssociation : accountProductAssociationService.findByAccount(account)) {
                 if (accountProductAssociation.getProduct().getListPeriodAvailable().contains(period)) {

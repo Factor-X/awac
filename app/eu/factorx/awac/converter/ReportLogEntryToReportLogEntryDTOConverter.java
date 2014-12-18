@@ -13,6 +13,7 @@ import eu.factorx.awac.service.impl.reporting.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
+import play.Logger;
 
 @Component
 public class ReportLogEntryToReportLogEntryDTOConverter implements Converter<ReportLogEntry, ReportLogEntryDTO> {
@@ -62,7 +63,6 @@ public class ReportLogEntryToReportLogEntryDTOConverter implements Converter<Rep
 
             ReportLogNoSuitableFactorEntryDTO reportLogNoSuitableFactorEntryDTO = new ReportLogNoSuitableFactorEntryDTO();
 
-
             reportLogNoSuitableFactorEntryDTO.setBiActivityCategory(activityCategory.getKey());
             reportLogNoSuitableFactorEntryDTO.setBiActivitySubCategory(activitySubCategory.getKey());
             reportLogNoSuitableFactorEntryDTO.setBiUnit(biUnit.getSymbol());
@@ -71,6 +71,8 @@ public class ReportLogEntryToReportLogEntryDTOConverter implements Converter<Rep
             reportLogNoSuitableFactorEntryDTO.setBiIndicatorCategory(icIndicatorCategory.getKey());
             reportLogNoSuitableFactorEntryDTO.setAdActivityType(adActivityTypeCode.getKey());
             reportLogNoSuitableFactorEntryDTO.setAdActivitySource(adActivitySource.getKey());
+
+
 
             return reportLogNoSuitableFactorEntryDTO;
         }
