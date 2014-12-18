@@ -18,6 +18,7 @@ import eu.factorx.awac.models.reporting.ReportResult;
 import eu.factorx.awac.service.*;
 import eu.factorx.awac.service.impl.reporting.*;
 import eu.factorx.awac.util.BusinessErrorType;
+import eu.factorx.awac.util.Colors;
 import eu.factorx.awac.util.MyrmexFatalException;
 import jxl.read.biff.BiffException;
 import jxl.write.WriteException;
@@ -226,6 +227,7 @@ public class ResultController extends AbstractController {
 
 			// 2.5. Each ReportResult is rendered to a SVG string - WEB
 			resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWeb(mergedReportResultAggregation));
+
 		}
 
 
@@ -284,22 +286,20 @@ public class ResultController extends AbstractController {
 			resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getHistogram(reportResultAggregation));
 
 			// 2.5. Each ReportResult is rendered to a SVG string - WEB
-			if (awacCalculator.getInterfaceTypeCode().equals(InterfaceTypeCode.HOUSEHOLD)) {
-				Map<String, Double> type = getTypicalHouseholdResultValues();
-				Map<String, Double> ideal = getIdealHouseholdResultValues();
+			InterfaceTypeCode interfaceTypeCode = awacCalculator.getInterfaceTypeCode();
+			if (interfaceTypeCode.equals(InterfaceTypeCode.HOUSEHOLD) || interfaceTypeCode.equals(InterfaceTypeCode.HOUSEHOLD) || interfaceTypeCode.equals(InterfaceTypeCode.EVENT)) {
+				Map<String, Double> type = getTypicalResultValues(interfaceTypeCode);
+				Map<String, Double> ideal = getIdealResultValues(interfaceTypeCode);
 				resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWebWithReferences(reportResultAggregation, type, ideal));
-			} else if (awacCalculator.getInterfaceTypeCode().equals(InterfaceTypeCode.LITTLEEMITTER)) {
-				Map<String, Double> type = getTypicaLittleEmitterResultValues();
-				Map<String, Double> ideal = getIdealLittleEmitterResultValues();
-				resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWebWithReferences(reportResultAggregation, type, ideal));
-			} else if (awacCalculator.getInterfaceTypeCode().equals(InterfaceTypeCode.EVENT)) {
-				Map<String, Double> type = getTypicaEventResultValues();
-				Map<String, Double> ideal = getIdealEventResultValues();
-				resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWebWithReferences(reportResultAggregation, type, ideal));
+
+				// 2.6. Add references
+				resultsDTO.getTypeMap().putAll(type);
+				resultsDTO.getIdealMap().putAll(ideal);
+				setTypicalAndIdealResultsColors(resultsDTO, reportResultAggregation);
+
 			} else {
 				resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWeb(reportResultAggregation));
 			}
-
 		}
 
 		// 3. Add log entries
@@ -313,64 +313,6 @@ public class ResultController extends AbstractController {
 
 		// 4. PUSH !!!
 		return ok(resultsDTO);
-	}
-
-	private Map<String, Double> getTypicalHouseholdResultValues() {
-		Map<String, Double> type = new HashMap<>();
-		type.put("IMe_1", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "TYPICAL_HOUSEHOLD_HOUSING")).getLabelEn()));
-		type.put("IMe_2", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "TYPICAL_HOUSEHOLD_MOBILITY")).getLabelEn()));
-		type.put("IMe_3", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "TYPICAL_HOUSEHOLD_CONSUMPTION")).getLabelEn()));
-		type.put("IMe_4", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "TYPICAL_HOUSEHOLD_WASTE")).getLabelEn()));
-		return type;
-	}
-
-	private Map<String, Double> getIdealHouseholdResultValues() {
-		Map<String, Double> ideal = new HashMap<>();
-		ideal.put("IMe_1", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "IDEAL_HOUSEHOLD_HOUSING")).getLabelEn()));
-		ideal.put("IMe_2", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "IDEAL_HOUSEHOLD_MOBILITY")).getLabelEn()));
-		ideal.put("IMe_3", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "IDEAL_HOUSEHOLD_CONSUMPTION")).getLabelEn()));
-		ideal.put("IMe_4", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "IDEAL_HOUSEHOLD_WASTE")).getLabelEn()));
-		return ideal;
-	}
-
-	private Map<String, Double> getTypicaEventResultValues() {
-		Map<String, Double> type = new HashMap<>();
-		type.put("IEv_1", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "TYPICAL_EVENT_LOCATION")).getLabelEn()));
-		type.put("IEv_2", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "TYPICAL_EVENT_MOBILITY")).getLabelEn()));
-		type.put("IEv_3", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "TYPICAL_EVENT_LOGISTICS")).getLabelEn()));
-		type.put("IEv_4", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "TYPICAL_EVENT_SUPPLIES")).getLabelEn()));
-		type.put("IEv_5", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "TYPICAL_EVENT_WASTE")).getLabelEn()));
-		return type;
-	}
-
-	private Map<String, Double> getIdealEventResultValues() {
-		Map<String, Double> ideal = new HashMap<>();
-		ideal.put("IEv_1", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "IDEAL_EVENT_LOCATION")).getLabelEn()));
-		ideal.put("IEv_2", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "IDEAL_EVENT_MOBILITY")).getLabelEn()));
-		ideal.put("IEv_3", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "IDEAL_EVENT_LOGISTICS")).getLabelEn()));
-		ideal.put("IEv_4", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "IDEAL_EVENT_SUPPLIES")).getLabelEn()));
-		ideal.put("IEv_5", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "IDEAL_EVENT_WASTE")).getLabelEn()));
-		return ideal;
-	}
-
-	private Map<String, Double> getTypicaLittleEmitterResultValues() {
-		Map<String, Double> type = new HashMap<>();
-		type.put("IPE_1", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "TYPICAL_LITTLEEMITTER_SITE_ACTIVITIES")).getLabelEn()));
-		type.put("IPE_2", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "TYPICAL_LITTLEEMITTER_MOBILITY")).getLabelEn()));
-		type.put("IPE_3", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "TYPICAL_LITTLEEMITTER_LOGISTICS")).getLabelEn()));
-		type.put("IPE_4", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "TYPICAL_LITTLEEMITTER_MATERIALS")).getLabelEn()));
-		type.put("IPE_5", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "TYPICAL_LITTLEEMITTER_WASTE")).getLabelEn()));
-		return type;
-	}
-
-	private Map<String, Double> getIdealLittleEmitterResultValues() {
-		Map<String, Double> ideal = new HashMap<>();
-		ideal.put("IPE_1", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "IDEAL_LITTLEEMITTER_SITE_ACTIVITIES")).getLabelEn()));
-		ideal.put("IPE_2", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "IDEAL_LITTLEEMITTER_MOBILITY")).getLabelEn()));
-		ideal.put("IPE_3", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "IDEAL_LITTLEEMITTER_LOGISTICS")).getLabelEn()));
-		ideal.put("IPE_4", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "IDEAL_LITTLEEMITTER_MATERIALS")).getLabelEn()));
-		ideal.put("IPE_5", Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, "IDEAL_LITTLEEMITTER_WASTE")).getLabelEn()));
-		return ideal;
 	}
 
 	private void controlScope(List<Scope> listScope) {
@@ -412,5 +354,70 @@ public class ResultController extends AbstractController {
 		throw new MyrmexFatalException(BusinessErrorType.NOT_YOUR_SCOPE_LITTLE);
 	}
 
+	private Map<String, Double> getTypicalResultValues(InterfaceTypeCode interfaceTypeCode) {
+		Map<String, Double> type = new HashMap<>();
+		if (InterfaceTypeCode.HOUSEHOLD.equals(interfaceTypeCode)) {
+			type.put("IMe_1", getDoubleValue("TYPICAL_HOUSEHOLD_HOUSING"));
+			type.put("IMe_2", getDoubleValue("TYPICAL_HOUSEHOLD_MOBILITY"));
+			type.put("IMe_3", getDoubleValue("TYPICAL_HOUSEHOLD_CONSUMPTION"));
+			type.put("IMe_4", getDoubleValue("TYPICAL_HOUSEHOLD_WASTE"));
+		} else if (InterfaceTypeCode.EVENT.equals(interfaceTypeCode)) {
+			type.put("IEv_1", getDoubleValue("TYPICAL_EVENT_LOCATION"));
+			type.put("IEv_2", getDoubleValue("TYPICAL_EVENT_MOBILITY"));
+			type.put("IEv_3", getDoubleValue("TYPICAL_EVENT_LOGISTICS"));
+			type.put("IEv_4", getDoubleValue("TYPICAL_EVENT_SUPPLIES"));
+			type.put("IEv_5", getDoubleValue("TYPICAL_EVENT_WASTE"));
+		} else if (InterfaceTypeCode.LITTLEEMITTER.equals(interfaceTypeCode)) {
+			type.put("IPE_1", getDoubleValue("TYPICAL_LITTLEEMITTER_SITE_ACTIVITIES"));
+			type.put("IPE_2", getDoubleValue("TYPICAL_LITTLEEMITTER_MOBILITY"));
+			type.put("IPE_3", getDoubleValue("TYPICAL_LITTLEEMITTER_LOGISTICS"));
+			type.put("IPE_4", getDoubleValue("TYPICAL_LITTLEEMITTER_MATERIALS"));
+			type.put("IPE_5", getDoubleValue("TYPICAL_LITTLEEMITTER_WASTE"));
+		}
+		return type;
+	}
+
+	private Map<String, Double> getIdealResultValues(InterfaceTypeCode interfaceTypeCode) {
+		Map<String, Double> ideal = new HashMap<>();
+		if (InterfaceTypeCode.HOUSEHOLD.equals(interfaceTypeCode)) {
+			ideal.put("IMe_1", getDoubleValue("IDEAL_HOUSEHOLD_HOUSING"));
+			ideal.put("IMe_2", getDoubleValue("IDEAL_HOUSEHOLD_MOBILITY"));
+			ideal.put("IMe_3", getDoubleValue("IDEAL_HOUSEHOLD_CONSUMPTION"));
+			ideal.put("IMe_4", getDoubleValue("IDEAL_HOUSEHOLD_WASTE"));
+		} else if (InterfaceTypeCode.EVENT.equals(interfaceTypeCode)) {
+			ideal.put("IEv_1", getDoubleValue("IDEAL_EVENT_LOCATION"));
+			ideal.put("IEv_2", getDoubleValue("IDEAL_EVENT_MOBILITY"));
+			ideal.put("IEv_3", getDoubleValue("IDEAL_EVENT_LOGISTICS"));
+			ideal.put("IEv_4", getDoubleValue("IDEAL_EVENT_SUPPLIES"));
+			ideal.put("IEv_5", getDoubleValue("IDEAL_EVENT_WASTE"));
+		} else if (InterfaceTypeCode.LITTLEEMITTER.equals(interfaceTypeCode)) {
+			ideal.put("IPE_1", getDoubleValue("IDEAL_LITTLEEMITTER_SITE_ACTIVITIES"));
+			ideal.put("IPE_2", getDoubleValue("IDEAL_LITTLEEMITTER_MOBILITY"));
+			ideal.put("IPE_3", getDoubleValue("IDEAL_LITTLEEMITTER_LOGISTICS"));
+			ideal.put("IPE_4", getDoubleValue("IDEAL_LITTLEEMITTER_MATERIALS"));
+			ideal.put("IPE_5", getDoubleValue("IDEAL_LITTLEEMITTER_WASTE"));
+		}
+		return ideal;
+	}
+
+	private Double getDoubleValue(String valueKey) {
+		return Double.valueOf(codeLabelService.findCodeLabelByCode(new Code(CodeList.TRANSLATIONS_INTERFACE, valueKey)).getLabelEn());
+	}
+
+	private void setTypicalAndIdealResultsColors(ResultsDTO resultsDTO, ReportResultAggregation reportResultAggregation) {
+		int c;
+		Double totalValue = 0.0;
+		for (ReportResultIndicatorAggregation aggregation : reportResultAggregation.getReportResultIndicatorAggregationList()) {
+			totalValue += aggregation.getTotalValue();
+		}
+		if (totalValue > 0) {
+			c = 1;
+		} else {
+			c = 0;
+		}
+
+		resultsDTO.setTypeColor("#" + Colors.makeGoodColorForSerieElement(c, c + 2));
+		resultsDTO.setIdealColor("#" + Colors.makeGoodColorForSerieElement(c + 1, c + 2));
+	}
 
 }

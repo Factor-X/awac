@@ -19,6 +19,8 @@ public class ResultsDTO extends DTO {
 	private Map<String, String> svgHistogramsCEF;
 	private Map<String, Double> typeMap;
 	private Map<String, Double> idealMap;
+	private String typeColor;
+	private String idealColor;
 
 	public ResultsDTO() {
 		reportDTOs = new HashMap<>();
@@ -87,5 +89,21 @@ public class ResultsDTO extends DTO {
 
 	public void setIdealMap(Map<String, Double> idealMap) {
 		this.idealMap = idealMap;
+	}
+
+	public void setTypeColor(String typeColor) {
+		this.typeColor = typeColor;
+	}
+
+	public String getTypeColor() {
+		return typeColor;
+	}
+
+	public void setIdealColor(String idealColor) {
+		this.idealColor = idealColor;
+	}
+
+	public String getIdealColor() {
+		return idealColor;
 	}
 }

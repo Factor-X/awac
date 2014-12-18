@@ -1,35 +1,38 @@
 .chart-legend
 
-    //
-        span {{ ngModel.reportLines }}
-
     div(ng-show="(ngModel.reportLines | filter:{color: '!!'}).length == 0")
         span(ng-bind-html="'RESULTS_LEGENDS_NODATA' | translate")
 
-    table(ng-hide="(ngModel.reportLines | filter:{color: '!!'}).length == 0")
-        thead(ng-show="ngModel.rightPeriod != null")
+    table
+        thead
             tr
                 th
+
+                th(ng-hide="(ngModel.reportLines | filter:{color: '!!'}).length == 0")
+                    span.period-header(style="color: {{ ngModel.leftColor }}; border-bottom-color: {{ ngModel.leftColor }}") {{ngModel.leftPeriod}}
+
+                th(ng-show="ngModel.rightPeriod != null")
+                    span.period-header(style="color: {{ ngModel.rightColor }}; border-bottom-color: {{ ngModel.rightColor }}") {{ngModel.rightPeriod}}
+
                 th
-                th(colspan="2")
-                    span.period-header(style="color: {{ {false: ngModel.leftColor, true: ''}[getMode()!='numbers'] }}; border-bottom-color: {{ {false: ngModel.leftColor, true: ''}[getMode()!='numbers'] }}") {{ngModel.leftPeriod}}
-                th(colspan="2")
-                    span.period-header(style="color: {{ {false: ngModel.rightColor, true: ''}[getMode()!='numbers'] }}; border-bottom-color: {{ {false: ngModel.rightColor, true: ''}[getMode()!='numbers'] }}") {{ngModel.rightPeriod}}
+                    span.period-header(style="color: {{ ngTypeColor }}; border-bottom-color: {{ ngTypeColor }}") Type
+
+                th
+                    span.period-header(style="color: {{ ngIdealColor }}; border-bottom-color: {{ ngIdealColor }}") Ideal
+
+
         tbody
-            tr(ng-repeat="line in ngModel.reportLines | filter:{color: '!!'}")
+            tr(ng-repeat="(indicator, value) in ngType")
                 td
-                    span.circled-number(ng-show="getMode()=='numbers' && getNumber(line) != null") {{ getNumber(line) }}
+                    span.circled-number(ng-show="getNumber(indicator) != null") {{ getNumber(indicator) }}
 
-                td
-                    span(ng-bind-html="line.indicatorName | translate")
+                td.align-right.data-cell(ng-hide="(ngModel.reportLines | filter:{color: '!!'}).length == 0")
+                    span {{ getLeftTotal(indicator) | numberToI18NRoundedOrFullIfLessThanOne }}&nbsp;tCO2e
 
-                td.align-right.data-cell(style="color: {{ {false: ngModel.leftColor, true: ''}[getMode()!='numbers'] }}")
-                    span {{ (line.leftScope1Value + line.leftScope2Value + line.leftScope3Value + line.leftOutOfScopeValue) | numberToI18NRoundedOrFullIfLessThanOne }}&nbsp;tCO2e
-                td.align-right.data-cell.opacity-50(style="color: {{ {false: ngModel.leftColor, true: ''}[getMode()!='numbers'] }}")
-                    span {{ line.leftPercentage | numberToI18N }}&nbsp;%&nbsp;
+                td.align-right.data-cell(ng-show="ngModel.rightPeriod != null")
+                    span {{ getRightTotal(indicator) | numberToI18NRoundedOrFullIfLessThanOne }}&nbsp;tCO2e
 
-                td.align-right.data-cell(ng-show="ngModel.rightPeriod != null", style="color: {{ {false: ngModel.rightColor, true: ''}[getMode()!='numbers'] }}")
-                    span {{ (line.rightScope1Value + line.rightScope2Value + line.rightScope3Value + line.rightOutOfScopeValue) | numberToI18NRoundedOrFullIfLessThanOne }}&nbsp;tCO2e
-                td.align-right.data-cell.opacity-50(ng-show="ngModel.rightPeriod != null", style="color: {{ {false: ngModel.rightColor, true: ''}[getMode()!='numbers'] }}")
-                    span {{ line.rightPercentage | numberToI18N }}&nbsp;%&nbsp;
-
+                td.align-right.data-cell
+                    span {{ ngType[indicator] | numberToI18NRoundedOrFullIfLessThanOne }}&nbsp;tCO2e
+                td.align-right.data-cell
+                    span {{ ngIdeal[indicator] | numberToI18NRoundedOrFullIfLessThanOne }}&nbsp;tCO2e
