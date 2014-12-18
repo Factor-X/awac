@@ -123,6 +123,8 @@ public class AuthenticationController extends AbstractController {
 
 		Account account = null;
 
+        session().clear();
+
         // wait a while to be sure async session clear is done
         try {
             Thread.sleep(1000);
@@ -256,7 +258,15 @@ public class AuthenticationController extends AbstractController {
 	// logout action cf routes
 	@Transactional(readOnly = true)
 	public Result logout() {
-securedController.logout();
+        securedController.logout();
+
+        // wait a while to be sure async session clear is done
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            // do nothing
+        }
+
         return ok(new ReturnDTO());
 	}
 
