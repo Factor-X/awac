@@ -228,6 +228,16 @@ public class ResultController extends AbstractController {
 			// 2.5. Each ReportResult is rendered to a SVG string - WEB
 			resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWeb(mergedReportResultAggregation));
 
+			// 2.6. Add references
+			InterfaceTypeCode interfaceTypeCode = awacCalculator.getInterfaceTypeCode();
+			if (interfaceTypeCode.equals(InterfaceTypeCode.HOUSEHOLD) || interfaceTypeCode.equals(InterfaceTypeCode.HOUSEHOLD) || interfaceTypeCode.equals(InterfaceTypeCode.EVENT)) {
+				Map<String, Double> type = getTypicalResultValues(interfaceTypeCode);
+				Map<String, Double> ideal = getIdealResultValues(interfaceTypeCode);
+
+				resultsDTO.getTypeMap().putAll(type);
+				resultsDTO.getIdealMap().putAll(ideal);
+				setTypicalAndIdealResultsColors(resultsDTO, mergedReportResultAggregation);
+			}
 		}
 
 
@@ -419,5 +429,22 @@ public class ResultController extends AbstractController {
 		resultsDTO.setTypeColor("#" + Colors.makeGoodColorForSerieElement(c, c + 2));
 		resultsDTO.setIdealColor("#" + Colors.makeGoodColorForSerieElement(c + 1, c + 2));
 	}
+
+	private void setTypicalAndIdealResultsColors(ResultsDTO resultsDTO, MergedReportResultAggregation mergedReportResultAggregation) {
+		int c;
+		Double totalValue = 0.0;
+		for (MergedReportResultIndicatorAggregation aggregation : mergedReportResultAggregation.getMergedReportResultIndicatorAggregationList()) {
+			totalValue += (aggregation.getLeftTotalValue() + aggregation.getRightTotalValue());
+		}
+		if (totalValue > 0) {
+			c = 1;
+		} else {
+			c = 0;
+		}
+
+		resultsDTO.setTypeColor("#" + Colors.makeGoodColorForSerieElement(c, c + 2));
+		resultsDTO.setIdealColor("#" + Colors.makeGoodColorForSerieElement(c + 1, c + 2));
+	}
+
 
 }
