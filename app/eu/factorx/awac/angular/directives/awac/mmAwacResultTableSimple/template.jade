@@ -14,12 +14,12 @@ ng-virtual
                         span  (tCO2e)
 
                 th(ng-show="getTypicalResultTotal() > 0")
-                    span.period-header.wrapped
+                    span.period-header.wrapped(style="color: {{ ngTypeColor }}; border-bottom-color: {{ ngTypeColor }}")
                         span(ng-bind-html="getTypicalResultLabelKey() | translate")
                         span  (tCO2e)
 
                 th(ng-show="getIdealResultTotal() > 0")
-                    span.period-header.wrapped
+                    span.period-header.wrapped(style="color: {{ ngIdealColor }}; border-bottom-color: {{ ngIdealColor }}")
                         span(ng-bind-html="getIdealResultLabelKey() | translate")
                         span  (tCO2e)
 
@@ -34,10 +34,10 @@ ng-virtual
                 td.align-right.scope1(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
                     span(ng-bind-html="(rl.rightScope1Value + rl.rightScope2Value + rl.rightScope3Value) | numberToI18NOrLess", ng-show="(rl.rightScope1Value + rl.rightScope2Value + rl.rightScope3Value) > 0")
 
-                td.align-right.scope1(ng-show="getTypicalResultTotal() > 0")
+                td.align-right.scope1(ng-show="getTypicalResultTotal() > 0", style="color: {{ ngTypeColor }}")
                     span(ng-bind-html="ngTypeMap[rl.indicatorName] | numberToI18NOrLess")
 
-                td.align-right.scope1(ng-show="getIdealResultTotal() > 0")
+                td.align-right.scope1(ng-show="getIdealResultTotal() > 0", style="color: {{ ngIdealColor }}")
                     span(ng-bind-html="ngIdealMap[rl.indicatorName] | numberToI18NOrLess")
 
         tfoot
@@ -51,10 +51,10 @@ ng-virtual
                 td.align-right.scope1(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
                     span(ng-bind-html="getRightTotal() | numberToI18NOrLess")
 
-                td.align-right.scope1(ng-show="getTypicalResultTotal() > 0")
+                td.align-right.scope1(ng-show="getTypicalResultTotal() > 0", style="color: {{ ngTypeColor }}")
                     span {{ getTypicalResultTotal() | numberToI18NOrLess }}
 
-                td.align-right.scope1(ng-show="getIdealResultTotal() > 0")
+                td.align-right.scope1(ng-show="getIdealResultTotal() > 0", style="color: {{ ngIdealColor }}")
                     span {{ getIdealResultTotal() | numberToI18NOrLess }}
 
             tr
@@ -63,12 +63,9 @@ ng-virtual
                     span.period-footer(style="color: {{ ngModel.leftColor }}; border-top-color: {{ ngModel.leftColor }}")
                 td.align-right.scope1(ng-show="ngModel.rightPeriod!=null", style="color: {{ ngModel.rightColor }}")
                     span.period-footer(style="color: {{ ngModel.rightColor }}; border-top-color: {{ ngModel.rightColor }}")
-                td.align-right.scope1(ng-show="getTypicalResultTotal() > 0", style="color: {{ ngModel.rightColor }}")
-                    span.period-footer(style="color: {{ ngModel.rightColor }}; border-top-color: {{ ngModel.rightColor }}")
-                td.align-right.scope1(ng-show="getIdealResultTotal() > 0", style="color: {{ ngModel.rightColor }}")
-                    span.period-footer(style="color: {{ ngModel.rightColor }}; border-top-color: {{ ngModel.rightColor }}")
+                td.align-right.scope1(ng-show="getTypicalResultTotal() > 0", style="color: {{ ngTypeColor }}")
+                    span.period-footer(style="color: {{ ngTypeColor }}; border-top-color: {{ ngTypeColor }}")
+                td.align-right.scope1(ng-show="getIdealResultTotal() > 0", style="color: {{ ngIdealColor }}")
+                    span.period-footer(style="color: {{ ngIdealColor }}; border-top-color: {{ ngIdealColor }}")
 
-    div
-        input(type="checkbox", ng-model="showAll")
-        label
-            span(ng-bind-html="'SHOW_ALL_INDICATORS' | translate")
+    br
