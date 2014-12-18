@@ -226,7 +226,20 @@ public class ResultController extends AbstractController {
 			resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getHistogram(awacCalculator, mergedReportResultAggregation));
 
 			// 2.5. Each ReportResult is rendered to a SVG string - WEB
-			resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWeb(awacCalculator, mergedReportResultAggregation));
+			InterfaceTypeCode interfaceTypeCode = awacCalculator.getInterfaceTypeCode();
+			if (interfaceTypeCode.equals(InterfaceTypeCode.HOUSEHOLD) || interfaceTypeCode.equals(InterfaceTypeCode.HOUSEHOLD) || interfaceTypeCode.equals(InterfaceTypeCode.EVENT)) {
+				Map<String, Double> type = getTypicalResultValues(interfaceTypeCode);
+				Map<String, Double> ideal = getIdealResultValues(interfaceTypeCode);
+				resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWebWithReferences(awacCalculator, mergedReportResultAggregation, type, ideal));
+
+				// 2.6. Add references
+				resultsDTO.getTypeMap().putAll(type);
+				resultsDTO.getIdealMap().putAll(ideal);
+				setTypicalAndIdealResultsColors(resultsDTO, mergedReportResultAggregation);
+
+			} else {
+				resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWeb(awacCalculator, mergedReportResultAggregation));
+			}
 
 		}
 
@@ -409,6 +422,22 @@ public class ResultController extends AbstractController {
 		Double totalValue = 0.0;
 		for (ReportResultIndicatorAggregation aggregation : reportResultAggregation.getReportResultIndicatorAggregationList()) {
 			totalValue += aggregation.getTotalValue();
+		}
+		if (totalValue > 0) {
+			c = 1;
+		} else {
+			c = 0;
+		}
+
+		resultsDTO.setTypeColor("#" + Colors.makeGoodColorForSerieElement(c, c + 2));
+		resultsDTO.setIdealColor("#" + Colors.makeGoodColorForSerieElement(c + 1, c + 2));
+	}
+
+	private void setTypicalAndIdealResultsColors(ResultsDTO resultsDTO, MergedReportResultAggregation mergedReportResultAggregation) {
+		int c;
+		Double totalValue = 0.0;
+		for (MergedReportResultIndicatorAggregation aggregation : mergedReportResultAggregation.getMergedReportResultIndicatorAggregationList()) {
+			totalValue += aggregation.getLeftTotalValue() + aggregation.getRightTotalValue();
 		}
 		if (totalValue > 0) {
 			c = 1;
