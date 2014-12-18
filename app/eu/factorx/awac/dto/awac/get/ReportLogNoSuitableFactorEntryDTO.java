@@ -10,7 +10,10 @@ public class ReportLogNoSuitableFactorEntryDTO extends ReportLogEntryDTO {
 	private String adActivityType;
 	private String adActivitySource;
 
-	public ReportLogNoSuitableFactorEntryDTO(String biActivityCategory, String biActivitySubCategory, String biUnit, Double adValue, String adUnit, String biIndicatorCategory, String adActivityType, String adActivitySource) {
+    public ReportLogNoSuitableFactorEntryDTO() {
+    }
+
+    public ReportLogNoSuitableFactorEntryDTO(String biActivityCategory, String biActivitySubCategory, String biUnit, Double adValue, String adUnit, String biIndicatorCategory, String adActivityType, String adActivitySource) {
 		this.biActivityCategory = biActivityCategory;
 		this.biActivitySubCategory = biActivitySubCategory;
 		this.biUnit = biUnit;
@@ -21,7 +24,39 @@ public class ReportLogNoSuitableFactorEntryDTO extends ReportLogEntryDTO {
 		this.adActivitySource = adActivitySource;
 	}
 
-	public String getBiActivityCategory() {
+    public void setBiActivityCategory(String biActivityCategory) {
+        this.biActivityCategory = biActivityCategory;
+    }
+
+    public void setBiActivitySubCategory(String biActivitySubCategory) {
+        this.biActivitySubCategory = biActivitySubCategory;
+    }
+
+    public void setBiUnit(String biUnit) {
+        this.biUnit = biUnit;
+    }
+
+    public void setAdValue(Double adValue) {
+        this.adValue = adValue;
+    }
+
+    public void setAdUnit(String adUnit) {
+        this.adUnit = adUnit;
+    }
+
+    public void setBiIndicatorCategory(String biIndicatorCategory) {
+        this.biIndicatorCategory = biIndicatorCategory;
+    }
+
+    public void setAdActivityType(String adActivityType) {
+        this.adActivityType = adActivityType;
+    }
+
+    public void setAdActivitySource(String adActivitySource) {
+        this.adActivitySource = adActivitySource;
+    }
+
+    public String getBiActivityCategory() {
 		return biActivityCategory;
 	}
 
