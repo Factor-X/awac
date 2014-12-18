@@ -219,14 +219,14 @@ public class ResultController extends AbstractController {
 			resultsDTO.getReportDTOs().put(reportKey, conversionService.convert(mergedReportResultAggregation, ReportDTO.class));
 
 			// 2.3. Each ReportResult is rendered to a SVG string - DONUT
-			resultsDTO.getLeftSvgDonuts().put(reportKey, resultSvgGeneratorService.getLeftDonut(mergedReportResultAggregation));
-			resultsDTO.getRightSvgDonuts().put(reportKey, resultSvgGeneratorService.getRightDonut(mergedReportResultAggregation));
+			resultsDTO.getLeftSvgDonuts().put(reportKey, resultSvgGeneratorService.getLeftDonut(awacCalculator, mergedReportResultAggregation));
+			resultsDTO.getRightSvgDonuts().put(reportKey, resultSvgGeneratorService.getRightDonut(awacCalculator, mergedReportResultAggregation));
 
 			// 2.4. Each ReportResult is rendered to a SVG string - HISTOGRAM
-			resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getHistogram(mergedReportResultAggregation));
+			resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getHistogram(awacCalculator, mergedReportResultAggregation));
 
 			// 2.5. Each ReportResult is rendered to a SVG string - WEB
-			resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWeb(mergedReportResultAggregation));
+			resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWeb(awacCalculator, mergedReportResultAggregation));
 
 		}
 
@@ -244,7 +244,7 @@ public class ResultController extends AbstractController {
 			// 2.2b. Each ReportResult is rendered to a SVG string - WEB
 			resultsDTO.getReportCEFDTOs().put(reportKey, conversionService.convert(mergedReportResultAggregation, ReportDTO.class));
 			// 2.4. Each ReportResult is rendered to a SVG string - HISTOGRAM
-			resultsDTO.getSvgHistogramsCEF().put(reportKey, resultSvgGeneratorService.getHistogram(mergedReportResultAggregation));
+			resultsDTO.getSvgHistogramsCEF().put(reportKey, resultSvgGeneratorService.getHistogram(awacCalculator, mergedReportResultAggregation));
 		}
 
 
@@ -280,17 +280,17 @@ public class ResultController extends AbstractController {
 			resultsDTO.getReportDTOs().put(reportKey, conversionService.convert(reportResultAggregation, ReportDTO.class));
 
 			// 2.3. Each ReportResult is rendered to a SVG string - DONUT
-			resultsDTO.getLeftSvgDonuts().put(reportKey, resultSvgGeneratorService.getDonut(reportResultAggregation));
+			resultsDTO.getLeftSvgDonuts().put(reportKey, resultSvgGeneratorService.getDonut(awacCalculator, reportResultAggregation));
 
 			// 2.4. Each ReportResult is rendered to a SVG string - HISTOGRAM
-			resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getHistogram(reportResultAggregation));
+			resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getHistogram(awacCalculator, reportResultAggregation));
 
 			// 2.5. Each ReportResult is rendered to a SVG string - WEB
 			InterfaceTypeCode interfaceTypeCode = awacCalculator.getInterfaceTypeCode();
 			if (interfaceTypeCode.equals(InterfaceTypeCode.HOUSEHOLD) || interfaceTypeCode.equals(InterfaceTypeCode.HOUSEHOLD) || interfaceTypeCode.equals(InterfaceTypeCode.EVENT)) {
 				Map<String, Double> type = getTypicalResultValues(interfaceTypeCode);
 				Map<String, Double> ideal = getIdealResultValues(interfaceTypeCode);
-				resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWebWithReferences(reportResultAggregation, type, ideal));
+				resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWebWithReferences(awacCalculator, reportResultAggregation, type, ideal));
 
 				// 2.6. Add references
 				resultsDTO.getTypeMap().putAll(type);
@@ -298,7 +298,7 @@ public class ResultController extends AbstractController {
 				setTypicalAndIdealResultsColors(resultsDTO, reportResultAggregation);
 
 			} else {
-				resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWeb(reportResultAggregation));
+				resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWeb(awacCalculator, reportResultAggregation));
 			}
 		}
 
