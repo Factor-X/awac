@@ -14,13 +14,13 @@
                 th(ng-show="ngModel.rightPeriod != null")
                     span.period-header(style="color: {{ ngModel.rightColor }}; border-bottom-color: {{ ngModel.rightColor }}") {{ngModel.rightPeriod}}
 
-                th
+                th(ng-show="isTypicalShown()")
                     span.period-header(style="color: {{ ngTypeColor }}; border-bottom-color: {{ ngTypeColor }}")
                         span(ng-show="$root.instanceName == 'household'", ng-bind-html="'TYPICAL_HOUSEHOLD_TITLE' | translate")
                         span(ng-show="$root.instanceName == 'event'", ng-bind-html="'TYPICAL_EVENT_TITLE' | translate")
                         span(ng-show="$root.instanceName == 'littleemitter'", ng-bind-html="'TYPICAL_LITTLEEMITTER_TITLE' | translate")
 
-                th
+                th(ng-show="isIdealShown()")
                     span.period-header(style="color: {{ ngIdealColor }}; border-bottom-color: {{ ngIdealColor }}")
                         span(ng-show="$root.instanceName == 'household'", ng-bind-html="'IDEAL_HOUSEHOLD_TITLE' | translate")
                         span(ng-show="$root.instanceName == 'event'", ng-bind-html="'IDEAL_EVENT_TITLE' | translate")
@@ -38,7 +38,7 @@
                 td.align-right.data-cell(ng-show="ngModel.rightPeriod != null")
                     span {{ getRightTotal(indicator) | numberToI18NRoundedOrFullIfLessThanOne }}&nbsp;tCO2e
 
-                td.align-right.data-cell
+                td.align-right.data-cell(ng-show="isTypicalShown()")
                     span {{ ngType[indicator] | numberToI18NRoundedOrFullIfLessThanOne }}&nbsp;tCO2e
-                td.align-right.data-cell
+                td.align-right.data-cell(ng-show="isIdealShown()")
                     span {{ ngIdeal[indicator] | numberToI18NRoundedOrFullIfLessThanOne }}&nbsp;tCO2e

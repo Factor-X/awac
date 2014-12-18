@@ -153,7 +153,10 @@ public class ResultController extends AbstractController {
 
 		LanguageCode lang = securedController.getCurrentUser().getPerson().getDefaultLanguage();
 		InterfaceTypeCode interfaceCode = securedController.getCurrentUser().getOrganization().getInterfaceCode();
-		byte[] bytes = resultPdfGeneratorService.generate(lang, scopes, period, comparedPeriod, interfaceCode);
+		AwacCalculator awacCalculator = awacCalculatorService.findByCode(interfaceCode);
+		Map<String, Double> type = getTypicalResultValues(interfaceCode);
+		Map<String, Double> ideal = getIdealResultValues(interfaceCode);
+		byte[] bytes = resultPdfGeneratorService.generate(awacCalculator, lang, scopes, period, comparedPeriod, interfaceCode, type, ideal);
 
 		DownloadFileDTO downloadFileDTO = new DownloadFileDTO();
 		downloadFileDTO.setFilename("export_bilanGES_" + DateTime.now().toString("YMd-HH:mm").replace(':', 'h') + ".pdf");
