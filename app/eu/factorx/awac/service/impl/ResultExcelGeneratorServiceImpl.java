@@ -172,16 +172,13 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 					int index = 5;
 					for (Map.Entry<String, List<Double>> row : scopeValuesByIndicator.entrySet()) {
 
+						Logger.info("row = " + row);
 						CodeLabel codeLabel = codeLabelService.findCodeLabelByCode(new Code(CodeList.INDICATOR, row.getKey()));
 
 						sheet.addCell(new Label(0, index, codeLabel.getLabel(lang)));
 
 						// total of emissions (all scopes)
-						double total = 0;
-						for (Double value : row.getValue()) {
-							total += value;
-						}
-						sheet.addCell(new Number(1, index, total));
+						sheet.addCell(new Number(1, index, row.getValue().get(0)));
 
 						// typical emission
 						sheet.addCell(new Number(2, index, typicalResultValues.get(row.getKey())));
@@ -761,8 +758,8 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 
 						sheet.addCell(new Label(0, index, codeLabel.getLabel(lang)));
 
-						sheet.addCell(new Number(1, index, row.getLeftScope1Value() + row.getLeftScope2Value() + row.getLeftScope3Value() + row.getLeftOutOfScopeValue()));
-						sheet.addCell(new Number(2, index, row.getRightScope1Value() + row.getRightScope2Value() + row.getRightScope3Value() + row.getRightOutOfScopeValue()));
+						sheet.addCell(new Number(1, index, row.getLeftTotalValue()));
+						sheet.addCell(new Number(2, index, row.getRightTotalValue()));
 						sheet.addCell(new Number(3, index, typicalResultValues.get(indicatorKey)));
 						sheet.addCell(new Number(4, index, idealResultValues.get(indicatorKey)));
 
