@@ -362,8 +362,17 @@ public class RegistrationController extends AbstractController {
 			awacInterfaceTypeFragment = Configuration.root().getString("awac.enterprisefragment");
 		} else if (interfaceType.getKey().equals(InterfaceTypeCode.MUNICIPALITY.getKey())) {
 			awacInterfaceTypeFragment = Configuration.root().getString("awac.municipalityfragment");
-		} else {
+		} else if (interfaceType.getKey().equals(InterfaceTypeCode.HOUSEHOLD.getKey())) {
+			awacInterfaceTypeFragment = Configuration.root().getString("awac.householdfragment");
+		} else if (interfaceType.getKey().equals(InterfaceTypeCode.LITTLEEMITTER.getKey())) {
+			awacInterfaceTypeFragment = Configuration.root().getString("awac.littleemitterfragment");
+		} else if (interfaceType.getKey().equals(InterfaceTypeCode.EVENT.getKey())) {
+			awacInterfaceTypeFragment = Configuration.root().getString("awac.eventfragment");
+		} else if (interfaceType.getKey().equals(InterfaceTypeCode.VERIFICATION.getKey())) {
 			awacInterfaceTypeFragment = Configuration.root().getString("awac.verificationfragment");
+		} else {
+			Logger.error("Cannot define url fragment for interface type = " + interfaceType.getKey());
+			awacInterfaceTypeFragment = "";
 		}
 
 		// prepare email

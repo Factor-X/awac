@@ -729,6 +729,8 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 		if (InterfaceTypeCode.HOUSEHOLD.equals(interfaceTypeCode) || InterfaceTypeCode.LITTLEEMITTER.equals(interfaceTypeCode) || InterfaceTypeCode.EVENT.equals(interfaceTypeCode)) {
 			String typicalResultLabel = translate(getTypicalResultLabelKey(interfaceTypeCode), CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)";
 			String idealResultLabel = translate(getIdealResultLabelKey(interfaceTypeCode), CodeList.TRANSLATIONS_INTERFACE, lang) + " (tCO2e)";
+			boolean typicalResultDefined = containsValues(typicalResultValues);
+			boolean idealResultDefined = containsValues(idealResultValues);
 			for (MergedReportResultAggregation aggregation : merged.getMergedReportResultAggregations()) {
 				String reportKey = aggregation.getReportCode();
 				String leftResultLabel = translate("SCOPE_SIMPLE", CodeList.TRANSLATIONS_INTERFACE, lang) + " " + aggregation.getLeftPeriod().getLabel() + " (tCO2e)";
@@ -746,8 +748,12 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 
 					sheet.addCell(new Label(1, 5, leftResultLabel, cellFormat));
 					sheet.addCell(new Label(2, 5, rightResultLabel, cellFormat));
-					sheet.addCell(new Label(3, 5, typicalResultLabel, cellFormat));
-					sheet.addCell(new Label(4, 5, idealResultLabel, cellFormat));
+					if (typicalResultDefined) {
+						sheet.addCell(new Label(3, 5, typicalResultLabel, cellFormat));
+					}
+					if (idealResultDefined) {
+						sheet.addCell(new Label(4, 5, idealResultLabel, cellFormat));
+					}
 
 
 					int index = 6;
@@ -760,8 +766,12 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 
 						sheet.addCell(new Number(1, index, row.getLeftTotalValue()));
 						sheet.addCell(new Number(2, index, row.getRightTotalValue()));
-						sheet.addCell(new Number(3, index, typicalResultValues.get(indicatorKey)));
-						sheet.addCell(new Number(4, index, idealResultValues.get(indicatorKey)));
+						if (typicalResultDefined) {
+							sheet.addCell(new Number(3, index, typicalResultValues.get(indicatorKey)));
+						}
+						if (idealResultDefined) {
+							sheet.addCell(new Number(4, index, idealResultValues.get(indicatorKey)));
+						}
 
 						index++;
 					}
@@ -822,7 +832,7 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 		}
     }
 
-    //
+	//
     // Utils
     //
 
@@ -948,6 +958,15 @@ public class ResultExcelGeneratorServiceImpl implements ResultExcelGeneratorServ
 			return "IDEAL_EVENT_TITLE";
 		}
 		return null;
+	}
+
+	private boolean containsValues(Map<String, Double> resultValues) {
+		for (Double value : resultValues.values()) {
+			if (value > 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
