@@ -202,6 +202,7 @@ public class ResultController extends AbstractController {
 
 		// 1. Compute the ReportResult
 		InterfaceTypeCode interfaceCode = scopes.get(0).getOrganization().getInterfaceCode();
+		boolean isSmallCalculator = isSmallCalculator(interfaceCode);
 		AwacCalculator awacCalculator = awacCalculatorService.findByCode(interfaceCode);
 		ReportResultCollection allReportResultsLeft = reportResultService.getReportResults(awacCalculator, scopes, period);
 		ReportResultCollection allReportResultsRight = reportResultService.getReportResults(awacCalculator, scopes, comparedPeriod);
@@ -224,7 +225,7 @@ public class ResultController extends AbstractController {
 			resultsDTO.getReportDTOs().put(reportKey, conversionService.convert(mergedReportResultAggregation, ReportDTO.class));
 
 			// 2.3. Each ReportResult is rendered to a SVG string - DONUT
-			if (isSmallCalculator(interfaceCode)) {
+			if (isSmallCalculator) {
 				resultsDTO.getLeftSvgDonuts().put(reportKey, resultSvgGeneratorService.getLeftSimpleDonut(awacCalculator, mergedReportResultAggregation));
 				resultsDTO.getRightSvgDonuts().put(reportKey, resultSvgGeneratorService.getRightSimpleDonut(awacCalculator, mergedReportResultAggregation));
 			} else {
@@ -233,14 +234,14 @@ public class ResultController extends AbstractController {
 			}
 
 			// 2.4. Each ReportResult is rendered to a SVG string - HISTOGRAM
-			if (isSmallCalculator(interfaceCode)) {
+			if (isSmallCalculator) {
 				resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getSimpleHistogram(awacCalculator, mergedReportResultAggregation));
 			} else {
 				resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getHistogram(awacCalculator, mergedReportResultAggregation));
 			}
 
 			// 2.5. Each ReportResult is rendered to a SVG string - WEB
-			if (isSmallCalculator(interfaceCode)) {
+			if (isSmallCalculator) {
 				Map<String, Double> type = getTypicalResultValues(interfaceCode);
 				Map<String, Double> ideal = getIdealResultValues(interfaceCode);
 				resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWebWithReferences(awacCalculator, mergedReportResultAggregation, type, ideal));
@@ -292,6 +293,7 @@ public class ResultController extends AbstractController {
 
 		// 1. Compute the ReportResult
 		InterfaceTypeCode interfaceCode = scopes.get(0).getOrganization().getInterfaceCode();
+		boolean isSmallCalculator = isSmallCalculator(interfaceCode);
 		AwacCalculator awacCalculator = awacCalculatorService.findByCode(interfaceCode);
 		ReportResultCollection allReportResults = reportResultService.getReportResults(awacCalculator, scopes, period);
 		List<ReportLogEntry> logEntries = allReportResults.getLogEntries();
@@ -307,21 +309,21 @@ public class ResultController extends AbstractController {
 			resultsDTO.getReportDTOs().put(reportKey, conversionService.convert(reportResultAggregation, ReportDTO.class));
 
 			// 2.3. Each ReportResult is rendered to a SVG string - DONUT
-			if (isSmallCalculator(interfaceCode)) {
+			if (isSmallCalculator) {
 				resultsDTO.getLeftSvgDonuts().put(reportKey, resultSvgGeneratorService.getSimpleDonut(awacCalculator, reportResultAggregation));
 			} else {
 				resultsDTO.getLeftSvgDonuts().put(reportKey, resultSvgGeneratorService.getDonut(awacCalculator, reportResultAggregation));
 			}
 
 			// 2.4. Each ReportResult is rendered to a SVG string - HISTOGRAM
-			if (isSmallCalculator(interfaceCode)) {
+			if (isSmallCalculator) {
 				resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getSimpleHistogram(awacCalculator, reportResultAggregation));
 			} else {
 				resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getHistogram(awacCalculator, reportResultAggregation));
 			}
 
 			// 2.5. Each ReportResult is rendered to a SVG string - WEB
-			if (isSmallCalculator(interfaceCode)) {
+			if (isSmallCalculator) {
 				Map<String, Double> type = getTypicalResultValues(interfaceCode);
 				Map<String, Double> ideal = getIdealResultValues(interfaceCode);
 				resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWebWithReferences(awacCalculator, reportResultAggregation, type, ideal));
