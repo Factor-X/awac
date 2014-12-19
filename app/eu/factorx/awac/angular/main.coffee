@@ -36,8 +36,8 @@ angular.module("tmh.dynamicLocale").config (tmhDynamicLocaleProvider)->
 # Routes
 #
 
-logoutResolve=
-    logout:($rootScope,downloadService) ->
+logoutResolve =
+    logout: ($rootScope, downloadService) ->
         console.log 'logout !! '
         $rootScope.currentPerson = null
         $rootScope.periodSelectedKey = null
@@ -127,6 +127,7 @@ angular
 .module('app')
 .run ($rootScope) ->
     $rootScope.instanceName = iName
+    window.rs = $rootScope
 
 #
 # Automation of file download
@@ -134,6 +135,7 @@ angular
 angular
 .module('app')
 .config ($httpProvider) ->
+    console.log $httpProvider
     $httpProvider.interceptors.push () ->
         'request': (config) ->
             return config
@@ -145,9 +147,12 @@ angular
                     for i in [0...byteCharacters.length]
                         byteNumbers[i] = byteCharacters.charCodeAt(i)
                     byteArray = new Uint8Array(byteNumbers)
-                    blob = new Blob([byteArray], { type: response.data.mimeType })
+                    blob = new Blob([byteArray], {type: response.data.mimeType})
                     filename = response.data.filename
 
                     saveAs(blob, filename)
                 , 0)
+            if response.data.__type == "eu.factorx.awac.dto.awac.get.PromiseDTO"
+                window.rs.$broadcast('PROMISE', response.data.uuid)
+
             return response

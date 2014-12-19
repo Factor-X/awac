@@ -2,7 +2,7 @@
  *
  * Instant Play Framework
  * AWAC
- *                       
+ *
  *
  * Copyright (c) 2014 Factor-X.
  * Author Gaston Hollands
@@ -10,6 +10,7 @@
  */
 
 import eu.factorx.awac.InitializationThread;
+import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.apache.http.HttpResponse;
@@ -40,6 +41,8 @@ import scala.concurrent.duration.Duration;
 
 import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
@@ -50,6 +53,7 @@ public class Global extends GlobalSettings {
 
 	private static InitializationThread thread;
 	private static Semaphore semaphore = new Semaphore(1);
+
 
 	// Spring global context
 	private ApplicationContext applicationContext;

@@ -567,3 +567,9 @@ angular.module('app').run ($rootScope, $location, downloadService, messageFlash,
 
     $rootScope.getVerificationRequestStatus = ->
         return $rootScope.verificationRequest?.status
+
+    $rootScope.$on 'PROMISE', (event, uuid) ->
+        console.log uuid
+        setTimeout(()->
+            downloadService.getJson "/awac/promises/" + uuid
+        , 2000)

@@ -1,9 +1,6 @@
 package eu.factorx.awac.controllers;
 
-import eu.factorx.awac.dto.awac.get.DownloadFileDTO;
-import eu.factorx.awac.dto.awac.get.ReportDTO;
-import eu.factorx.awac.dto.awac.get.ReportLogEntryDTO;
-import eu.factorx.awac.dto.awac.get.ResultsDTO;
+import eu.factorx.awac.dto.awac.get.*;
 import eu.factorx.awac.dto.awac.post.GetReportParametersDTO;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Scope;
@@ -20,6 +17,8 @@ import eu.factorx.awac.service.impl.reporting.*;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.Colors;
 import eu.factorx.awac.util.MyrmexFatalException;
+import eu.factorx.awac.util.document.messages.DocumentMessage;
+import eu.factorx.awac.util.document.service.DocumentService;
 import jxl.read.biff.BiffException;
 import jxl.write.WriteException;
 import org.apache.commons.codec.binary.Base64;
@@ -27,15 +26,13 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Controller;
+import play.Play;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
 import play.mvc.Security;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class ResultController extends AbstractController {
@@ -66,6 +63,8 @@ public class ResultController extends AbstractController {
 	private SvgGenerator svgGenerator;
 	@Autowired
 	private ResultPdfGeneratorService resultPdfGeneratorService;
+	@Autowired
+	private DocumentService documentService;
 
 	//
 	// ACTIONS
@@ -144,27 +143,21 @@ public class ResultController extends AbstractController {
 
 		controlScope(scopes);
 
-
-		Period period = periodService.findByCode(new PeriodCode(periodKey));
-		Period comparedPeriod = null;
-		if (comparedPeriodKey != null) {
-			comparedPeriod = periodService.findByCode(new PeriodCode(comparedPeriodKey));
-		}
-
 		LanguageCode lang = securedController.getCurrentUser().getPerson().getDefaultLanguage();
 		InterfaceTypeCode interfaceCode = securedController.getCurrentUser().getOrganization().getInterfaceCode();
-		AwacCalculator awacCalculator = awacCalculatorService.findByCode(interfaceCode);
-		Map<String, Double> type = getTypicalResultValues(interfaceCode);
-		Map<String, Double> ideal = getIdealResultValues(interfaceCode);
-		byte[] bytes = resultPdfGeneratorService.generate(awacCalculator, lang, scopes, period, comparedPeriod, interfaceCode, type, ideal);
 
-		DownloadFileDTO downloadFileDTO = new DownloadFileDTO();
-		downloadFileDTO.setFilename("export_bilanGES_" + DateTime.now().toString("YMd-HH:mm").replace(':', 'h') + ".pdf");
-		downloadFileDTO.setMimeType("application/pdf");
-		downloadFileDTO.setBase64(new Base64().encodeAsString(bytes));
+		final DocumentMessage documentMessage = new DocumentMessage();
+		documentMessage.setPeriodKey(periodKey);
+		documentMessage.setComparedPeriodKey(comparedPeriodKey);
+		documentMessage.setLang(lang);
+		documentMessage.setScopes(scopes);
+		documentMessage.setInterfaceCode(interfaceCode);
+		documentMessage.setIdealResultValues(getIdealResultValues(interfaceCode));
+		documentMessage.setTypicalResultValues(getTypicalResultValues(interfaceCode));
+		documentMessage.setUUID(UUID.randomUUID().toString());
+		documentService.send(documentMessage);
 
-
-		return ok(downloadFileDTO);
+		return ok(new PromiseDTO(documentMessage.getUUID()));
 	}
 
 	//

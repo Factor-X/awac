@@ -269,7 +269,15 @@ public class ResultSvgGeneratorServiceImpl implements ResultSvgGeneratorService 
 				v4 = reportResultIndicatorAggregation.getOutOfScopeValue();
 			}
 
-			if (considerAll || (v1 != null && v1 > 0) || (v2 != null && v2 > 0) || (v3 != null && v3 > 0) || (v4 != null && v4 > 0)) {
+			if (considerAll) {
+				int row = scopeTable.getRowCount();
+				scopeTable.setCell(0, row, reportResultIndicatorAggregation.getIndicator());
+				scopeTable.setCell(1, row, v1 + v2 + v3 + v4);
+				scopeTable.setCell(2, row, 0.0);
+				scopeTable.setCell(3, row, 0.0);
+				scopeTable.setCell(4, row, 0.0);
+
+			} else if ((v1 != null && v1 > 0) || (v2 != null && v2 > 0) || (v3 != null && v3 > 0) || (v4 != null && v4 > 0)) {
 				int row = scopeTable.getRowCount();
 				scopeTable.setCell(0, row, reportResultIndicatorAggregation.getIndicator());
 				scopeTable.setCell(1, row, v1);
@@ -320,7 +328,22 @@ public class ResultSvgGeneratorServiceImpl implements ResultSvgGeneratorService 
 				right4 = mergedReportResultIndicatorAggregation.getRightOutOfScopeValue();
 			}
 
-			if (considerAll || (left1 != null && left1 > 0) || (left2 != null && left2 > 0) || (left3 != null && left3 > 0) || (left4 != null && left4 > 0) || (right1 != null && right1 > 0) || (right2 != null && right2 > 0) || (right3 != null && right3 > 0) || (right4 != null && right4 > 0)) {
+			if (considerAll) {
+
+				int row = scopeTable.getRowCount();
+				scopeTable.setCell(0, row, mergedReportResultIndicatorAggregation.getIndicator());
+
+				scopeTable.setCell(1, row, left1 + left2 + left3 + left4);
+				scopeTable.setCell(2, row, 0.0);
+				scopeTable.setCell(3, row, 0.0);
+				scopeTable.setCell(4, row, 0.0);
+
+				scopeTable.setCell(5, row, right1 + right2 + right3 + right4);
+				scopeTable.setCell(6, row, 0.0);
+				scopeTable.setCell(7, row, 0.0);
+				scopeTable.setCell(8, row, 0.0);
+
+			} else if ((left1 != null && left1 > 0) || (left2 != null && left2 > 0) || (left3 != null && left3 > 0) || (left4 != null && left4 > 0) || (right1 != null && right1 > 0) || (right2 != null && right2 > 0) || (right3 != null && right3 > 0) || (right4 != null && right4 > 0)) {
 				int row = scopeTable.getRowCount();
 				scopeTable.setCell(0, row, mergedReportResultIndicatorAggregation.getIndicator());
 
