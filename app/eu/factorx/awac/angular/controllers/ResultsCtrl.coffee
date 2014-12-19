@@ -62,6 +62,8 @@ angular
         downloadService.postJson '/awac/result/getReportAsPdf', dto, (result) ->
             $scope.pdfLoading = false
 
+            messageFlash.displayInfo 'PREPARING_DOCUMENT'
+
 
     $scope.exportXls = () ->
         sites = $scope.mySites.filter((e) ->
