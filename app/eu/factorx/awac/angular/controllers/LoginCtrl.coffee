@@ -63,7 +63,7 @@ angular
     $scope.send = (options) ->
         if options.anonymous || $scope.connectionFieldValid()
 
-            scale = 100000000
+            scale = 20000000000
             while scale >= 0
               scale -= 10
 
