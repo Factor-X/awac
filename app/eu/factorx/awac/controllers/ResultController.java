@@ -130,20 +130,20 @@ public class ResultController extends AbstractController {
 
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
-	public Result getReportAsPdf() throws BiffException, IOException, WriteException {
+	public Result getReportAsPdf() throws IOException, BiffException, WriteException {
 
 		GetReportParametersDTO dto = extractDTOFromRequest(GetReportParametersDTO.class);
-		String periodKey = dto.getPeriodKey();
-		String comparedPeriodKey = dto.getComparedPeriodKey();
+		final String periodKey = dto.getPeriodKey();
+		final String comparedPeriodKey = dto.getComparedPeriodKey();
 
 		// 2. Fetch the scopes
-		List<Scope> scopes = new ArrayList<>();
+		final List<Scope> scopes = new ArrayList<>();
 		for (Long scopeId : dto.getScopesIds()) {
 			scopes.add(scopeService.findById(scopeId));
 		}
 
-		//control scope
 		controlScope(scopes);
+
 
 		Period period = periodService.findByCode(new PeriodCode(periodKey));
 		Period comparedPeriod = null;
@@ -162,6 +162,7 @@ public class ResultController extends AbstractController {
 		downloadFileDTO.setFilename("export_bilanGES_" + DateTime.now().toString("YMd-HH:mm").replace(':', 'h') + ".pdf");
 		downloadFileDTO.setMimeType("application/pdf");
 		downloadFileDTO.setBase64(new Base64().encodeAsString(bytes));
+
 
 		return ok(downloadFileDTO);
 	}
