@@ -2004,7 +2004,7 @@ if (am41 == null) {
         
 am42 = (DoubleQuestion) questionService.findByCode(QuestionCode.AM42);
 if (am42 == null) {
-    am42 = new DoubleQuestion( am26, 0, QuestionCode.AM42, volumeUnits, getUnitBySymbol("m3") );
+    am42 = new DoubleQuestion( am26, 0, QuestionCode.AM42, volumeUnits, getUnitBySymbol("l") );
     JPA.em().persist(am42);
 
     // cleanup the driver
@@ -2024,7 +2024,7 @@ if (am42 == null) {
     }
     ((NumericQuestion)am42).setUnitCategory(volumeUnits);
     am42.setOrderIndex(0);
-    ((NumericQuestion)am42).setDefaultUnit(getUnitBySymbol("m3"));
+    ((NumericQuestion)am42).setDefaultUnit(getUnitBySymbol("l"));
 
     // cleanup the driver
     Driver am42_driver = driverService.findByName("AM42");
@@ -2047,7 +2047,7 @@ if (am42 == null) {
         
 am43 = (DoubleQuestion) questionService.findByCode(QuestionCode.AM43);
 if (am43 == null) {
-    am43 = new DoubleQuestion( am26, 0, QuestionCode.AM43, volumeUnits, getUnitBySymbol("m3") );
+    am43 = new DoubleQuestion( am26, 0, QuestionCode.AM43, volumeUnits, getUnitBySymbol("l") );
     JPA.em().persist(am43);
 
     // cleanup the driver
@@ -2067,7 +2067,7 @@ if (am43 == null) {
     }
     ((NumericQuestion)am43).setUnitCategory(volumeUnits);
     am43.setOrderIndex(0);
-    ((NumericQuestion)am43).setDefaultUnit(getUnitBySymbol("m3"));
+    ((NumericQuestion)am43).setDefaultUnit(getUnitBySymbol("l"));
 
     // cleanup the driver
     Driver am43_driver = driverService.findByName("AM43");
@@ -2090,7 +2090,7 @@ if (am43 == null) {
         
 am44 = (DoubleQuestion) questionService.findByCode(QuestionCode.AM44);
 if (am44 == null) {
-    am44 = new DoubleQuestion( am26, 0, QuestionCode.AM44, volumeUnits, getUnitBySymbol("m3") );
+    am44 = new DoubleQuestion( am26, 0, QuestionCode.AM44, volumeUnits, getUnitBySymbol("l") );
     JPA.em().persist(am44);
 
     // cleanup the driver
@@ -2110,7 +2110,7 @@ if (am44 == null) {
     }
     ((NumericQuestion)am44).setUnitCategory(volumeUnits);
     am44.setOrderIndex(0);
-    ((NumericQuestion)am44).setDefaultUnit(getUnitBySymbol("m3"));
+    ((NumericQuestion)am44).setDefaultUnit(getUnitBySymbol("l"));
 
     // cleanup the driver
     Driver am44_driver = driverService.findByName("AM44");
@@ -2716,7 +2716,7 @@ if (am58 == null) {
         
 am59 = (DoubleQuestion) questionService.findByCode(QuestionCode.AM59);
 if (am59 == null) {
-    am59 = new DoubleQuestion( am48, 0, QuestionCode.AM59, volumeUnits, getUnitBySymbol("m3") );
+    am59 = new DoubleQuestion( am48, 0, QuestionCode.AM59, volumeUnits, getUnitBySymbol("l") );
     JPA.em().persist(am59);
 
     // cleanup the driver
@@ -2736,7 +2736,7 @@ if (am59 == null) {
     }
     ((NumericQuestion)am59).setUnitCategory(volumeUnits);
     am59.setOrderIndex(0);
-    ((NumericQuestion)am59).setDefaultUnit(getUnitBySymbol("m3"));
+    ((NumericQuestion)am59).setDefaultUnit(getUnitBySymbol("l"));
 
     // cleanup the driver
     Driver am59_driver = driverService.findByName("AM59");
@@ -2759,7 +2759,7 @@ if (am59 == null) {
         
 am60 = (DoubleQuestion) questionService.findByCode(QuestionCode.AM60);
 if (am60 == null) {
-    am60 = new DoubleQuestion( am48, 0, QuestionCode.AM60, volumeUnits, getUnitBySymbol("m3") );
+    am60 = new DoubleQuestion( am48, 0, QuestionCode.AM60, volumeUnits, getUnitBySymbol("l") );
     JPA.em().persist(am60);
 
     // cleanup the driver
@@ -2779,7 +2779,7 @@ if (am60 == null) {
     }
     ((NumericQuestion)am60).setUnitCategory(volumeUnits);
     am60.setOrderIndex(0);
-    ((NumericQuestion)am60).setDefaultUnit(getUnitBySymbol("m3"));
+    ((NumericQuestion)am60).setDefaultUnit(getUnitBySymbol("l"));
 
     // cleanup the driver
     Driver am60_driver = driverService.findByName("AM60");
@@ -2802,7 +2802,7 @@ if (am60 == null) {
         
 am61 = (DoubleQuestion) questionService.findByCode(QuestionCode.AM61);
 if (am61 == null) {
-    am61 = new DoubleQuestion( am48, 0, QuestionCode.AM61, volumeUnits, getUnitBySymbol("m3") );
+    am61 = new DoubleQuestion( am48, 0, QuestionCode.AM61, volumeUnits, getUnitBySymbol("l") );
     JPA.em().persist(am61);
 
     // cleanup the driver
@@ -2822,7 +2822,7 @@ if (am61 == null) {
     }
     ((NumericQuestion)am61).setUnitCategory(volumeUnits);
     am61.setOrderIndex(0);
-    ((NumericQuestion)am61).setDefaultUnit(getUnitBySymbol("m3"));
+    ((NumericQuestion)am61).setDefaultUnit(getUnitBySymbol("l"));
 
     // cleanup the driver
     Driver am61_driver = driverService.findByName("AM61");

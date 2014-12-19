@@ -2,7 +2,7 @@
  *
  * Instant Play Framework
  * AWAC
- *                       
+ *
  *
  * Copyright (c) 2014 Factor-X.
  * Author Gaston Hollands
@@ -16,6 +16,7 @@ import eu.factorx.awac.util.Colors;
 import eu.factorx.awac.util.Table;
 import eu.factorx.awac.util.math.Vector2D;
 import org.springframework.stereotype.Component;
+import play.Logger;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -299,7 +300,200 @@ public class SvgGeneratorImpl implements SvgGenerator {
 
     }
 
-    @Override
+	@Override
+	public String getSimpleHistogram(Table data) {
+		// +-----------+------------+------------+------------+-----------------+------------+------------+------------+-----------------+
+		// + Indicator + P1:Scope 1 + P1:Scope 2 + P1:Scope 3 + P1:Out of scope + P2:Scope 1 + P2:Scope 2 + P2:Scope 3 + P2:Out of scope +
+		// +-----------+------------+------------+------------+-----------------+------------+------------+------------+-----------------+
+
+		StringBuilder sb = new StringBuilder();
+		int count = data.getRowCount();
+		int series = (data.getColumnCount() - 1) / 4;
+		double maximum = 0.0;
+
+		for (int i = 0; i < count; i++) {
+			for (int j = 0; j < series; j++) {
+				double sum = 0;
+				for (int iScope = 0; iScope < 4; iScope++) {
+					sum += (Double) data.getCell(1 + j * 4 + iScope, i);
+				}
+				if (sum > maximum) {
+					maximum = sum;
+				}
+			}
+		}
+
+
+		int sizex = 300 + count * 200;
+		int sizey = 1000;
+
+
+		double l = Math.log10(maximum);
+		double lDown = Math.floor(l);
+		double c = Math.ceil(maximum / Math.pow(10, lDown));
+		double cap = c * Math.pow(10, lDown);
+
+		if (series > 0 && count > 0) {
+
+			sb.append(String.format("<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='%d' height='%d' viewBox='0 0 %d %d'>\n",
+				sizex,
+				sizey,
+				sizex,
+				sizey
+			));
+
+			double histoWidth = 200;
+			double left = 300;
+			for (int i = 0; i < count; i++) {
+				for (int j = 0; j < series; j++) {
+					double sum = 0;
+					for (int iScope = 0; iScope < 4; iScope++) {
+						Double cell = (Double) data.getCell(1 + j * 4 + iScope, i);
+						sum += cell;
+					}
+					String color = Colors.makeGoodColorForSerieElement(j, series);
+
+					sb.append(String.format(
+						"<rect " +
+							"x='%s' " +
+							"y='%s' " +
+							"width='%s' " +
+							"height='%s' " +
+							"fill='#%s' " +
+							"stroke='white' " +
+							"stroke-width='0' " +
+							"class='path' " +
+							"title='' " +
+							"/>\n",
+						left + histoWidth * i + (1.0 * histoWidth * 0.8 * j / series) + histoWidth * 0.1,
+						sizey * 0.875 - (sum) * sizey * 0.75 / cap,
+						histoWidth * 0.8 / series,
+						sum * sizey * 0.75 / cap,
+						color
+					));
+				}
+			}
+
+			// numbers
+			for (int i = 0; i < count; i++) {
+				double x = left + histoWidth * i + histoWidth / 2.0;
+				double y = sizey * 0.875 + 50;
+				sb.append(String.format(
+					"<circle " +
+						"cx='%s' " +
+						"cy='%s' " +
+						"r='24' " +
+						"fill='none' " +
+						"stroke='#000' " +
+						"stroke-width='1' " +
+						"/>",
+					x,
+					y
+				));
+				sb.append(String.format(
+					"<text " +
+						"x='%s' " +
+						"y='%s' " +
+						"text-anchor='middle' " +
+						"dominant-baseline='central' " +
+						"style='fill: #000; stroke: none; font-size: 32px'" +
+						">" +
+						"%s" +
+						"</text>",
+					x,
+					y,
+					i + 1
+				));
+			}
+
+			sb.append(String.format(
+				"<line " +
+					"x1='%s' " +
+					"y1='%s' " +
+					"x2='%s' " +
+					"y2='%s' " +
+					"stroke-linecap='round' " +
+					"stroke='#ccc' " +
+					"stroke-width='3' " +
+					"/>",
+				0,
+				sizey * 0.875,
+				sizex,
+				sizey * 0.875
+			));
+
+			sb.append(String.format(
+				"<line " +
+					"x1='%s' " +
+					"y1='%s' " +
+					"x2='%s' " +
+					"y2='%s' " +
+					"stroke-linecap='round' " +
+					"stroke='#ccc' " +
+					"stroke-width='3' " +
+					"/>",
+				left,
+				0,
+				left,
+				sizey
+			));
+
+			for (double factor = 1.0; factor > 0; factor -= 0.25) {
+				double t = sizey * 0.875 - sizey * factor * 0.75;
+				sb.append(String.format(
+					"<line " +
+						"x1='%s' " +
+						"y1='%s' " +
+						"x2='%s' " +
+						"y2='%s' " +
+						"stroke-linecap='round' " +
+						"stroke='#ccc' " +
+						"stroke-width='3' " +
+						"/>",
+					left - 20,
+					t,
+					left,
+					t
+				));
+
+				NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag("fr"));
+				nf.setMaximumFractionDigits(12);
+
+				String stdNot = nf.format(cap * factor);
+
+				String scientNot = String.format(Locale.forLanguageTag("fr"), "%.3e", cap * factor);
+
+				String level = stdNot;
+
+				if (scientNot.length() < stdNot.length()) {
+					level = scientNot;
+				}
+
+				sb.append(String.format(
+					"<text " +
+						"x='%s' " +
+						"y='%s' " +
+						"text-anchor='end' " +
+						"dominant-baseline='central' " +
+						"style='fill: #000; stroke: none; font-size: 32px' " +
+						"title='%s' " +
+						">" +
+						"%s" +
+						"</text>",
+					left - 30,
+					t,
+					stdNot + " tCO2e",
+					level + " tCO2e"
+				));
+			}
+
+			sb.append("</svg>\n");
+		}
+
+		return sb.toString().replaceAll("'", "\"");
+	}
+
+	@Override
     public String getHistogram(Table data) {
 
         // +-----------+------------+------------+------------+-----------------+------------+------------+------------+-----------------+

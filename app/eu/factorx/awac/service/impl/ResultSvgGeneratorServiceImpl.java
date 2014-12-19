@@ -53,6 +53,12 @@ public class ResultSvgGeneratorServiceImpl implements ResultSvgGeneratorService 
 		return svgGenerator.getHistogram(scopeTable);
 	}
 
+	@Override
+	public String getSimpleHistogram(AwacCalculator awacCalculator, ReportResultAggregation reportResult) throws IOException, WriteException, BiffException {
+		Table scopeTable = new Table();
+		fillTableWithResultDataForHistogram(awacCalculator, reportResult, scopeTable, null);
+		return svgGenerator.getSimpleHistogram(scopeTable);
+	}
 
 	@Override
 	public String getWebWithReferences(AwacCalculator awacCalculator, ReportResultAggregation reportResultAggregation, Map<String, Double> type, Map<String, Double> ideal) {
@@ -124,6 +130,13 @@ public class ResultSvgGeneratorServiceImpl implements ResultSvgGeneratorService 
 		Table scopeTable = new Table();
 		fillTableWithResultDataForHistogram(awacCalculator, mergedReportResultAggregation, scopeTable, null);
 		return svgGenerator.getHistogram(scopeTable);
+	}
+
+	@Override
+	public String getSimpleHistogram(AwacCalculator awacCalculator, MergedReportResultAggregation mergedReportResultAggregation) {
+		Table scopeTable = new Table();
+		fillTableWithResultDataForHistogram(awacCalculator, mergedReportResultAggregation, scopeTable, null);
+		return svgGenerator.getSimpleHistogram(scopeTable);
 	}
 
 	@Override
