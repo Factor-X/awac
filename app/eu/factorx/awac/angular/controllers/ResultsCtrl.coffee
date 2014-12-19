@@ -85,6 +85,8 @@ angular
         downloadService.postJson '/awac/result/getReportAsXls', dto, (result) ->
             $scope.xlsLoading = false
 
+            messageFlash.displayInfo 'PREPARING_DOCUMENT'
+
 
     $scope.dataURItoBlob = (dataURI) ->
 

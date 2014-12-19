@@ -63,9 +63,6 @@ angular
     $scope.send = (options) ->
         if options.anonymous || $scope.connectionFieldValid()
 
-            scale = 20000000000
-            while scale >= 0
-              scale -= 10
 
             #active loading mode
             $scope.isLoading = true
@@ -82,19 +79,21 @@ angular
                     interfaceName: $scope.$root.instanceName
 
             #send request
-            downloadService.postJson '/awac/login', dto, (result) ->
-                if result.success
-                    $scope.$root.loginSuccess(result.data)
-                    messageFlash.displaySuccess translationService.get 'CONNECTION_MESSAGE_SUCCESS'
-                    $scope.isLoading = false
-                else
-                    $scope.isLoading = false
-                    if result.data.__type == 'eu.factorx.awac.dto.myrmex.get.MustChangePasswordExceptionsDTO'
-                        # must change password
-                        params =
-                            login: $scope.loginInfo.field
-                            password: $scope.passwordInfo.field
-                        modalService.show(modalService.CONNECTION_PASSWORD_CHANGE, params)
+            $timeout(() ->
+                downloadService.postJson '/awac/login', dto, (result) ->
+                    if result.success
+                        $scope.$root.loginSuccess(result.data)
+                        messageFlash.displaySuccess translationService.get 'CONNECTION_MESSAGE_SUCCESS'
+                        $scope.isLoading = false
+                    else
+                        $scope.isLoading = false
+                        if result.data.__type == 'eu.factorx.awac.dto.myrmex.get.MustChangePasswordExceptionsDTO'
+                            # must change password
+                            params =
+                                login: $scope.loginInfo.field
+                                password: $scope.passwordInfo.field
+                            modalService.show(modalService.CONNECTION_PASSWORD_CHANGE, params)
+            , 3000)
         #disactive loading mode
 
         return false
