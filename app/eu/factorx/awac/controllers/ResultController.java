@@ -224,8 +224,13 @@ public class ResultController extends AbstractController {
 			resultsDTO.getReportDTOs().put(reportKey, conversionService.convert(mergedReportResultAggregation, ReportDTO.class));
 
 			// 2.3. Each ReportResult is rendered to a SVG string - DONUT
-			resultsDTO.getLeftSvgDonuts().put(reportKey, resultSvgGeneratorService.getLeftDonut(awacCalculator, mergedReportResultAggregation));
-			resultsDTO.getRightSvgDonuts().put(reportKey, resultSvgGeneratorService.getRightDonut(awacCalculator, mergedReportResultAggregation));
+			if (isSmallCalculator(interfaceCode)) {
+				resultsDTO.getLeftSvgDonuts().put(reportKey, resultSvgGeneratorService.getLeftSimpleDonut(awacCalculator, mergedReportResultAggregation));
+				resultsDTO.getRightSvgDonuts().put(reportKey, resultSvgGeneratorService.getRightSimpleDonut(awacCalculator, mergedReportResultAggregation));
+			} else {
+				resultsDTO.getLeftSvgDonuts().put(reportKey, resultSvgGeneratorService.getLeftDonut(awacCalculator, mergedReportResultAggregation));
+				resultsDTO.getRightSvgDonuts().put(reportKey, resultSvgGeneratorService.getRightDonut(awacCalculator, mergedReportResultAggregation));
+			}
 
 			// 2.4. Each ReportResult is rendered to a SVG string - HISTOGRAM
 			if (isSmallCalculator(interfaceCode)) {
@@ -302,7 +307,11 @@ public class ResultController extends AbstractController {
 			resultsDTO.getReportDTOs().put(reportKey, conversionService.convert(reportResultAggregation, ReportDTO.class));
 
 			// 2.3. Each ReportResult is rendered to a SVG string - DONUT
-			resultsDTO.getLeftSvgDonuts().put(reportKey, resultSvgGeneratorService.getDonut(awacCalculator, reportResultAggregation));
+			if (isSmallCalculator(interfaceCode)) {
+				resultsDTO.getLeftSvgDonuts().put(reportKey, resultSvgGeneratorService.getSimpleDonut(awacCalculator, reportResultAggregation));
+			} else {
+				resultsDTO.getLeftSvgDonuts().put(reportKey, resultSvgGeneratorService.getDonut(awacCalculator, reportResultAggregation));
+			}
 
 			// 2.4. Each ReportResult is rendered to a SVG string - HISTOGRAM
 			if (isSmallCalculator(interfaceCode)) {

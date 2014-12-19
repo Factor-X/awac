@@ -36,6 +36,13 @@ public class ResultSvgGeneratorServiceImpl implements ResultSvgGeneratorService 
 		return svgGenerator.getDonut(scopeTable, reportResult.getPeriod().getLabel());
 	}
 
+	@Override
+	public String getSimpleDonut(AwacCalculator awacCalculator, ReportResultAggregation reportResult) throws IOException, WriteException, BiffException {
+		IndicatorIsoScopeCode reportScope = reportResult.getReportRestrictedScope();
+		Table scopeTable = new Table();
+		fillTableWithResultData(awacCalculator, reportResult, scopeTable, reportScope);
+		return svgGenerator.getSimpleDonut(scopeTable, reportResult.getPeriod().getLabel());
+	}
 
 	@Override
 	public String getWeb(AwacCalculator awacCalculator, ReportResultAggregation reportResult) throws IOException, WriteException, BiffException {
@@ -115,6 +122,29 @@ public class ResultSvgGeneratorServiceImpl implements ResultSvgGeneratorService 
 			scopeTable.setCell(2, i, null);
 		}
 		return svgGenerator.getDonut(scopeTable, mergedReportResultAggregation.getRightPeriod().getLabel());
+	}
+
+	@Override
+	public String getLeftSimpleDonut(AwacCalculator awacCalculator, MergedReportResultAggregation mergedReportResultAggregation) {
+		IndicatorIsoScopeCode reportScope = mergedReportResultAggregation.getReportRestrictedScope();
+		Table scopeTable = new Table();
+		fillTableWithResultData(awacCalculator, mergedReportResultAggregation, scopeTable, reportScope);
+		for (int i = 0; i < scopeTable.getRowCount(); i++) {
+			scopeTable.setCell(2, i, null);
+		}
+		return svgGenerator.getSimpleDonut(scopeTable, mergedReportResultAggregation.getLeftPeriod().getLabel());
+	}
+
+	@Override
+	public String getRightSimpleDonut(AwacCalculator awacCalculator, MergedReportResultAggregation mergedReportResultAggregation) {
+		IndicatorIsoScopeCode reportScope = mergedReportResultAggregation.getReportRestrictedScope();
+		Table scopeTable = new Table();
+		fillTableWithResultData(awacCalculator, mergedReportResultAggregation, scopeTable, reportScope);
+		for (int i = 0; i < scopeTable.getRowCount(); i++) {
+			scopeTable.setCell(1, i, scopeTable.getCell(2, i));
+			scopeTable.setCell(2, i, null);
+		}
+		return svgGenerator.getSimpleDonut(scopeTable, mergedReportResultAggregation.getRightPeriod().getLabel());
 	}
 
 

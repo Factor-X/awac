@@ -168,7 +168,155 @@ public class SvgGeneratorImpl implements SvgGenerator {
 
     }
 
-    @Override
+	@Override
+	public String getSimpleDonut(Table data, String period) {
+
+		Logger.info("Pie chart data = \n" + data.dump());
+
+		StringBuilder sb = new StringBuilder();
+
+		int size = 1000;
+
+		sb.append(String.format("<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='%d' height='%d' viewBox='0 0 %d %d'>\n",
+			size,
+			size,
+			size,
+			size
+		));
+
+		double oldPercentage = 0.0;
+		double total = 0.0;
+		int rows = data.getRowCount();
+
+		int pathCount = 0;
+		if (rows > 0) {
+			for (int i = 0; i < data.getRowCount(); i++) {
+				Double cellValue = (Double) data.getCell(1, i);
+				total += cellValue;
+				if (cellValue > 0) {
+					pathCount++;
+				}
+			}
+		}
+
+		if (rows > 0 && total > 0) {
+
+			for (int i = 0; i < rows; i++) {
+
+				Double cell = (Double) data.getCell(1, i);
+
+				if (cell == 0) {
+					continue;
+				}
+
+				double percentage = 100.0 * cell / total;
+
+				double unit = (Math.PI * 2) / 100;
+				double startangle = oldPercentage * unit;
+				double endangle = (oldPercentage + percentage) * unit - 0.001;
+
+				double x1 = (size / 2) + (size / 2) * Math.sin(startangle);
+				double y1 = (size / 2) - (size / 2) * Math.cos(startangle);
+				double x2 = (size / 2) + (size / 2) * Math.sin(endangle);
+				double y2 = (size / 2) - (size / 2) * Math.cos(endangle);
+				int big = 0;
+				if (endangle - startangle > Math.PI) {
+					big = 1;
+				}
+				String d = "M " + (size / 2) + "," + (size / 2) + " L " + x1 + "," + y1 + " A " + (size / 2) + "," + (size / 2) + " 0 " +
+					big + " 1 " + x2 + "," + y2 + " Z";
+
+				oldPercentage += percentage;
+
+
+				if (percentage == 100.0) {
+					sb.append(String.format(
+						"<circle " +
+							"cx='%d' " +
+							"cy='%d' " +
+							"r='%d' " +
+							"fill='#%s' " +
+							"data-indicator-name='%s' " +
+							"data-indicator-value='%s' " +
+							"class='path' " +
+							"/>",
+						size / 2,
+						size / 2,
+						size / 2,
+						Colors.makeGoodColorForSerieElement(i + 1, pathCount),
+						"" + data.getCell(0, i),
+						"" + data.getCell(1, i)
+					));
+				} else {
+					sb.append(String.format(
+						"<path " +
+							"d='%s' " +
+							"fill='#%s' " +
+							"stroke='white' " +
+							"stroke-width='5' " +
+							"data-indicator-name='%s' " +
+							"data-indicator-value='%s' " +
+							"class='path' " +
+							"></path>",
+						d,
+						Colors.makeGoodColorForSerieElement(i + 1, pathCount),
+						"" + data.getCell(0, i),
+						"" + data.getCell(1, i)
+
+					));
+				}
+			}
+
+
+			sb.append(String.format("<circle cx='%d' cy='%d' r='%d' fill='#ffffff'/>",
+				size / 2,
+				size / 2,
+				size / 4
+			));
+
+
+		} else {
+
+			sb.append(String.format("<circle cx='%d' cy='%d' r='%d' stroke-dasharray='%d,%d' stroke-width='5' stroke='black' fill='none'/>",
+				size / 2,
+				size / 2,
+				size / 2 - 10,
+				size / 20,
+				size / 20
+			));
+
+			sb.append(String.format("<circle cx='%d' cy='%d' r='%d' stroke-dasharray='%d,%d' stroke-width='5' stroke='black' fill='none'/>",
+				size / 2,
+				size / 2,
+				size / 4,
+				size / 20,
+				size / 20
+			));
+
+		}
+
+		sb.append(String.format(
+			"<text " +
+				"x='%s' " +
+				"y='%s' " +
+				"text-anchor='middle' " +
+				"dominant-baseline='central' " +
+				"style='fill: #000000; stroke: none; font-size: 72px; font-weight: bold'" +
+				">" +
+				"%s" +
+				"</text>",
+			size / 2,
+			size / 2,
+			period
+		));
+
+		sb.append("</svg>\n");
+
+		return sb.toString().replaceAll("'", "\"");
+
+	}
+
+	@Override
     public String getWeb(Table data) {
 
         double refAngle = Math.PI / 2;
