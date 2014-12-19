@@ -31,6 +31,7 @@
             tr(ng-repeat="(indicator, value) in ngType")
                 td
                     span.circled-number(ng-show="getNumber(indicator) != null") {{ getNumber(indicator) }}
+                    span(ng-bind-html="indicator | translate")
 
                 td.align-right.data-cell(ng-hide="(ngModel.reportLines | filter:{color: '!!'}).length == 0")
                     span {{ getLeftTotal(indicator) | numberToI18NRoundedOrFullIfLessThanOne }}&nbsp;tCO2e

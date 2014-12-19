@@ -305,7 +305,7 @@ public class SvgGeneratorImpl implements SvgGenerator {
 		// +-----------+------------+------------+------------+-----------------+------------+------------+------------+-----------------+
 		// + Indicator + P1:Scope 1 + P1:Scope 2 + P1:Scope 3 + P1:Out of scope + P2:Scope 1 + P2:Scope 2 + P2:Scope 3 + P2:Out of scope +
 		// +-----------+------------+------------+------------+-----------------+------------+------------+------------+-----------------+
-
+		Logger.info("data = \n" + data.dump());
 		StringBuilder sb = new StringBuilder();
 		int count = data.getRowCount();
 		int series = (data.getColumnCount() - 1) / 4;
@@ -499,6 +499,7 @@ public class SvgGeneratorImpl implements SvgGenerator {
         // +-----------+------------+------------+------------+-----------------+------------+------------+------------+-----------------+
         // + Indicator + P1:Scope 1 + P1:Scope 2 + P1:Scope 3 + P1:Out of scope + P2:Scope 1 + P2:Scope 2 + P2:Scope 3 + P2:Out of scope +
         // +-----------+------------+------------+------------+-----------------+------------+------------+------------+-----------------+
+		Logger.info("Histogram data = \n" + data.dump());
 
         StringBuilder sb = new StringBuilder();
         int count = data.getRowCount();

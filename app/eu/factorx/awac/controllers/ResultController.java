@@ -130,20 +130,20 @@ public class ResultController extends AbstractController {
 
 	@Transactional(readOnly = false)
 	@Security.Authenticated(SecuredController.class)
-	public Result getReportAsPdf() throws BiffException, IOException, WriteException {
+	public Result getReportAsPdf() throws IOException, BiffException, WriteException {
 
 		GetReportParametersDTO dto = extractDTOFromRequest(GetReportParametersDTO.class);
-		String periodKey = dto.getPeriodKey();
-		String comparedPeriodKey = dto.getComparedPeriodKey();
+		final String periodKey = dto.getPeriodKey();
+		final String comparedPeriodKey = dto.getComparedPeriodKey();
 
 		// 2. Fetch the scopes
-		List<Scope> scopes = new ArrayList<>();
+		final List<Scope> scopes = new ArrayList<>();
 		for (Long scopeId : dto.getScopesIds()) {
 			scopes.add(scopeService.findById(scopeId));
 		}
 
-		//control scope
 		controlScope(scopes);
+
 
 		Period period = periodService.findByCode(new PeriodCode(periodKey));
 		Period comparedPeriod = null;
@@ -162,6 +162,7 @@ public class ResultController extends AbstractController {
 		downloadFileDTO.setFilename("export_bilanGES_" + DateTime.now().toString("YMd-HH:mm").replace(':', 'h') + ".pdf");
 		downloadFileDTO.setMimeType("application/pdf");
 		downloadFileDTO.setBase64(new Base64().encodeAsString(bytes));
+
 
 		return ok(downloadFileDTO);
 	}
@@ -227,17 +228,16 @@ public class ResultController extends AbstractController {
 			resultsDTO.getRightSvgDonuts().put(reportKey, resultSvgGeneratorService.getRightDonut(awacCalculator, mergedReportResultAggregation));
 
 			// 2.4. Each ReportResult is rendered to a SVG string - HISTOGRAM
-			if (InterfaceTypeCode.HOUSEHOLD.equals(interfaceCode) || InterfaceTypeCode.LITTLEEMITTER.equals(interfaceCode) || InterfaceTypeCode.HOUSEHOLD.equals(interfaceCode)) {
+			if (isSmallCalculator(interfaceCode)) {
 				resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getSimpleHistogram(awacCalculator, mergedReportResultAggregation));
 			} else {
 				resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getHistogram(awacCalculator, mergedReportResultAggregation));
 			}
 
 			// 2.5. Each ReportResult is rendered to a SVG string - WEB
-			InterfaceTypeCode interfaceTypeCode = awacCalculator.getInterfaceTypeCode();
-			if (interfaceTypeCode.equals(InterfaceTypeCode.HOUSEHOLD) || interfaceTypeCode.equals(InterfaceTypeCode.HOUSEHOLD) || interfaceTypeCode.equals(InterfaceTypeCode.EVENT)) {
-				Map<String, Double> type = getTypicalResultValues(interfaceTypeCode);
-				Map<String, Double> ideal = getIdealResultValues(interfaceTypeCode);
+			if (isSmallCalculator(interfaceCode)) {
+				Map<String, Double> type = getTypicalResultValues(interfaceCode);
+				Map<String, Double> ideal = getIdealResultValues(interfaceCode);
 				resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWebWithReferences(awacCalculator, mergedReportResultAggregation, type, ideal));
 
 				// 2.6. Add references
@@ -305,17 +305,16 @@ public class ResultController extends AbstractController {
 			resultsDTO.getLeftSvgDonuts().put(reportKey, resultSvgGeneratorService.getDonut(awacCalculator, reportResultAggregation));
 
 			// 2.4. Each ReportResult is rendered to a SVG string - HISTOGRAM
-			if (InterfaceTypeCode.HOUSEHOLD.equals(interfaceCode) || InterfaceTypeCode.LITTLEEMITTER.equals(interfaceCode) || InterfaceTypeCode.HOUSEHOLD.equals(interfaceCode)) {
+			if (isSmallCalculator(interfaceCode)) {
 				resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getSimpleHistogram(awacCalculator, reportResultAggregation));
 			} else {
 				resultsDTO.getSvgHistograms().put(reportKey, resultSvgGeneratorService.getHistogram(awacCalculator, reportResultAggregation));
 			}
 
 			// 2.5. Each ReportResult is rendered to a SVG string - WEB
-			InterfaceTypeCode interfaceTypeCode = awacCalculator.getInterfaceTypeCode();
-			if (interfaceTypeCode.equals(InterfaceTypeCode.HOUSEHOLD) || interfaceTypeCode.equals(InterfaceTypeCode.HOUSEHOLD) || interfaceTypeCode.equals(InterfaceTypeCode.EVENT)) {
-				Map<String, Double> type = getTypicalResultValues(interfaceTypeCode);
-				Map<String, Double> ideal = getIdealResultValues(interfaceTypeCode);
+			if (isSmallCalculator(interfaceCode)) {
+				Map<String, Double> type = getTypicalResultValues(interfaceCode);
+				Map<String, Double> ideal = getIdealResultValues(interfaceCode);
 				resultsDTO.getSvgWebs().put(reportKey, resultSvgGeneratorService.getWebWithReferences(awacCalculator, reportResultAggregation, type, ideal));
 
 				// 2.6. Add references
@@ -378,6 +377,10 @@ public class ResultController extends AbstractController {
 			}
 		}
 		throw new MyrmexFatalException(BusinessErrorType.NOT_YOUR_SCOPE_LITTLE);
+	}
+
+	private boolean isSmallCalculator(InterfaceTypeCode interfaceCode) {
+		return InterfaceTypeCode.HOUSEHOLD.equals(interfaceCode) || InterfaceTypeCode.LITTLEEMITTER.equals(interfaceCode) || InterfaceTypeCode.EVENT.equals(interfaceCode);
 	}
 
 	private Map<String, Double> getTypicalResultValues(InterfaceTypeCode interfaceTypeCode) {

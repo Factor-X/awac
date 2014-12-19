@@ -618,7 +618,7 @@ public class AwacLittleEmitterInitialData {
     }
     private void createQuestionSetAP95() {
         // == AP95
-        // Répartition par type de voiture
+        // &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Répartition par type de voiture
         ap95 = questionSetService.findByCode(QuestionCode.AP95);
         if( ap95 == null ) {
             ap95 = new QuestionSet(QuestionCode.AP95, false, ap91);
@@ -3424,7 +3424,7 @@ if (ap94 == null) {
     }
     private void createQuestionAP96() {
         // == AP96
-        // Proportion de voiture Diesel (%)
+        // &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Proportion de voiture Diesel (%)
 
         ap96 = (PercentageQuestion) questionService.findByCode(QuestionCode.AP96);
 if (ap96 == null) {
@@ -3482,7 +3482,7 @@ if (ap96 == null) {
     }
     private void createQuestionAP97() {
         // == AP97
-        // Proportion de voiture Essence (%)
+        // &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Proportion de voiture Essence (%)
 
         ap97 = (PercentageQuestion) questionService.findByCode(QuestionCode.AP97);
 if (ap97 == null) {
@@ -3540,7 +3540,7 @@ if (ap97 == null) {
     }
     private void createQuestionAP98() {
         // == AP98
-        // Consommation moyenne des véhicules (l/100km)
+        // &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Consommation moyenne des véhicules (l/100km)
 
         ap98 = (DoubleQuestion) questionService.findByCode(QuestionCode.AP98);
 if (ap98 == null) {
