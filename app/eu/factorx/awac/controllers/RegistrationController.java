@@ -224,6 +224,7 @@ public class RegistrationController extends AbstractController {
 
 		//create site
 		Site site = new Site(organization, dto.getFirstSiteName());
+		site.setPercentOwned(100.0);
 		site.setOrganizationalStructure("ORGANIZATION_STRUCTURE_1");
 
 		//add last year period
