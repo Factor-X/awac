@@ -21,7 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.*;
 
-public class DocumentMessage {
+public class PDFDocumentMessage {
 
 
 	private String periodKey;

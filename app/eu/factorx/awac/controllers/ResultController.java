@@ -17,7 +17,8 @@ import eu.factorx.awac.service.impl.reporting.*;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.Colors;
 import eu.factorx.awac.util.MyrmexFatalException;
-import eu.factorx.awac.util.document.messages.DocumentMessage;
+import eu.factorx.awac.util.document.messages.PDFDocumentMessage;
+import eu.factorx.awac.util.document.messages.XLSDocumentMessage;
 import eu.factorx.awac.util.document.service.DocumentService;
 import jxl.read.biff.BiffException;
 import jxl.write.WriteException;
@@ -26,7 +27,6 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Controller;
-import play.Play;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -115,16 +115,21 @@ public class ResultController extends AbstractController {
 		//control scope
 		controlScope(scopes);
 
-		if (comparedPeriodKey == null) {
-			Period period = periodService.findByCode(new PeriodCode(periodKey));
+		LanguageCode lang = securedController.getCurrentUser().getPerson().getDefaultLanguage();
+		InterfaceTypeCode interfaceCode = securedController.getCurrentUser().getOrganization().getInterfaceCode();
 
-			return getSimpleReportAsXls(period, scopes);
-		} else {
-			Period period = periodService.findByCode(new PeriodCode(periodKey));
-			Period comparedPeriod = periodService.findByCode(new PeriodCode(comparedPeriodKey));
+		final XLSDocumentMessage xlsDocumentMessage = new XLSDocumentMessage();
+		xlsDocumentMessage.setPeriodKey(periodKey);
+		xlsDocumentMessage.setComparedPeriodKey(comparedPeriodKey);
+		xlsDocumentMessage.setLang(lang);
+		xlsDocumentMessage.setScopes(scopes);
+		xlsDocumentMessage.setInterfaceCode(interfaceCode);
+		xlsDocumentMessage.setIdealResultValues(getIdealResultValues(interfaceCode));
+		xlsDocumentMessage.setTypicalResultValues(getTypicalResultValues(interfaceCode));
+		xlsDocumentMessage.setUUID(UUID.randomUUID().toString());
+		documentService.send(xlsDocumentMessage);
 
-			return getComparedReportAsXls(period, comparedPeriod, scopes);
-		}
+		return ok(new PromiseDTO(xlsDocumentMessage.getUUID()));
 	}
 
 	@Transactional(readOnly = false)
@@ -146,49 +151,25 @@ public class ResultController extends AbstractController {
 		LanguageCode lang = securedController.getCurrentUser().getPerson().getDefaultLanguage();
 		InterfaceTypeCode interfaceCode = securedController.getCurrentUser().getOrganization().getInterfaceCode();
 
-		final DocumentMessage documentMessage = new DocumentMessage();
-		documentMessage.setPeriodKey(periodKey);
-		documentMessage.setComparedPeriodKey(comparedPeriodKey);
-		documentMessage.setLang(lang);
-		documentMessage.setScopes(scopes);
-		documentMessage.setInterfaceCode(interfaceCode);
-		documentMessage.setIdealResultValues(getIdealResultValues(interfaceCode));
-		documentMessage.setTypicalResultValues(getTypicalResultValues(interfaceCode));
-		documentMessage.setUUID(UUID.randomUUID().toString());
-		documentService.send(documentMessage);
+		final PDFDocumentMessage PDFDocumentMessage = new PDFDocumentMessage();
+		PDFDocumentMessage.setPeriodKey(periodKey);
+		PDFDocumentMessage.setComparedPeriodKey(comparedPeriodKey);
+		PDFDocumentMessage.setLang(lang);
+		PDFDocumentMessage.setScopes(scopes);
+		PDFDocumentMessage.setInterfaceCode(interfaceCode);
+		PDFDocumentMessage.setIdealResultValues(getIdealResultValues(interfaceCode));
+		PDFDocumentMessage.setTypicalResultValues(getTypicalResultValues(interfaceCode));
+		PDFDocumentMessage.setUUID(UUID.randomUUID().toString());
+		documentService.send(PDFDocumentMessage);
 
-		return ok(new PromiseDTO(documentMessage.getUUID()));
+		return ok(new PromiseDTO(PDFDocumentMessage.getUUID()));
 	}
 
 	//
 	// UTILS
 	//
 
-	private Result getSimpleReportAsXls(Period period, List<Scope> scopes) throws IOException, WriteException, BiffException {
-		LanguageCode lang = securedController.getCurrentUser().getPerson().getDefaultLanguage();
-		InterfaceTypeCode interfaceCode = securedController.getCurrentUser().getOrganization().getInterfaceCode();
-		byte[] content = resultExcelGeneratorService.generateExcelInStream(lang, scopes, period, interfaceCode, getTypicalResultValues(interfaceCode), getIdealResultValues(interfaceCode));
 
-		DownloadFileDTO downloadFileDTO = new DownloadFileDTO();
-		downloadFileDTO.setFilename("export_bilanGES_" + DateTime.now().toString("YMd-HH:mm").replace(':', 'h') + ".xls");
-		downloadFileDTO.setMimeType("application/vnd.ms-excel");
-		downloadFileDTO.setBase64(new Base64().encodeAsString(content));
-
-		return ok(downloadFileDTO);
-	}
-
-	private Result getComparedReportAsXls(Period period, Period comparedPeriod, List<Scope> scopes) throws IOException, WriteException, BiffException {
-		LanguageCode lang = securedController.getCurrentUser().getPerson().getDefaultLanguage();
-		InterfaceTypeCode interfaceCode = securedController.getCurrentUser().getOrganization().getInterfaceCode();
-		byte[] content = resultExcelGeneratorService.generateComparedExcelInStream(lang, scopes, period, comparedPeriod, interfaceCode, getTypicalResultValues(interfaceCode), getIdealResultValues(interfaceCode));
-
-		DownloadFileDTO downloadFileDTO = new DownloadFileDTO();
-		downloadFileDTO.setFilename("export_bilanGES_" + DateTime.now().toString("YMd-HH:mm").replace(':', 'h') + ".xls");
-		downloadFileDTO.setMimeType("application/vnd.ms-excel");
-		downloadFileDTO.setBase64(new Base64().encodeAsString(content));
-
-		return ok(downloadFileDTO);
-	}
 
 	private Result getComparedReport(Period period, Period comparedPeriod, List<Scope> scopes) throws BiffException, IOException, WriteException {
 		ResultsDTO resultsDTO = new ResultsDTO();

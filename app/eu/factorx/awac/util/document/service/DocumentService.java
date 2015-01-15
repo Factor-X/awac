@@ -5,7 +5,8 @@ import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.routing.SmallestMailboxRouter;
 import eu.factorx.awac.util.document.actors.DocumentServiceActor;
-import eu.factorx.awac.util.document.messages.DocumentMessage;
+import eu.factorx.awac.util.document.messages.PDFDocumentMessage;
+import eu.factorx.awac.util.document.messages.XLSDocumentMessage;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -35,7 +36,10 @@ public class DocumentService {
 	 * @param Document the Document message
 	 */
 
-	public void send(DocumentMessage Document) {
+	public void send(PDFDocumentMessage Document) {
+		DocumentActorRef.tell(Document, DocumentActorRef);
+	}
+	public void send(XLSDocumentMessage Document) {
 		DocumentActorRef.tell(Document, DocumentActorRef);
 	}
 }
