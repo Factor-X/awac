@@ -17,8 +17,8 @@ angular
             identifierInfo:
                 fieldTitle: "USER_IDENTIFIER"
                 inputName:'identifier'
-                validationRegex: "[a-zA-Z0-9-]{5,20}"
-                validationMessage: "IDENTIFIER_CHECK_WRONG"
+                validationRegex: "^\\S{5,20}$"
+                validationMessage: "LOGIN_VALIDATION_WRONG_LENGTH"
 
             lastNameInfo:
                 fieldTitle: "USER_LASTNAME"

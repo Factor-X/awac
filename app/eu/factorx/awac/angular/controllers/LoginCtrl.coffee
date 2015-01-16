@@ -42,8 +42,8 @@ angular
         fieldTitle: "IDENTIFIENT_OR_EMAIL"
         inputName: 'password'
         fieldType: "text"
-        validationRegex: "^\\S+$"
-        validationMessage: "PASSWORD_VALIDATION_WRONG_LENGTH"
+        validationRegex: "^\\S{5,20}$"
+        validationMessage: "LOGIN_VALIDATION_WRONG_LENGTH"
         field: ""
         isValid: false
         focus: ->
