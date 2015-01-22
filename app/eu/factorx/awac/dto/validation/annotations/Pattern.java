@@ -16,7 +16,7 @@ public @interface Pattern {
 
 	public static final String PASSWORD_OPTIONAL = "/([A-Za-z0-9#?!@$%^&*-]{5,20}|.{0})/";
 
-	public static final String IDENTIFIER = "/[a-zA-Z0-9-]{5,20}/";
+	public static final String IDENTIFIER = "/[a-zA-Z0-9_-]{5,20}/";
 
     public static final String PHONE_NUMBER = "/.{5-12}/";
 
