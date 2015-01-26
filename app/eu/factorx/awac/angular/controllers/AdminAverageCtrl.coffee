@@ -68,4 +68,7 @@ angular
         downloadService.postJson '/awac/admin/average/computeAverage', data, (result) ->
             $scope.isLoading = false
             if result.success
-                messageFlash.displayInfo "STATS_SUCCESS_MESSAGE"
+                if !!result.data && !!result.data.message
+                    messageFlash.displayInfo result.data.message
+                else
+                    messageFlash.displayInfo "STATS_SUCCESS_MESSAGE"
