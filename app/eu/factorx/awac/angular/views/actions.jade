@@ -1,6 +1,8 @@
 div.actions.advices
     h1 {{ "REDUCTION_ACTION_ADVICES_TITLE" | translateText }}
     br
+    div.desc(ng-if="$root.instanceName == 'littleemitter' || $root.instanceName == 'household'", ng-bind-html="'REDUCTION_ACTION_ADVICES_DESC_HOUSEHOLD_LE' | translate")
+    div.desc(ng-if="$root.instanceName == 'event'", ng-bind-html="'REDUCTION_ACTION_ADVICES_DESC_EVENT' | translate")
 
     .waiting-data(ng-show="waitingAdvices")
         img(src="/assets/images/modal-loading.gif")
