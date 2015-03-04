@@ -36,36 +36,36 @@ public class BaseActivityDataAPE_BAD5C extends ActivityResultContributor {
 
         //2. build BAD
 
-        
+
 
 
 
         //and control
 
         //2.1 loop for each answer for each loop for each parents of one or more question needed by the BAD
-        
-            
+
+
                             List<QuestionSetAnswer> questionSetAnswersAP65 = questionSetAnswers.get(QuestionCode.AP65);
                 //2.2 control if the list if different than null
                 if (questionSetAnswersAP65 == null) {
                     return res;
                 }
-            
+
             //loop ($repetition.mainQuestionSetDescription)
                             for (QuestionSetAnswer questionSetAnswer1 : questionSetAnswersAP65) {
-             
+
                             //create a map for each repetition level
                 Map<QuestionCode, QuestionAnswer> answersByCode1 = byQuestionCode(questionSetAnswer1.getQuestionAnswers());
 
                 //load question for this level
                                     QuestionAnswer questionAP68Answer = answersByCode1.get(QuestionCode.AP68);
-                
+
                     //control them
                     if (                            questionAP68Answer == null                                                 ) {
                        continue;
                     }
-                    
-            
+
+
             //build the bad
             BaseActivityData baseActivityData = new BaseActivityData();
 
@@ -77,14 +77,14 @@ public class BaseActivityDataAPE_BAD5C extends ActivityResultContributor {
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_7);
             baseActivityData.setActivityType(ActivityTypeCode.AT_1);
 
-            baseActivityData.setActivitySource(ActivitySourceCode.AS_163);
+            baseActivityData.setActivitySource(ActivitySourceCode.AS_2);
 
             baseActivityData.setActivityOwnership(true);
             baseActivityData.setUnit(baseActivityDataUnit);
             baseActivityData.setValue(toDouble(questionAP68Answer, baseActivityDataUnit));
             res.add(baseActivityData);
 
-            
+
                          }
                  return res;
     }

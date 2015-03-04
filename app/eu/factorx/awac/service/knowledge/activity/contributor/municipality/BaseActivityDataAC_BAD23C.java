@@ -36,19 +36,19 @@ public class BaseActivityDataAC_BAD23C extends ActivityResultContributor {
 
         //2. build BAD
 
-        
+
         //2.1 loop for each answer for each loop for each parents of one or more question needed by the BAD
-        
-            
+
+
                             List<QuestionSetAnswer> questionSetAnswersAC602 = questionSetAnswers.get(QuestionCode.AC602);
                 //2.2 control if the list if different than null
                 if (questionSetAnswersAC602 == null) {
                     return res;
                 }
-            
+
             //loop ($repetition.mainQuestionSetDescription)
                             for (QuestionSetAnswer questionSetAnswer1 : questionSetAnswersAC602) {
-             
+
                             //create a map for each repetition level
                 Map<QuestionCode, QuestionAnswer> answersByCode1 = byQuestionCode(questionSetAnswer1.getQuestionAnswers());
 
@@ -56,15 +56,15 @@ public class BaseActivityDataAC_BAD23C extends ActivityResultContributor {
                                     QuestionAnswer questionAC605Answer = answersByCode1.get(QuestionCode.AC605);
                                     QuestionAnswer questionAC603Answer = answersByCode1.get(QuestionCode.AC603);
                                     QuestionAnswer questionAC604Answer = answersByCode1.get(QuestionCode.AC604);
-                
+
                     //control them
                     if (                            questionAC605Answer == null  ||
                                                                                 questionAC603Answer == null  ||
                                                                                 questionAC604Answer == null                                                 ) {
                        continue;
                     }
-                    
-            
+
+
             //build the bad
             BaseActivityData baseActivityData = new BaseActivityData();
 
@@ -76,14 +76,14 @@ public class BaseActivityDataAC_BAD23C extends ActivityResultContributor {
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_7);
             baseActivityData.setActivityType(ActivityTypeCode.AT_1);
 
-            baseActivityData.setActivitySource(ActivitySourceCode.AS_163);
+            baseActivityData.setActivitySource(ActivitySourceCode.AS_2);
 
             baseActivityData.setActivityOwnership(false);
             baseActivityData.setUnit(baseActivityDataUnit);
             baseActivityData.setValue(toDouble(questionAC605Answer, baseActivityDataUnit)+0*toDouble(questionAC603Answer, baseActivityDataUnit)+0*toDouble(questionAC604Answer, baseActivityDataUnit));
             res.add(baseActivityData);
 
-            
+
                          }
                  return res;
     }
