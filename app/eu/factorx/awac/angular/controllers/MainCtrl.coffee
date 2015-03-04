@@ -107,6 +107,7 @@ angular
 
     $scope.$watch '$root.periodSelectedKey', (o, n) ->
         if o != n
+            $scope.$root.periodToCompare = undefined
             $scope.computeScopeAndPeriod()
 
     $scope.computeScopeAndPeriod = ->
