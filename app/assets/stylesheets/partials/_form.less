@@ -1,101 +1,137 @@
 
 .menu.menu_municipality > * {
-    min-width: ~'calc((100% / 5.0) - 6px)';
-    width: ~'calc((100% / 5.0) - 6px)';
-    max-width: ~'calc((100% / 5.0) - 6px)';
+  min-width: ~'calc((100% / 5.0) - 6px)';
+  width: ~'calc((100% / 5.0) - 6px)';
+  max-width: ~'calc((100% / 5.0) - 6px)';
 }
 
 .menu.menu_enterprise > * {
-    min-width: ~'calc((100% / 6.0) - 6px)';
-    width: ~'calc((100% / 6.0) - 6px)';
-    max-width: ~'calc((100% / 6.0) - 6px)';
+  min-width: ~'calc((100% / 6.0) - 6px)';
+  width: ~'calc((100% / 6.0) - 6px)';
+  max-width: ~'calc((100% / 6.0) - 6px)';
 }
 
 .block_status {
 
-    .verification_status_approval {
-        &.verification_approved {
-            background: url('../images/status/verification_approved.png') center center no-repeat #acd595;
-        }
-        &.verification_approval {
-            background: url('../images/status/verification_approval.png') center center no-repeat #e5e5ee;
-            cursor: pointer;
-        }
+  .verification_status_approval {
+    &.verification_approved {
+      background: url('../images/status/verification_approved.png') center center no-repeat #acd595;
     }
-    .verification_status_reject {
-        &.verification_rejected {
-            background: url('../images/status/verification_rejected.png') center center no-repeat #ff2222;
-        }
-        &.verification_reject {
-            background: url("../images/status/verification_reject.png") center center no-repeat #e5e5ee;
-            cursor: pointer;
-        }
-        &:disabled {
-            cursor: auto;
+    &.verification_approval {
+      background: url('../images/status/verification_approval.png') center center no-repeat #e5e5ee;
+      cursor: pointer;
+    }
+  }
+  .verification_status_reject {
+    &.verification_rejected {
+      background: url('../images/status/verification_rejected.png') center center no-repeat #ff2222;
+    }
+    &.verification_reject {
+      background: url("../images/status/verification_reject.png") center center no-repeat #e5e5ee;
+      cursor: pointer;
+    }
+    &:disabled {
+      cursor: auto;
 
-        }
     }
-    .verified {
-        &.verified_unverified {
-            background: url('../images/status/verified_unverified.png') center center no-repeat #e5e5ee;
-        }
-        &.verified_valid {
-            background: url('../images/status/verified_valid.png') center center no-repeat #acd595;
-        }
-        &.verified_rejected {
-            background: url('../images/status/verified_rejected.png') center center no-repeat #ff2222;
-            cursor: pointer;
-        }
+  }
+  .verified {
+    &.verified_unverified {
+      background: url('../images/status/verified_unverified.png') center center no-repeat #e5e5ee;
     }
+    &.verified_valid {
+      background: url('../images/status/verified_valid.png') center center no-repeat #acd595;
+    }
+    &.verified_rejected {
+      background: url('../images/status/verified_rejected.png') center center no-repeat #ff2222;
+      cursor: pointer;
+    }
+  }
 
 }
 
 .error_message_numbers_only {
-    position: absolute;
-    z-index: 2;
+  position: absolute;
+  z-index: 2;
 
-    & > * {
-        display: inline-block;
+  & > * {
+    display: inline-block;
 
-        &:first-child {
-            background-color: #FF0000;
-            border: 1px solid #B10000;
-            width: 200px;
-            padding: 5px;
-            -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            color: #ffffff;
-        }
-
-        &:last-child {
-            vertical-align: top;
-            margin-top: 4px;
-            margin-left: -1px;
-            z-index: 2;
-        }
+    &:first-child {
+      background-color: #FF0000;
+      border: 1px solid #B10000;
+      width: 200px;
+      padding: 5px;
+      -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      color: #ffffff;
     }
+
+    &:last-child {
+      vertical-align: top;
+      margin-top: 4px;
+      margin-left: -1px;
+      z-index: 2;
+    }
+  }
 }
 
 .field_row {
-    .error_message_numbers_only {
-        margin-left: -210px;
-    }
+  .error_message_numbers_only {
+    margin-left: -210px;
+  }
 }
-
 
 .question_field {
-    .error_message_numbers_only {
-        margin-left: -172px;
-        margin-top: -25px;
-    }
+  .error_message_numbers_only {
+    margin-left: -172px;
+    margin-top: -25px;
+  }
 }
 
-.question_comparison{
-    & > div{
-        display: inline-block;
-        &:first-child{
-            width: 28px;
-        }
+.question_comparison {
+  & > div {
+    display: inline-block;
+    &:first-child {
+      width: 28px;
     }
+  }
+}
+
+.form-navigator {
+  text-align: center;
+  margin: 6em auto auto;
+  display: table;
+
+  .button {
+    display: table-cell;
+    vertical-align: middle !important;
+    width: 240px;
+    height: 100%;
+
+    &.save:before {
+      display: block;
+      font-family: 'FontAwesome';
+      content: '\f0c7';
+      font-size: 24px;
+      padding: 0 10px;
+    }
+
+    &.previous:before {
+      display: block;
+      font-family: 'FontAwesome';
+      content: '\f053';
+      font-size: 24px;
+      padding: 0 10px;
+    }
+
+    &.next:before {
+      display: block;
+      font-family: 'FontAwesome';
+      content: '\f054';
+      font-size: 24px;
+      padding: 0 10px;
+    }
+  }
 }

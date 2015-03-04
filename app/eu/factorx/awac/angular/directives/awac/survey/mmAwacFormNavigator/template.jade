@@ -1,0 +1,12 @@
+.form-navigator
+    button.button.previous(type="button", ng-show="previousFormIdentifier != null", ng-click="$root.nav('/form/' + previousFormIdentifier)")
+        span(ng-bind-html="previousFormIdentifier | translate")
+
+    button.button.save(type="button", ng-click="save()")
+        span(ng-bind-html="'SAVE_BUTTON' | translate")
+
+    button.button.next(type="button", ng-show="nextFormIdentifier != null", ng-click="$root.nav('/form/' + nextFormIdentifier)")
+        span(ng-bind-html="nextFormIdentifier | translate")
+
+    button.button.next(type="button", ng-show="nextFormIdentifier == null", ng-click="$root.nav('/results')")
+        span(ng-bind-html="'SURVEY_INTERFACE_RESULT' | translate")
