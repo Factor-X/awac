@@ -2,7 +2,7 @@
  *
  * Instant Play Framework
  * AWAC
- *                       
+ *
  *
  * Copyright (c) 2014 Factor-X.
  * Author Gaston Hollands
@@ -16,8 +16,10 @@ import java.util.Set;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlTransient;
 
+import eu.factorx.awac.models.code.type.LanguageCode;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
+import play.data.validation.Constraints;
 import play.data.validation.Constraints.Required;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -32,8 +34,7 @@ import eu.factorx.awac.models.forms.VerificationRequest;
 @Inheritance(strategy = InheritanceType.JOINED)
 @NamedQueries({
 		@NamedQuery(name = Account.FIND_BY_IDENTIFIER, query = "select p from Account p where p.identifier = :identifier"),
-		@NamedQuery(name = Account.FIND_BY_EMAIL, query = "select a from Account a, Person p where p.email = :email and a.person = p"),
-        @NamedQuery(name = Account.FIND_BY_EMAIL_AND_INTERFACE, query = "select a from Account a, Person p where p.email = :email and a.organization.interfaceCode = :interface"),
+		@NamedQuery(name = Account.FIND_BY_EMAIL, query = "select a from Account a where a.email = :email")
 })
 public class Account extends AuditedAbstractEntity {
 
@@ -48,8 +49,22 @@ public class Account extends AuditedAbstractEntity {
     @ManyToOne(cascade = {CascadeType.MERGE}, optional = false)
 	private Organization organization;
 
-	@ManyToOne(cascade = {CascadeType.MERGE}, optional = false)
-	private Person person;
+	//TODO NEW
+	@Required
+	private String lastname;
+
+	@Required
+	private String firstname;
+
+	@Constraints.Email
+	@Column(nullable = false, unique = true)
+	private String email;
+
+	@Embedded
+	@AttributeOverride(name = "key", column = @Column(name = "default_language", columnDefinition = "character varying(2) not null default 'FR'"))
+	private LanguageCode defaultLanguage = LanguageCode.FRENCH;
+
+	//TODO NEW
 
 	@Column(nullable = false, unique = true)
 	private String identifier;
@@ -83,16 +98,21 @@ public class Account extends AuditedAbstractEntity {
 	public Account() {
 	}
 
-	public Account(Organization organization, Person person, String identifier, String password) {
+
+	public Account(Organization organization, String lastname, String firstname, String email, String identifier, String password) {
 		this.organization = organization;
-		this.person = person;
+		this.lastname = lastname;
+		this.firstname = firstname;
+		this.email = email;
 		this.identifier = identifier;
 		this.password = password;
 	}
 
-	public Account(Organization organization, Person person, String identifier, String password, Boolean active, Boolean needChangePassword, Boolean isAdmin) {
+	public Account(Organization organization, String lastname, String firstname, String email, String identifier, String password, Boolean active, Boolean needChangePassword, Boolean isAdmin) {
 		this.organization = organization;
-		this.person = person;
+		this.lastname = lastname;
+		this.firstname = firstname;
+		this.email = email;
 		this.identifier = identifier;
 		this.password = password;
 		this.active = active;
@@ -122,14 +142,6 @@ public class Account extends AuditedAbstractEntity {
 
 	public void setOrganization(Organization organization) {
 		this.organization = organization;
-	}
-
-	public Person getPerson() {
-		return person;
-	}
-
-	public void setPerson(Person person) {
-		this.person = person;
 	}
 
 	public String getIdentifier() {
@@ -172,6 +184,38 @@ public class Account extends AuditedAbstractEntity {
 		this.isAdmin = isAdmin;
 	}
 
+	public String getLastname() {
+		return lastname;
+	}
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+
+	public String getFirstname() {
+		return firstname;
+	}
+
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public LanguageCode getDefaultLanguage() {
+		return defaultLanguage;
+	}
+
+	public void setDefaultLanguage(LanguageCode defaultLanguage) {
+		this.defaultLanguage = defaultLanguage;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) {
@@ -190,14 +234,18 @@ public class Account extends AuditedAbstractEntity {
 	@Override
 	public String toString() {
 		return "Account{" +
-				"organization=" + organization +
-				", person=" + person +
-				", identifier='" + identifier + '\'' +
-				", password='" + password + '\'' +
-				", active=" + active +
-				", needChangePassword=" + needChangePassword +
-				", isAdmin=" + isAdmin +
-                ", isMainVerifier=" + isMainVerifier+
-				'}';
+			"organization=" + organization +
+			", lastname='" + lastname + '\'' +
+			", firstname='" + firstname + '\'' +
+			", email='" + email + '\'' +
+			", defaultLanguage=" + defaultLanguage +
+			", identifier='" + identifier + '\'' +
+			", password='" + password + '\'' +
+			", active=" + active +
+			", needChangePassword=" + needChangePassword +
+			", isAdmin=" + isAdmin +
+			", isMainVerifier=" + isMainVerifier +
+			", verificationRequestList=" + verificationRequestList +
+			'}';
 	}
 }

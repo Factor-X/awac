@@ -75,9 +75,9 @@ public class AverageController extends AbstractController {
 
         ListDTO<CodeListDTO> list = new ListDTO<>();
 
-        list.add(toCodeListDTO(CodeList.SECTEURPRIMAIRE, securedController.getCurrentUser().getPerson().getDefaultLanguage()));
-        list.add(toCodeListDTO(CodeList.SECTEURSECONDAIRE, securedController.getCurrentUser().getPerson().getDefaultLanguage()));
-        list.add(toCodeListDTO(CodeList.SECTEURTERTIAIRE, securedController.getCurrentUser().getPerson().getDefaultLanguage()));
+        list.add(toCodeListDTO(CodeList.SECTEURPRIMAIRE, securedController.getCurrentUser().getDefaultLanguage()));
+        list.add(toCodeListDTO(CodeList.SECTEURSECONDAIRE, securedController.getCurrentUser().getDefaultLanguage()));
+        list.add(toCodeListDTO(CodeList.SECTEURTERTIAIRE, securedController.getCurrentUser().getDefaultLanguage()));
 
         return ok(list);
     }

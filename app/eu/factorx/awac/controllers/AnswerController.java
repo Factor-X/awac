@@ -299,10 +299,10 @@ public class AnswerController extends AbstractController {
         //recover / control the auditInfo
         if (questionSetAnswer.getAuditInfo() != null && questionSetAnswer.getAuditInfo().getDataLocker() != null) {
             if (!questionSetAnswer.getAuditInfo().getDataLocker().equals(securedController.getCurrentUser()) && securedController.getCurrentUser().getIsAdmin() == false) {
-                new MyrmexRuntimeException(BusinessErrorType.ANSWER_CONTROLLER_QSA_ALREAD_LOCKED, questionSetAnswer.getQuestionSet().getCode().getKey(), questionSetAnswer.getAuditInfo().getDataLocker().getPerson().getFirstname() + " " + questionSetAnswer.getAuditInfo().getDataLocker().getPerson().getLastname());
+                new MyrmexRuntimeException(BusinessErrorType.ANSWER_CONTROLLER_QSA_ALREAD_LOCKED, questionSetAnswer.getQuestionSet().getCode().getKey(), questionSetAnswer.getAuditInfo().getDataLocker().getFirstname() + " " + questionSetAnswer.getAuditInfo().getDataLocker().getLastname());
             }
             if (questionSetAnswer.getAuditInfo().getDataValidator() != null) {
-                new MyrmexRuntimeException(BusinessErrorType.ANSWER_CONTROLLER_QSA_ALREAD_VALIDATE, questionSetAnswer.getQuestionSet().getCode().getKey(), questionSetAnswer.getAuditInfo().getDataLocker().getPerson().getFirstname() + " " + questionSetAnswer.getAuditInfo().getDataLocker().getPerson().getLastname());
+                new MyrmexRuntimeException(BusinessErrorType.ANSWER_CONTROLLER_QSA_ALREAD_VALIDATE, questionSetAnswer.getQuestionSet().getCode().getKey(), questionSetAnswer.getAuditInfo().getDataLocker().getFirstname() + " " + questionSetAnswer.getAuditInfo().getDataLocker().getLastname());
             }
         }
 
@@ -400,7 +400,7 @@ public class AnswerController extends AbstractController {
         //recover / control the auditInfo
         if (questionSetAnswer.getAuditInfo() != null && questionSetAnswer.getAuditInfo().getDataValidator() != null) {
             if (!questionSetAnswer.getAuditInfo().getDataValidator().equals(securedController.getCurrentUser()) && securedController.getCurrentUser().getIsAdmin() == false) {
-                throw new MyrmexRuntimeException(BusinessErrorType.ANSWER_CONTROLLER_QSA_ALREAD_LOCKED, questionSetAnswer.getQuestionSet().getCode().getKey(), questionSetAnswer.getAuditInfo().getDataValidator().getPerson().getFirstname() + " " + questionSetAnswer.getAuditInfo().getDataValidator().getPerson().getLastname());
+                throw new MyrmexRuntimeException(BusinessErrorType.ANSWER_CONTROLLER_QSA_ALREAD_LOCKED, questionSetAnswer.getQuestionSet().getCode().getKey(), questionSetAnswer.getAuditInfo().getDataValidator().getFirstname() + " " + questionSetAnswer.getAuditInfo().getDataValidator().getLastname());
             }
         }
 

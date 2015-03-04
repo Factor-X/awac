@@ -79,7 +79,7 @@ public class OrganizationDataController extends AbstractController {
 
                 for (Account account : organization.getAccounts()) {
                     if (account.getActive()) {
-                        emailList.add(account.getPerson().getEmail());
+                        emailList.add(account.getEmail());
                     }
                 }
 

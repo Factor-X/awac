@@ -2,7 +2,7 @@
  *
  * Instant Play Framework
  * AWAC
- *                       
+ *
  *
  * Copyright (c) 2014 Factor-X.
  * Author Gaston Hollands
@@ -25,7 +25,7 @@ public class SystemAdministrator extends Account {
 		super();
 	}
 
-	public SystemAdministrator(Organization organization, Person person, String identifier, String password) {
-		super(organization, person, identifier, password);
+	public SystemAdministrator(Organization organization, String lastname, String firstname, String email, String identifier, String password) {
+		super(organization, lastname,firstname,email, identifier, password);
 	}
 }
