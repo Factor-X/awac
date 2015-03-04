@@ -1,18 +1,17 @@
 package eu.factorx.awac.converter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
-
 import eu.factorx.awac.dto.awac.post.FilesUploadedDTO;
 import eu.factorx.awac.dto.awac.shared.ReducingActionAdviceDTO;
 import eu.factorx.awac.dto.awac.shared.ReducingActionAdviceDTO.BaseIndicatorAssociationDTO;
 import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.models.knowledge.ReducingActionAdvice;
 import eu.factorx.awac.models.knowledge.ReducingActionAdviceBaseIndicatorAssociation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class ReducingActionAdviceToReducingActionAdviceDTOConverter implements Converter<ReducingActionAdvice, ReducingActionAdviceDTO> {
@@ -48,7 +47,8 @@ public class ReducingActionAdviceToReducingActionAdviceDTOConverter implements C
 		for (ReducingActionAdviceBaseIndicatorAssociation baseIndicatorAssociation : reducingAction.getBaseIndicatorAssociations()) {
 			String baseIndicatorKey = baseIndicatorAssociation.getBaseIndicatorCode().getKey();
 			Double percent = baseIndicatorAssociation.getPercent();
-			baseIndicatorAssociationDTOs.add(new BaseIndicatorAssociationDTO(baseIndicatorKey, percent));
+			Double percentMax = baseIndicatorAssociation.getPercentMax();
+			baseIndicatorAssociationDTOs.add(new BaseIndicatorAssociationDTO(baseIndicatorKey, percent, percentMax));
 		}
 		dto.setBaseIndicatorAssociations(baseIndicatorAssociationDTOs);
 

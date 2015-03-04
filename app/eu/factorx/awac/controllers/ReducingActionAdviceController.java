@@ -18,7 +18,7 @@ import eu.factorx.awac.service.impl.reporting.LowRankMeasureWarning;
 import eu.factorx.awac.service.impl.reporting.ReportLogEntry;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexFatalException;
-import org.joda.time.DateTime;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import play.Logger;
@@ -101,7 +101,8 @@ public class ReducingActionAdviceController extends AbstractController {
             for (ReducingActionAdviceDTO.BaseIndicatorAssociationDTO biAssociationDTO : dto.getBaseIndicatorAssociations()) {
                 BaseIndicatorCode baseIndicatorCode = new BaseIndicatorCode(biAssociationDTO.getBaseIndicatorKey());
                 Double percent = biAssociationDTO.getPercent();
-                biAssociations.add(new ReducingActionAdviceBaseIndicatorAssociation(advice, baseIndicatorCode, percent));
+				Double percentMax = biAssociationDTO.getPercentMax();
+                biAssociations.add(new ReducingActionAdviceBaseIndicatorAssociation(advice, baseIndicatorCode, percent, percentMax));
             }
         }
         advice.setBaseIndicatorAssociations(biAssociations);
@@ -190,8 +191,10 @@ public class ReducingActionAdviceController extends AbstractController {
         for (ReducingActionAdvice advice : advices) {
             ReducingActionAdviceDTO adviceDTO = conversionService.convert(advice, ReducingActionAdviceDTO.class);
 
-            Double computedGhgBenefit = computeGhgBenefit(advice, baseActivityResults);
-            UnitCode computedGhgBenefitUnitCode = UnitCode.U5331;
+			Pair<Double, Double> ghgBenefitInterval = computeGhgBenefitInterval(advice, baseActivityResults);
+
+			Double computedGhgBenefit = ghgBenefitInterval.getLeft();
+			UnitCode computedGhgBenefitUnitCode = UnitCode.U5331;
             if (computedGhgBenefit < 1.0) {
                 computedGhgBenefit = (computedGhgBenefit * 1000);
                 computedGhgBenefitUnitCode = UnitCode.U5335;
@@ -199,27 +202,39 @@ public class ReducingActionAdviceController extends AbstractController {
             adviceDTO.setComputedGhgBenefit(computedGhgBenefit);
             adviceDTO.setComputedGhgBenefitUnitKey(computedGhgBenefitUnitCode.getKey());
 
-            reducingActionDTOs.add(adviceDTO);
+			Double computedGhgBenefitMax = ghgBenefitInterval.getRight();
+			UnitCode computedGhgBenefitMaxUnitCode = UnitCode.U5331;
+			if (computedGhgBenefitMax < 1.0) {
+				computedGhgBenefitMax = (computedGhgBenefitMax * 1000);
+				computedGhgBenefitMaxUnitCode = UnitCode.U5335;
+			}
+			adviceDTO.setComputedGhgBenefitMax(computedGhgBenefitMax);
+			adviceDTO.setComputedGhgBenefitMaxUnitKey(computedGhgBenefitMaxUnitCode.getKey());
+
+			reducingActionDTOs.add(adviceDTO);
         }
         return reducingActionDTOs;
     }
 
-    private Double computeGhgBenefit(ReducingActionAdvice advice, List<BaseActivityResult> baseActivityResults) {
-        Map<BaseIndicatorCode, Double> ghgReductionObjectiveByBaseIndicator = new HashMap<>();
+    private Pair<Double, Double> computeGhgBenefitInterval(ReducingActionAdvice advice, List<BaseActivityResult> baseActivityResults) {
+        Map<BaseIndicatorCode, Pair<Double, Double>> ghgReductionObjectiveByBaseIndicator = new HashMap<>();
         for (ReducingActionAdviceBaseIndicatorAssociation baseIndicatorAssociation : advice.getBaseIndicatorAssociations()) {
-            ghgReductionObjectiveByBaseIndicator.put(baseIndicatorAssociation.getBaseIndicatorCode(), baseIndicatorAssociation.getPercent());
+            ghgReductionObjectiveByBaseIndicator.put(baseIndicatorAssociation.getBaseIndicatorCode(), Pair.of(baseIndicatorAssociation.getPercent(), baseIndicatorAssociation.getPercentMax()));
         }
 
-        Double res = 0.0;
+        Double minGhgBenefit = 0.0;
+		Double maxGhgBenefit = 0.0;
         for (BaseActivityResult baseActivityResult : baseActivityResults) {
             BaseIndicatorCode baseIndicatorCode = baseActivityResult.getBaseIndicator().getCode();
-            Double ghgReductionPercent = ghgReductionObjectiveByBaseIndicator.get(baseIndicatorCode);
-            if (ghgReductionPercent == null) {
+            Pair<Double, Double> ghgReductionPercents = ghgReductionObjectiveByBaseIndicator.get(baseIndicatorCode);
+
+			if (ghgReductionPercents == null) {
                 continue;
             }
             Double ghgEmission = baseActivityResultService.getValueForYear(baseActivityResult);
-            res += (ghgEmission * ghgReductionPercent / 100.0);
+			minGhgBenefit += (ghgEmission * ghgReductionPercents.getLeft() / 100.0);
+			maxGhgBenefit += (ghgEmission * ghgReductionPercents.getRight() / 100.0);
         }
-        return res;
+        return Pair.of(minGhgBenefit, maxGhgBenefit);
     }
 }

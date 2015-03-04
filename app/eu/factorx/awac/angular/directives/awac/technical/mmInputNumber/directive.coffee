@@ -17,15 +17,15 @@ angular
 
 
         convertToString = (value, decimal) ->
-            if !value? || isNaN value
+            if !value? || value == "" || isNaN value
                 return ""
             value=parseFloat(value).toFixed(decimal)
             formats = $locale.NUMBER_FORMATS
             return value.toString().split('.').join(formats.DECIMAL_SEP)
 
         convertToFloat = (viewValue) ->
-            if viewValue == ""
-                return NaN
+            if viewValue == "" or viewValue == null
+                return null
             formats = $locale.NUMBER_FORMATS
             sep = formats.DECIMAL_SEP
             value = viewValue.split(sep).join('.')
@@ -57,7 +57,7 @@ angular
                     errorMessage = null
 
                     viewValue = convertToFloat(viewValue.trim())
-                    if viewValue == ''
+                    if viewValue == null or viewValue == ''
                         return null
                     regexFloat = new RegExp("^(\\-|\\+)?([0-9]+|Infinity)?$")
                     if regexFloat.test(viewValue)
@@ -83,8 +83,9 @@ angular
                     errorMessage = null
 
                     viewValue = convertToFloat(viewValue.trim())
-                    if viewValue == ''
+                    if viewValue == null or viewValue == ''
                         return null
+
                     regexFloat = new RegExp("^(\\-|\\+)?([0-9]+(\\.[0-9]*)?|Infinity)?$")
                     if regexFloat.test(viewValue)
                         parseResult = viewValue

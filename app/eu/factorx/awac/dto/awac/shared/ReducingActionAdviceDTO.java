@@ -35,6 +35,10 @@ public class ReducingActionAdviceDTO extends DTO implements Serializable {
 
 	private String computedGhgBenefitUnitKey;
 
+	private Double computedGhgBenefitMax;
+
+	private String computedGhgBenefitMaxUnitKey;
+
 	@Size(max = 255)
 	private String expectedPaybackTime;
 
@@ -63,14 +67,18 @@ public class ReducingActionAdviceDTO extends DTO implements Serializable {
 		@NotNull
 		private Double percent;
 
+		@NotNull
+		private Double percentMax;
+
 		public BaseIndicatorAssociationDTO() {
 			super();
 		}
 
-		public BaseIndicatorAssociationDTO(String baseIndicatorKey, Double percent) {
+		public BaseIndicatorAssociationDTO(String baseIndicatorKey, Double percent, Double percentMax) {
 			super();
 			this.baseIndicatorKey = baseIndicatorKey;
 			this.percent = percent;
+			this.percentMax = percentMax;
 		}
 
 		public String getBaseIndicatorKey() {
@@ -87,6 +95,14 @@ public class ReducingActionAdviceDTO extends DTO implements Serializable {
 
 		public void setPercent(Double percent) {
 			this.percent = percent;
+		}
+
+		public Double getPercentMax() {
+			return percentMax;
+		}
+
+		public void setPercentMax(Double percentMax) {
+			this.percentMax = percentMax;
 		}
 	}
 
@@ -164,6 +180,22 @@ public class ReducingActionAdviceDTO extends DTO implements Serializable {
 
 	public void setComputedGhgBenefitUnitKey(String computedGhgBenefitUnitKey) {
 		this.computedGhgBenefitUnitKey = computedGhgBenefitUnitKey;
+	}
+
+	public Double getComputedGhgBenefitMax() {
+		return computedGhgBenefitMax;
+	}
+
+	public void setComputedGhgBenefitMax(Double computedGhgBenefitMax) {
+		this.computedGhgBenefitMax = computedGhgBenefitMax;
+	}
+
+	public String getComputedGhgBenefitMaxUnitKey() {
+		return computedGhgBenefitMaxUnitKey;
+	}
+
+	public void setComputedGhgBenefitMaxUnitKey(String computedGhgBenefitMaxUnitKey) {
+		this.computedGhgBenefitMaxUnitKey = computedGhgBenefitMaxUnitKey;
 	}
 
 	public String getExpectedPaybackTime() {

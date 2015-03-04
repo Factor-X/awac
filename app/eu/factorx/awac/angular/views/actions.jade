@@ -35,7 +35,7 @@ div.actions.advices
                     span &nbsp;&nbsp;
                     span.text {{ getTypeLabel(advice.typeKey) }}
                 td.ghgBenefit
-                    span(ng-show="advice.typeKey == '1'") {{ (advice.computedGhgBenefit | numberToI18N) + "&nbsp;" + getGwpUnitSymbol(advice.computedGhgBenefitUnitKey) }}
+                    span(ng-show="advice.typeKey == '1'") {{ (advice.computedGhgBenefit | numberToI18N) + "&nbsp;" + getGwpUnitSymbol(advice.computedGhgBenefitUnitKey) + "&nbsp;&#8210;&nbsp;" + (advice.computedGhgBenefitMax | numberToI18N) + "&nbsp;" + getGwpUnitSymbol(advice.computedGhgBenefitMaxUnitKey) }}
                     span(ng-hide="advice.typeKey == '2'") &nbsp;
                     //.field_info
                         .field_info_popup

@@ -130,15 +130,19 @@ angular
 
         $scope.baseIndicatorAssociationToAdd =
             baseIndicatorKey: ""
-            percent: 0
+            percent: "0"
+            percentMax: "0"
             isValid: () ->
-                if !!this.baseIndicatorKey && !!this.percent
+                console.log(this.percent)
+                if !!this.baseIndicatorKey && this.percent? && !!this.percentMax
                     percent = +this.percent.replace(',', '.')
-                    return (percent > 0) && (percent < 100)
+                    percentMax = +this.percentMax.replace(',', '.')
+                    return (percent >= -1) && (percent < 100) && (percentMax > 0) && (percentMax < 100) && (percentMax >= percent)
                 return false
             clear: () ->
                 this.baseIndicatorKey = ""
                 this.percent = 0
+                this.percentMax = 0
 
         $scope.baseIndicatorOptions = []
 
@@ -271,6 +275,7 @@ angular
         $scope.addBaseIndicatorAssociation = () ->
             if ($scope.baseIndicatorAssociationToAdd.isValid())
                 $scope.baseIndicatorAssociationToAdd.percent = +$scope.baseIndicatorAssociationToAdd.percent.replace(',', '.')
+                $scope.baseIndicatorAssociationToAdd.percentMax = +$scope.baseIndicatorAssociationToAdd.percentMax.replace(',', '.')
                 $scope.baseIndicatorAssociations.push(angular.copy($scope.baseIndicatorAssociationToAdd))
                 $scope.baseIndicatorAssociationToAdd.clear();
 
