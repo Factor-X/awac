@@ -36,19 +36,19 @@ public class BaseActivityDataAE_BAD44C extends ActivityResultContributor {
 
         //2. build BAD
 
-        
+
         //2.1 loop for each answer for each loop for each parents of one or more question needed by the BAD
-        
-            
+
+
                             List<QuestionSetAnswer> questionSetAnswersA502 = questionSetAnswers.get(QuestionCode.A502);
                 //2.2 control if the list if different than null
                 if (questionSetAnswersA502 == null) {
                     return res;
                 }
-            
+
             //loop ($repetition.mainQuestionSetDescription)
                             for (QuestionSetAnswer questionSetAnswer1 : questionSetAnswersA502) {
-             
+
                             //create a map for each repetition level
                 Map<QuestionCode, QuestionAnswer> answersByCode1 = byQuestionCode(questionSetAnswer1.getQuestionAnswers());
 
@@ -56,15 +56,15 @@ public class BaseActivityDataAE_BAD44C extends ActivityResultContributor {
                                     QuestionAnswer questionA505Answer = answersByCode1.get(QuestionCode.A505);
                                     QuestionAnswer questionA503Answer = answersByCode1.get(QuestionCode.A503);
                                     QuestionAnswer questionA504Answer = answersByCode1.get(QuestionCode.A504);
-                
+
                     //control them
                     if (                            questionA505Answer == null  ||
                                                                                 questionA503Answer == null  ||
                                                                                 questionA504Answer == null                                                 ) {
                        continue;
                     }
-                    
-            
+
+
             //build the bad
             BaseActivityData baseActivityData = new BaseActivityData();
 
@@ -76,14 +76,14 @@ public class BaseActivityDataAE_BAD44C extends ActivityResultContributor {
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_8);
             baseActivityData.setActivityType(ActivityTypeCode.AT_1);
 
-            baseActivityData.setActivitySource(ActivitySourceCode.AS_163);
+            baseActivityData.setActivitySource(ActivitySourceCode.AS_2);
 
             baseActivityData.setActivityOwnership(false);
             baseActivityData.setUnit(baseActivityDataUnit);
             baseActivityData.setValue(toDouble(questionA505Answer, baseActivityDataUnit)+0*toDouble(questionA503Answer, baseActivityDataUnit)+0*toDouble(questionA504Answer, baseActivityDataUnit));
             res.add(baseActivityData);
 
-            
+
                          }
                  return res;
     }

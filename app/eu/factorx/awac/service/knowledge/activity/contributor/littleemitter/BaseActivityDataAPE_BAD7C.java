@@ -36,24 +36,24 @@ public class BaseActivityDataAPE_BAD7C extends ActivityResultContributor {
 
         //2. build BAD
 
-        
+
 
 
 
         //and control
 
         //2.1 loop for each answer for each loop for each parents of one or more question needed by the BAD
-        
-            
+
+
                             List<QuestionSetAnswer> questionSetAnswersAP81 = questionSetAnswers.get(QuestionCode.AP81);
                 //2.2 control if the list if different than null
                 if (questionSetAnswersAP81 == null) {
                     return res;
                 }
-            
+
             //loop ($repetition.mainQuestionSetDescription)
                             for (QuestionSetAnswer questionSetAnswer1 : questionSetAnswersAP81) {
-             
+
                             //create a map for each repetition level
                 Map<QuestionCode, QuestionAnswer> answersByCode1 = byQuestionCode(questionSetAnswer1.getQuestionAnswers());
 
@@ -64,7 +64,7 @@ public class BaseActivityDataAPE_BAD7C extends ActivityResultContributor {
                                     QuestionAnswer questionAP87Answer = answersByCode1.get(QuestionCode.AP87);
                                     QuestionAnswer questionAP90Answer = answersByCode1.get(QuestionCode.AP90);
                                     QuestionAnswer questionAP83Answer = answersByCode1.get(QuestionCode.AP83);
-                
+
                     //control them
                     if (                            questionAP82Answer == null  ||
                                                                                 questionAP85Answer == null  ||
@@ -74,9 +74,9 @@ public class BaseActivityDataAPE_BAD7C extends ActivityResultContributor {
                                                                                 questionAP83Answer == null                                                 ) {
                        continue;
                     }
-                    
+
                         if(getCode(questionAP83Answer).getKey().equals("3")){
-            
+
             //build the bad
             BaseActivityData baseActivityData = new BaseActivityData();
 
@@ -88,7 +88,7 @@ public class BaseActivityDataAPE_BAD7C extends ActivityResultContributor {
             baseActivityData.setActivitySubCategory(ActivitySubCategoryCode.ASC_8);
             baseActivityData.setActivityType(ActivityTypeCode.AT_1);
 
-            baseActivityData.setActivitySource(ActivitySourceCode.AS_163);
+            baseActivityData.setActivitySource(ActivitySourceCode.AS_2);
 
             baseActivityData.setActivityOwnership(false);
             baseActivityData.setUnit(baseActivityDataUnit);
@@ -96,7 +96,7 @@ public class BaseActivityDataAPE_BAD7C extends ActivityResultContributor {
             res.add(baseActivityData);
 
                         }
-            
+
                          }
                  return res;
     }

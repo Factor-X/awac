@@ -1,12 +1,12 @@
 package eu.factorx.awac.models.code.type;
 
+import eu.factorx.awac.models.code.Code;
+import eu.factorx.awac.models.code.CodeList;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-
-import eu.factorx.awac.models.code.Code;
-import eu.factorx.awac.models.code.CodeList;
 
 @Embeddable
 @AttributeOverrides({@AttributeOverride(name = "key", column = @Column(name = "activitysource"))})
@@ -174,7 +174,7 @@ public class ActivitySourceCode extends Code {
 	public static final ActivitySourceCode AS_160 = new ActivitySourceCode("AS_160");
 	public static final ActivitySourceCode AS_161 = new ActivitySourceCode("AS_161");
 	public static final ActivitySourceCode AS_162 = new ActivitySourceCode("AS_162");
-	public static final ActivitySourceCode AS_163 = new ActivitySourceCode("AS_163");
+	//	public static final ActivitySourceCode AS_163 = new ActivitySourceCode("AS_163");
 	public static final ActivitySourceCode AS_164 = new ActivitySourceCode("AS_164");
 	public static final ActivitySourceCode AS_165 = new ActivitySourceCode("AS_165");
 	public static final ActivitySourceCode AS_166 = new ActivitySourceCode("AS_166");
@@ -383,14 +383,14 @@ public class ActivitySourceCode extends Code {
 	public static final ActivitySourceCode AS_370 = new ActivitySourceCode("AS_370");
 	public static final ActivitySourceCode AS_371 = new ActivitySourceCode("AS_371");
 	public static final ActivitySourceCode AS_372 = new ActivitySourceCode("AS_372");
-    public static final ActivitySourceCode AS_373 = new ActivitySourceCode("AS_373");
-    public static final ActivitySourceCode AS_374 = new ActivitySourceCode("AS_374");
-    public static final ActivitySourceCode AS_375 = new ActivitySourceCode("AS_375");
-    public static final ActivitySourceCode AS_376 = new ActivitySourceCode("AS_376");
-    public static final ActivitySourceCode AS_377 = new ActivitySourceCode("AS_377");
-    public static final ActivitySourceCode AS_378 = new ActivitySourceCode("AS_378");
-    public static final ActivitySourceCode AS_379 = new ActivitySourceCode("AS_379");
-    public static final ActivitySourceCode AS_380 = new ActivitySourceCode("AS_380");
+	public static final ActivitySourceCode AS_373 = new ActivitySourceCode("AS_373");
+	public static final ActivitySourceCode AS_374 = new ActivitySourceCode("AS_374");
+	public static final ActivitySourceCode AS_375 = new ActivitySourceCode("AS_375");
+	public static final ActivitySourceCode AS_376 = new ActivitySourceCode("AS_376");
+	public static final ActivitySourceCode AS_377 = new ActivitySourceCode("AS_377");
+	public static final ActivitySourceCode AS_378 = new ActivitySourceCode("AS_378");
+	public static final ActivitySourceCode AS_379 = new ActivitySourceCode("AS_379");
+	public static final ActivitySourceCode AS_380 = new ActivitySourceCode("AS_380");
 	private static final long serialVersionUID = 1L;
 
 	protected ActivitySourceCode() {
