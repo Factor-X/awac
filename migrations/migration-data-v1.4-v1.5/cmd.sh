@@ -2,8 +2,8 @@
 
 export PGPASSWORD=play
 
-# Added 2 translations (descriptions for the actions panel)
+# CGA-98
 psql -h localhost -U play -d awac -w <  ./CGA-98.sql
 
-
+# CGA-108
 

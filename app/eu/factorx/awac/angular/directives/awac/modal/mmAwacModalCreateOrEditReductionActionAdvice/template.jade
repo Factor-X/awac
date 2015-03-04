@@ -56,20 +56,31 @@
                     // Reducing objectives (reduction action - base indicator associations)
                     // -- Available base indicators
                     .field_row.field_form_separator
-                        .field_cell
+                        .field_cell(style="vertical-align:bottom; padding-bottom:6px;")
                             span(ng-bind-html="'REDUCTION_ACTION_ADVICE_BASE_INDICATORS_FIELD_TITLE' | translate")
                         .field_cell.field_wide
                             .wrapper_table
                                 .wrapper_row
                                     .wrapper_cell(style="width: 100%;vertical-align: top;")
+                                        span &nbsp;&nbsp;
+                                    .wrapper_cell(style="white-space: nowrap; vertical-align: top; width: 70px;min-width: 70px;")
+                                        span.text &nbsp;MIN&nbsp;
+                                    .wrapper_cell(style="white-space: nowrap; vertical-align: top; width: 70px;min-width: 70px;")
+                                        span.text &nbsp;MAX&nbsp;
+
+                                .wrapper_row
+                                    .wrapper_cell(style="width: 100%;vertical-align: top;")
                                         select(ng-options="bi.key as bi.key + ' - ' + bi.label for bi in baseIndicatorOptions", ng-model="baseIndicatorAssociationToAdd.baseIndicatorKey", ng-disabled="typeKey.field == '2'")
-                                    .wrapper_cell(style="white-space: nowrap; vertical-align: top; width: 90px;min-width: 90px;")
-                                        input(type='text', ng-model='baseIndicatorAssociationToAdd.percent', ng-disabled="typeKey.field == '2'", style="width: 60px;")
+                                    .wrapper_cell(style="white-space: nowrap; vertical-align: top; width: 70px;min-width: 70px;")
+                                        input(type='text', ng-model='baseIndicatorAssociationToAdd.percent', ng-disabled="typeKey.field == '2'", style="width: 50px;")
+                                        span &nbsp;%&nbsp;
+                                    .wrapper_cell(style="white-space: nowrap; vertical-align: top; width: 70px;min-width: 70px;")
+                                        input(type='text', ng-model='baseIndicatorAssociationToAdd.percentMax', ng-disabled="typeKey.field == '2'", style="width: 50px;")
                                         span &nbsp;%&nbsp;
                                     .wrapper_cell(style="vertical-align: top;")
-                                        button.button(type="button", ng-click="addBaseIndicatorAssociation()", ng-disabled="!baseIndicatorAssociationToAdd.isValid()", style="margin:0; padding:0; min-height:22px; padding-right:5px; padding-left:5px; border-radius:2px;")
+                                        button.button(type="button", ng-click="addBaseIndicatorAssociation()", ng-disabled="!baseIndicatorAssociationToAdd.isValid()", style="margin:0; padding:0; min-height:22px; padding-right:10px; padding-left:10px; border-radius:2px;")
                                             span.fa.fa-plus-circle
-                        .field_cell
+                        .field_cell(style="vertical-align:bottom; padding-bottom:2px;")
                             div
                                 .error_message(ng-hide='(typeKey.field == "2") || (baseIndicatorAssociations.length > 0)')
                                     img(src='/assets/images/field_invalid.png')
@@ -82,10 +93,11 @@
                             .wrapper_table(style="margin-top:5px;margin-bottom: 10px;")
                                 .wrapper_row(ng-repeat="bia in baseIndicatorAssociations", style="font-weight:bold;")
                                     .wrapper_cell(style="vertical-align:middle")
-                                        button.button(type="button", ng-click="removeBaseIndicatorAssociation(bia.baseIndicatorKey)", style="margin:0; padding:0; min-height:22px; padding-right:5px; padding-left:5px; border-radius:2px;")
+                                        button.button(type="button", ng-click="removeBaseIndicatorAssociation(bia.baseIndicatorKey)", style="margin:0; padding:0; min-height:22px; padding-right:10px; padding-left:10px; border-radius:2px;")
                                             span.fa.fa-remove.fa-1g
                                     .wrapper_cell(style="vertical-align:middle; padding-left:10px; padding-right:10px; width:100%;") {{ getBaseIndicatorLabel(bia.baseIndicatorKey) }}
-                                    .wrapper_cell(style="vertical-align:middle; text-align: right;") {{ (bia.percent| numberToI18N) + "&nbsp;%" }}
+                                    .wrapper_cell(style="vertical-align:middle; text-align: right;") {{ (bia.percent| numberToI18N) + "&nbsp;%&nbsp;&nbsp;-&nbsp;" }}
+                                    .wrapper_cell(style="vertical-align:middle; text-align: right;") {{ (bia.percentMax| numberToI18N) + "&nbsp;%" }}
 
                     // Comments (text area)
                     .field_row.field_form_separator

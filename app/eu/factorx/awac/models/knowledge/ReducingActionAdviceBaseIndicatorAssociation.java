@@ -23,15 +23,18 @@ public class ReducingActionAdviceBaseIndicatorAssociation extends AbstractEntity
 
 	private Double percent;
 
+	private Double percentMax;
+
 	public ReducingActionAdviceBaseIndicatorAssociation() {
 		super();
 	}
 
-	public ReducingActionAdviceBaseIndicatorAssociation(ReducingActionAdvice actionAdvice, BaseIndicatorCode baseIndicatorCode, Double percent) {
+	public ReducingActionAdviceBaseIndicatorAssociation(ReducingActionAdvice actionAdvice, BaseIndicatorCode baseIndicatorCode, Double percent, Double percentMax) {
 		super();
 		this.actionAdvice = actionAdvice;
 		this.baseIndicatorCode = baseIndicatorCode;
 		this.percent = percent;
+		this.percentMax = percentMax;
 	}
 
 	public ReducingActionAdvice getActionAdvice() {
@@ -58,10 +61,18 @@ public class ReducingActionAdviceBaseIndicatorAssociation extends AbstractEntity
 		this.percent = percent;
 	}
 
+	public Double getPercentMax() {
+		return percentMax;
+	}
+
+	public void setPercentMax(Double percentMax) {
+		this.percentMax = percentMax;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+		if (!(o instanceof ReducingActionAdviceBaseIndicatorAssociation)) return false;
 		if (!super.equals(o)) return false;
 
 		ReducingActionAdviceBaseIndicatorAssociation that = (ReducingActionAdviceBaseIndicatorAssociation) o;
@@ -69,6 +80,7 @@ public class ReducingActionAdviceBaseIndicatorAssociation extends AbstractEntity
 		if (!actionAdvice.equals(that.actionAdvice)) return false;
 		if (!baseIndicatorCode.equals(that.baseIndicatorCode)) return false;
 		if (!percent.equals(that.percent)) return false;
+		if (!percentMax.equals(that.percentMax)) return false;
 
 		return true;
 	}
@@ -79,6 +91,7 @@ public class ReducingActionAdviceBaseIndicatorAssociation extends AbstractEntity
 		result = 31 * result + actionAdvice.hashCode();
 		result = 31 * result + baseIndicatorCode.hashCode();
 		result = 31 * result + percent.hashCode();
+		result = 31 * result + percentMax.hashCode();
 		return result;
 	}
 }
