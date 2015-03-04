@@ -2,8 +2,8 @@
 
 export PGPASSWORD=play
 
-# example
-# psql -h localhost -U play -d awac -w <  ./CELDL-482.sql
+# Added 2 translations (descriptions for the actions panel)
+psql -h localhost -U play -d awac -w <  ./CGA-98.sql
 
 
 
