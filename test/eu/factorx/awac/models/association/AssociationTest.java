@@ -10,7 +10,6 @@ import org.junit.runners.MethodSorters;
 import play.Logger;
 import eu.factorx.awac.models.AbstractBaseModelTest;
 import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
@@ -32,8 +31,7 @@ public class AssociationTest extends AbstractBaseModelTest {
 
 		Organization org = new Organization(ORGANIZATION_NAME, InterfaceTypeCode.ENTERPRISE);
 
-		Person person = new Person (LASTNAME,"hollands","gaston.hollands@factorx.eu");
-		Account ac = new Account(org,person,IDENTIFIER1,"passwd");
+		Account ac = new Account(org,LASTNAME,"hollands","gaston.hollands@factorx.eu",IDENTIFIER1,"passwd");
 		ac.setActive(false);
 
 		em.persist(org);
@@ -48,18 +46,6 @@ public class AssociationTest extends AbstractBaseModelTest {
 			Logger.info("organization is null");
 		}
 		assertNotNull(org);
-
-
-		em.persist(person);
-
-		person = null;
-		query = "select p from Person p where p.lastname = '" + LASTNAME + "'";
-		try {
-			person = em.createQuery(query, Person.class).getResultList().get(0);
-		} catch (Exception empty) {
-			Logger.info("person is null");
-		}
-		assertNotNull(person);
 
 		em.persist(ac);
 
@@ -120,16 +106,6 @@ public class AssociationTest extends AbstractBaseModelTest {
 		}
 		assertNotNull(acc);
 
-		Person person = null;
-		query = "select p from Person p where p.lastname = '" + LASTNAME + "'";
-		try {
-			person = em.createQuery(query, Person.class).getResultList().get(0);
-		} catch (Exception empty) {
-			Logger.info("person is null");
-		}
-		assertNotNull(person);
-
-
 		Organization org = null;
 		query = "select o from Organization o where o.name = '" + ORGANIZATION_NAME + "'";
 		try {
@@ -151,7 +127,6 @@ public class AssociationTest extends AbstractBaseModelTest {
 		//em.remove(site);
 		//em.remove(org);
 		em.remove(acc);
-		em.remove(person);
 
 
 		AccountSiteAssociation accountSiteAssociation = null;

@@ -11,6 +11,8 @@ public class LoginResultDTO extends DTO {
 
 	private String defaultPeriod;
 
+	private Long organizationId;
+
 	private String organizationName;
 
     private Long defaultSiteId;
@@ -22,7 +24,15 @@ public class LoginResultDTO extends DTO {
     public LoginResultDTO() {
 	}
 
-    public Long getDefaultSiteId() {
+	public Long getOrganizationId() {
+		return organizationId;
+	}
+
+	public void setOrganizationId(Long organizationId) {
+		this.organizationId = organizationId;
+	}
+
+	public Long getDefaultSiteId() {
         return defaultSiteId;
     }
 

@@ -24,12 +24,10 @@ public class AccountTest extends AbstractBaseModelTest {
 
         Organization org = new Organization("testing",InterfaceTypeCode.ENTERPRISE);
 
-		Person person = new Person ("gaston","hollands","gaston.hollands@factorx.eu");
-        Account ac = new Account(org,person,"gho","passwd");
+        Account ac = new Account(org,"gaston","hollands","gaston.hollands@factorx.eu","gho","passwd");
 		ac.setActive(false);
 
 		em.persist(org);
-		em.persist(person);
         em.persist(ac);
 
 		//Logger.info("Identifier:" + ac.getIdentifier());
@@ -165,6 +163,7 @@ public class AccountTest extends AbstractBaseModelTest {
 	} // end of test
 
 	// for DB cleanup
+	/*
 	@Test
 	public void _009_deleteAssociatedPerson() {
 
@@ -187,5 +186,6 @@ public class AccountTest extends AbstractBaseModelTest {
 
 		assertNull(reload);
 	} // end of test
+	*/
 
 } // end of class

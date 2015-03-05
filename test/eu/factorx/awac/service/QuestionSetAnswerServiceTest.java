@@ -12,7 +12,7 @@ import eu.factorx.awac.models.AbstractBaseModelTest;
 
 /**
  * Test CRUD operations on Municipality form ''
- * 
+ *
  */
 @ContextConfiguration(locations = { "classpath:/components-test.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -35,8 +35,6 @@ public class QuestionSetAnswerServiceTest extends AbstractBaseModelTest {
 	private PeriodService periodService;
 	@Autowired
 	private AccountService accountService;
-	@Autowired
-	private PersonService personService;
 	@Autowired
 	private QuestionAnswerService questionAnswerService;
 

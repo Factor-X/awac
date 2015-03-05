@@ -59,9 +59,6 @@ public class InvitationTest extends AbstractBaseControllerTest {
 	private AccountService accountService;
 
 	@Autowired
-	private PersonService personService;
-
-	@Autowired
 	private AccountSiteAssociationService accountSiteAssociationService;
 
 
@@ -240,7 +237,6 @@ public class InvitationTest extends AbstractBaseControllerTest {
 		List<AccountSiteAssociation> asa = accountSiteAssociationService.findByAccount(accountList.get(0));
 		accountSiteAssociationService.remove(asa);
 		accountService.remove(accountList.get(0));
-		personService.remove(accountList.get(0).getPerson());
 
 	}
 

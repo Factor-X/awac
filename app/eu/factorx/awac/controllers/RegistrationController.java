@@ -246,6 +246,8 @@ public class RegistrationController extends AbstractController {
 		//create ConnectionFormDTO
 		LoginResultDTO resultDto = conversionService.convert(account, LoginResultDTO.class);
 
+		Logger.warn("resultDto:"+resultDto);
+
 		return ok(resultDto);
 	}
 

@@ -96,6 +96,7 @@ public class
 
         //add organization name
         loginResultDTO.setOrganizationName(account.getOrganization().getName());
+		loginResultDTO.setOrganizationId(account.getOrganization().getId());
 
         //create periodDTO
         List<PeriodDTO> periodsDTO = new ArrayList<>();
