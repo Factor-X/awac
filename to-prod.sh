@@ -1,7 +1,7 @@
 export SOME_DIR=/tmp
 export AWAC_HOME=$(pwd)
 
-instance=awac-accept
+instance=awac-dev
 
 activator clean update compile dist
 

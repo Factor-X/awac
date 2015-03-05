@@ -112,7 +112,15 @@ angular
         return bb.getBlob(mimeString)
 
 
+    $scope.reloading = false
+
     $scope.reload = () ->
+
+        if $scope.reloading
+            return
+
+        $scope.reloading = true
+
         sites = $scope.mySites.filter((e) ->
             return e.selected
         )
@@ -344,6 +352,8 @@ angular
                         $scope.rightTotalEmissions += line.rightScope1Value
                         $scope.rightTotalEmissions += line.rightScope2Value
                         $scope.rightTotalEmissions += line.rightScope3Value
+
+                $scope.reloading = false
     # $scope.rightTotalEmissions += line.rightOutOfScopeValue
 
 
