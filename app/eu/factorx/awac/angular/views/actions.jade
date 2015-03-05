@@ -100,7 +100,11 @@ div.actions
                                         td
                                             .box.wide(ng-show="!!a.ghgBenefit") {{ (a.ghgBenefit | numberToI18N) + "&nbsp;" + getGwpUnitSymbol(a.ghgBenefitUnitKey) }}
                                             .box.wide(ng-hide="!!a.ghgBenefit") &nbsp;
-
+                                    tr(ng-if="a.typeKey == '1'")
+                                        td {{ "REDUCTION_ACTION_GHG_BENEFIT_MAX_FIELD_TITLE" | translateText }}:
+                                        td
+                                            .box.wide(ng-show="!!a.ghgBenefitMax") {{ (a.ghgBenefitMax | numberToI18N) + "&nbsp;" + getGwpUnitSymbol(a.ghgBenefitMaxUnitKey) }}
+                                            .box.wide(ng-hide="!!a.ghgBenefitMax") &nbsp;
                                     tr
                                         td {{ "REDUCTION_ACTION_FINANCIAL_BENEFIT_FIELD_TITLE" | translateText }}:
                                         td

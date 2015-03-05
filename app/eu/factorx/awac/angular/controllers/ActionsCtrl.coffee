@@ -121,6 +121,8 @@ angular
             scopeTypeKey: "1"
             ghgBenefit: actionAdvice.computedGhgBenefit
             ghgBenefitUnitKey: actionAdvice.computedGhgBenefitUnitKey
+            ghgBenefitMax: actionAdvice.computedGhgBenefitMax
+            ghgBenefitMaxUnitKey: actionAdvice.computedGhgBenefitMaxUnitKey
             physicalMeasure: actionAdvice.physicalMeasure
             webSite: actionAdvice.webSite
             responsiblePerson: actionAdvice.responsiblePerson

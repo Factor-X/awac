@@ -1,13 +1,13 @@
 package eu.factorx.awac.dto.awac.shared;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-
 import eu.factorx.awac.dto.DTO;
 import eu.factorx.awac.dto.awac.post.FilesUploadedDTO;
 import eu.factorx.awac.dto.validation.annotations.NotNull;
 import eu.factorx.awac.dto.validation.annotations.Size;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 public class ReducingActionDTO extends DTO implements Serializable {
 
@@ -42,6 +42,10 @@ public class ReducingActionDTO extends DTO implements Serializable {
 	private Double ghgBenefit;
 
 	private String ghgBenefitUnitKey;
+
+	private Double ghgBenefitMax;
+
+	private String ghgBenefitMaxUnitKey;
 
 	private Double financialBenefit;
 
@@ -141,6 +145,22 @@ public class ReducingActionDTO extends DTO implements Serializable {
 
 	public void setGhgBenefitUnitKey(String ghgBenefitUnitKey) {
 		this.ghgBenefitUnitKey = ghgBenefitUnitKey;
+	}
+
+	public Double getGhgBenefitMax() {
+		return ghgBenefitMax;
+	}
+
+	public void setGhgBenefitMax(Double ghgBenefitMax) {
+		this.ghgBenefitMax = ghgBenefitMax;
+	}
+
+	public String getGhgBenefitMaxUnitKey() {
+		return ghgBenefitMaxUnitKey;
+	}
+
+	public void setGhgBenefitMaxUnitKey(String ghgBenefitMaxUnitKey) {
+		this.ghgBenefitMaxUnitKey = ghgBenefitMaxUnitKey;
 	}
 
 	public Double getFinancialBenefit() {

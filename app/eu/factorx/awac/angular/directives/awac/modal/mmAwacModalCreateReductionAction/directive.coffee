@@ -81,6 +81,15 @@ angular
 
         $scope.ghgBenefitUnitKey = $scope.action.ghgBenefitUnitKey ? "U5335" # default unit: kgCO2e
 
+        $scope.ghgBenefitMax =
+            inputName: 'ghgBenefitMax'
+            field: $scope.action.ghgBenefitMax
+            numbersOnly: 'double'
+            fieldTitle: "REDUCTION_ACTION_GHG_BENEFIT_MAX_FIELD_TITLE"
+            placeholder: "REDUCTION_ACTION_GHG_BENEFIT_MAX_FIELD_PLACEHOLDER"
+
+        $scope.ghgBenefitMaxUnitKey = $scope.action.ghgBenefitMaxUnitKey ? "U5335" # default unit: kgCO2e
+
         $scope.financialBenefit =
             inputName: 'financialBenefit'
             field: $scope.action.financialBenefit
@@ -165,6 +174,8 @@ angular
                 physicalMeasure: $scope.physicalMeasure.field
                 ghgBenefit: $scope.ghgBenefit.field
                 ghgBenefitUnitKey: $scope.ghgBenefitUnitKey
+                ghgBenefitMax: $scope.ghgBenefitMax.field
+                ghgBenefitMaxUnitKey: $scope.ghgBenefitMaxUnitKey
                 financialBenefit: $scope.financialBenefit.field
                 investmentCost: $scope.investmentCost.field
                 expectedPaybackTime: $scope.expectedPaybackTime.field
@@ -193,9 +204,14 @@ angular
                 $scope.ghgBenefit.field = ""
                 $scope.ghgBenefit.disabled = true
                 $scope.ghgBenefitUnitKey.disabled = true
+                $scope.ghgBenefitMax.field = ""
+                $scope.ghgBenefitMax.disabled = true
+                $scope.ghgBenefitMaxUnitKey.disabled = true
             else
                 $scope.ghgBenefit.disabled = false
                 $scope.ghgBenefitUnitKey.disabled = false
+                $scope.ghgBenefitMax.disabled = false
+                $scope.ghgBenefitMaxUnitKey.disabled = false
 
         # disabled GHG benefit field if action is not an effective reduction ("better method" type)
         $scope.$watch 'typeKey.field', (n, o) ->
