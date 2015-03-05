@@ -1,19 +1,18 @@
 package eu.factorx.awac.converter;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.joda.time.DateTime;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
-
 import eu.factorx.awac.dto.awac.post.FilesUploadedDTO;
 import eu.factorx.awac.dto.awac.shared.ReducingActionDTO;
 import eu.factorx.awac.models.data.file.StoredFile;
 import eu.factorx.awac.models.knowledge.ReducingAction;
 import eu.factorx.awac.models.knowledge.Unit;
+import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Component
 public class ReducingActionToReducingActionDTOConverter implements Converter<ReducingAction, ReducingActionDTO> {
@@ -42,6 +41,13 @@ public class ReducingActionToReducingActionDTOConverter implements Converter<Red
 		if (unit != null) {
 			reducingActionDTO.setGhgBenefitUnitKey(unit.getUnitCode().getKey());
 		}
+
+		reducingActionDTO.setGhgBenefitMax(reducingAction.getGhgBenefitMax());
+		Unit unitMax = reducingAction.getGhgBenefitMaxUnit();
+		if (unitMax != null) {
+			reducingActionDTO.setGhgBenefitMaxUnitKey(unitMax.getUnitCode().getKey());
+		}
+
 		reducingActionDTO.setFinancialBenefit(reducingAction.getFinancialBenefit());
 		reducingActionDTO.setInvestmentCost(reducingAction.getInvestmentCost());
 		reducingActionDTO.setExpectedPaybackTime(reducingAction.getExpectedPaybackTime());

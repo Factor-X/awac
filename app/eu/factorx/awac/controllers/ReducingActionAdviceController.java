@@ -156,9 +156,11 @@ public class ReducingActionAdviceController extends AbstractController {
         List<Scope> scopes = new ArrayList<>();
         if (InterfaceTypeCode.ENTERPRISE.equals(interfaceTypeCode)) {
             scopes.addAll(organization.getSites());
+        } else if (InterfaceTypeCode.EVENT.equals(interfaceTypeCode)) {
+            scopes.addAll(organization.getProducts());
         } else {
-            scopes.add(organization);
-        }
+			scopes.add(organization);
+		}
         List<ReportLogEntry> logEntries = new ArrayList<>();
         List<BaseActivityResult> baseActivityResults = reportResultService.getBaseActivityResults(awacCalculator, scopes, period, logEntries);
 

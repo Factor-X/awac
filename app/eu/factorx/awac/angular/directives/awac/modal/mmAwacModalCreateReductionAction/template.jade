@@ -68,9 +68,11 @@
                         .field_cell.field_wide
                             textarea(ckeditor="editorOptions", ng-model="physicalMeasure.field")
 
-                    // GHG Benefit (double with unit) (disabled if Type is not 'GES Reduction')
+                    // GHG Benefit mi, & max (double with unit) (disabled if Type is not 'GES Reduction')
                     mm-awac-modal-field-text(ng-info="ghgBenefit", ng-disabled="typeKey.field == '2'").field_form_separator
                         select(ng-options="u.code as u.name for u in $parent.gwpUnits", ng-model="$parent.ghgBenefitUnitKey", ng-disabled="$parent.typeKey.field == '2'")
+                    mm-awac-modal-field-text(ng-info="ghgBenefitMax", ng-disabled="typeKey.field == '2'")
+                        select(ng-options="u.code as u.name for u in $parent.gwpUnits", ng-model="$parent.ghgBenefitMaxUnitKey", ng-disabled="$parent.typeKey.field == '2'")
 
                     // Cost & Benefits
                     mm-awac-modal-field-text(ng-info="financialBenefit").field_form_separator

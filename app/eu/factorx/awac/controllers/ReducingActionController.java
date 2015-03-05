@@ -1,27 +1,5 @@
 package eu.factorx.awac.controllers;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.*;
-
-import jxl.CellView;
-import jxl.Workbook;
-import jxl.WorkbookSettings;
-import jxl.format.Alignment;
-import jxl.format.VerticalAlignment;
-import jxl.write.*;
-import jxl.write.Number;
-
-import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
-
-import play.db.jpa.Transactional;
-import play.mvc.Result;
-import play.mvc.Security;
-import eu.factorx.awac.dto.awac.get.CodeLabelDTO;
-import eu.factorx.awac.dto.awac.get.CodeListDTO;
 import eu.factorx.awac.dto.awac.get.ReducingActionDTOList;
 import eu.factorx.awac.dto.awac.get.UnitDTO;
 import eu.factorx.awac.dto.awac.post.FilesUploadedDTO;
@@ -37,6 +15,24 @@ import eu.factorx.awac.models.knowledge.Unit;
 import eu.factorx.awac.service.*;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.MyrmexRuntimeException;
+import jxl.CellView;
+import jxl.Workbook;
+import jxl.WorkbookSettings;
+import jxl.format.Alignment;
+import jxl.format.VerticalAlignment;
+import jxl.write.*;
+import jxl.write.Number;
+import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
+import play.db.jpa.Transactional;
+import play.mvc.Result;
+import play.mvc.Security;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.*;
 
 @org.springframework.stereotype.Controller
 public class ReducingActionController extends AbstractController {
@@ -152,11 +148,18 @@ public class ReducingActionController extends AbstractController {
 		if (ReducingActionTypeCode.BETTER_METHOD.equals(actionType)) {
 			reducingAction.setGhgBenefit(null);
 			reducingAction.setGhgBenefitUnit(null);
+			reducingAction.setGhgBenefitMax(null);
+			reducingAction.setGhgBenefitMaxUnit(null);
 		} else {
 			reducingAction.setGhgBenefit(dto.getGhgBenefit());
 			String ghgBenefitUnitKey = dto.getGhgBenefitUnitKey();
 			if (StringUtils.isNotBlank(ghgBenefitUnitKey)) {
 				reducingAction.setGhgBenefitUnit(unitService.findByCode(new UnitCode(ghgBenefitUnitKey)));
+			}
+			reducingAction.setGhgBenefitMax(dto.getGhgBenefitMax());
+			String ghgBenefitMaxUnitKey = dto.getGhgBenefitMaxUnitKey();
+			if (StringUtils.isNotBlank(ghgBenefitMaxUnitKey)) {
+				reducingAction.setGhgBenefitMaxUnit(unitService.findByCode(new UnitCode(ghgBenefitMaxUnitKey)));
 			}
 		}
 		reducingAction.setFinancialBenefit(dto.getFinancialBenefit());
@@ -174,7 +177,7 @@ public class ReducingActionController extends AbstractController {
 		}
 		if (dto.getId() == null) {
 			reducingAction.setDocuments(documents);
-		} else {			
+		} else {
 			reducingAction.getDocuments().clear();
 			reducingAction.getDocuments().addAll(documents);
 		}

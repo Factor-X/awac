@@ -61,6 +61,11 @@ public class ReducingAction extends AuditedAbstractEntity {
 	@ManyToOne
 	private Unit ghgBenefitUnit;
 
+	private Double ghgBenefitMax;
+
+	@ManyToOne
+	private Unit ghgBenefitMaxUnit;
+
 	private Double financialBenefit;
 
 	private Double investmentCost;
@@ -163,6 +168,22 @@ public class ReducingAction extends AuditedAbstractEntity {
 
 	public void setGhgBenefitUnit(Unit ghgBenefitUnit) {
 		this.ghgBenefitUnit = ghgBenefitUnit;
+	}
+
+	public Double getGhgBenefitMax() {
+		return ghgBenefitMax;
+	}
+
+	public void setGhgBenefitMax(Double ghgBenefitMax) {
+		this.ghgBenefitMax = ghgBenefitMax;
+	}
+
+	public Unit getGhgBenefitMaxUnit() {
+		return ghgBenefitMaxUnit;
+	}
+
+	public void setGhgBenefitMaxUnit(Unit ghgBenefitMaxUnit) {
+		this.ghgBenefitMaxUnit = ghgBenefitMaxUnit;
 	}
 
 	public Double getFinancialBenefit() {
