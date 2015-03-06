@@ -10,6 +10,7 @@ import eu.factorx.awac.models.code.type.PeriodCode;
 
 @Entity
 @Table(name = "period")
+@Cacheable(true)
 public class Period extends AuditedAbstractEntity implements Comparable<Period> {
 
     private static final long serialVersionUID = 1L;

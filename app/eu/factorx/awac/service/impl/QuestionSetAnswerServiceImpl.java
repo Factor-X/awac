@@ -10,6 +10,7 @@ import eu.factorx.awac.models.knowledge.Period;
 import eu.factorx.awac.service.QuestionSetAnswerSearchParameter;
 import eu.factorx.awac.service.QuestionSetAnswerService;
 import eu.factorx.awac.util.JPAUtils;
+import org.hibernate.annotations.QueryHints;
 import org.springframework.stereotype.Component;
 import play.Logger;
 import play.db.jpa.JPA;
@@ -64,6 +65,7 @@ public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceI
 		parts.add("order by e.repetitionIndex");
 
 		TypedQuery<QuestionSetAnswer> query = JPAUtils.build(parts, parameters, QuestionSetAnswer.class);
+		query.setHint(QueryHints.CACHEABLE, Boolean.TRUE);
 		return query.getResultList();
 
 	}
@@ -104,6 +106,7 @@ public class QuestionSetAnswerServiceImpl extends AbstractJPAPersistenceServiceI
 
 	@Override
 	public Map<QuestionCode, List<QuestionSetAnswer>> getAllQuestionSetAnswers(Scope scope, Period period) {
+
 		List<QuestionSetAnswer> questionSetAnswers = this.findByScopeAndPeriod(scope, period);
 
 		Map<QuestionCode, List<QuestionSetAnswer>> res = new HashMap<>();

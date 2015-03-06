@@ -1,5 +1,6 @@
 package eu.factorx.awac.controllers;
 
+import eu.factorx.awac.GlobalVariables;
 import eu.factorx.awac.dto.admin.BADLogDTO;
 import eu.factorx.awac.dto.admin.get.*;
 import eu.factorx.awac.dto.awac.get.DownloadFileDTO;
@@ -286,6 +287,8 @@ public class AdminController extends AbstractController {
         if (!securedController.getCurrentUser().getIsAdmin()) {
             return forbidden();
         }
+
+		GlobalVariables.factorValues = null;
 
         UpdateFactorsDTO dto = extractDTOFromRequest(UpdateFactorsDTO.class);
 

@@ -145,16 +145,22 @@ public class ReportResultServiceImpl implements ReportResultService {
 
 	@Override
 	public ReportResultCollection getReportResults(AwacCalculator awacCalculator, List<Scope> scopes, Period period) {
+
 		List<ReportResult> reportResults = new ArrayList<>();
 		List<ReportLogEntry> logEntries = new ArrayList<>();
 
 		List<BaseActivityResult> baseActivityResults = getBaseActivityResults(awacCalculator, scopes, period, logEntries);
 
+
 		for (Report report : awacCalculator.getReports()) {
 			reportResults.add(getReportResult(report, period, baseActivityResults, logEntries, awacCalculator));
+
 		}
 
-		return new ReportResultCollection(reportResults, logEntries);
+		ReportResultCollection reportResultCollection = new ReportResultCollection(reportResults, logEntries);
+
+
+		return reportResultCollection;
 	}
 
 	@Override
@@ -174,7 +180,11 @@ public class ReportResultServiceImpl implements ReportResultService {
 	@Override
 	public List<BaseActivityResult> getBaseActivityResults(AwacCalculator awacCalculator, List<Scope> scopes, Period period, List<ReportLogEntry> logEntries) {
 		List<BaseIndicator> baseIndicators = getBaseIndicatorsForCalculator(awacCalculator);
-        return computeBaseActivityResults(baseIndicators, scopes, period, logEntries);
+
+		List<BaseActivityResult> baseActivityResults = computeBaseActivityResults(baseIndicators, scopes, period, logEntries);
+
+
+		return baseActivityResults;
 	}
 
 	@Override
@@ -200,13 +210,18 @@ public class ReportResultServiceImpl implements ReportResultService {
 
 	@Override
 	public ReportResultAggregation aggregate(ReportResult reportResult) {
+
 		ReportResultAggregation aggregationForResult = new ReportResultAggregation();
 
 		Map<String, List<Double>> scopeValuesByIndicator = reportResultService.getScopeValuesByIndicator(reportResult);
 
+
 		aggregationForResult.setReportCode(reportResult.getReport().getCode().getKey());
+
 		aggregationForResult.setPeriod(reportResult.getPeriod());
+
 		aggregationForResult.setReportRestrictedScope(reportResult.getReport().getRestrictedScope());
+
 
 		for (Map.Entry<String, List<Double>> entry : scopeValuesByIndicator.entrySet()) {
 			ReportResultIndicatorAggregation indicator = new ReportResultIndicatorAggregation(entry.getKey());
@@ -221,6 +236,7 @@ public class ReportResultServiceImpl implements ReportResultService {
 		final Map<String, ReportIndicator> indicators = new HashMap<>();
 		for (Map.Entry<String, List<Double>> entry : scopeValuesByIndicator.entrySet()) {
 			indicators.put(entry.getKey(), reportIndicatorService.findByReportCodeAndIndicatorCode(reportResult.getReport().getCode().getKey(), entry.getKey()));
+
 		}
 
 		Collections.sort(aggregationForResult.getReportResultIndicatorAggregationList(), new Comparator<ReportResultIndicatorAggregation>() {
@@ -229,6 +245,7 @@ public class ReportResultServiceImpl implements ReportResultService {
 				return indicators.get(o1.getIndicator()).getOrderIndex().compareTo(indicators.get(o2.getIndicator()).getOrderIndex());
 			}
 		});
+
 
 		return aggregationForResult;
 	}
@@ -278,7 +295,7 @@ public class ReportResultServiceImpl implements ReportResultService {
 
 		// group activity results by indicator
 		Map<String, List<BaseActivityResult>> dataByIndicator = new HashMap<>();
-        for (Indicator indicator : reportResult.getReport().getIndicators()) {
+		for (Indicator indicator : reportResult.getReport().getIndicators()) {
 			IndicatorCode indicatorCode = indicator.getCode();
 			List<BaseActivityResult> indicatorActivityResults;
 			if (reportResult.getActivityResults().containsKey(indicatorCode)) {
@@ -468,6 +485,7 @@ public class ReportResultServiceImpl implements ReportResultService {
 
 	private List<BaseActivityResult> getReportResultForSingleScope(List<BaseIndicator> baseIndicators, Scope scope, Period period, List<ReportLogEntry> logEntries) {
 
+
 		// find all question set answers (only "parents" => find where qsa.parent is null)
 		Map<QuestionCode, List<QuestionSetAnswer>> allQuestionSetAnswers = questionSetAnswerService.getAllQuestionSetAnswers(scope, period);
 
@@ -480,6 +498,7 @@ public class ReportResultServiceImpl implements ReportResultService {
 
 		// find all activity data
 		List<BaseActivityData> allBADs = getActivityData(allQuestionSetAnswers);
+
 		Logger.info("Built {} BADs for scope: {} and period: {}", allBADs.size(), scope, period.getLabel());
 		Set<BaseActivityDataCode> matchingIndicatorBADs = new HashSet<>();
 
@@ -489,6 +508,7 @@ public class ReportResultServiceImpl implements ReportResultService {
 		for (BaseIndicator baseIndicator : baseIndicators) {
 
 			List<BaseActivityData> indicatorBADs = filterByIndicator(allBADs, baseIndicator);
+
 			if (indicatorBADs.isEmpty()) {
 				continue;
 			}
@@ -499,6 +519,7 @@ public class ReportResultServiceImpl implements ReportResultService {
 			}
 
 			indicatorBADs = filterByRank(indicatorBADs, logEntries);
+
 
 			for (BaseActivityData baseActivityData : indicatorBADs) {
 				FactorSearchParameter factorSearchParam = new FactorSearchParameter(baseIndicator, baseActivityData);
@@ -511,9 +532,11 @@ public class ReportResultServiceImpl implements ReportResultService {
 					reportContribution(bar, logEntries);
 				}
 			}
+
 		}
 
 		checkNotUsedBADs(allBADs, matchingIndicatorBADs, logEntries);
+
 
 		return activityResults;
 	}

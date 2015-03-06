@@ -4,6 +4,7 @@ import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.type.LanguageCode;
 import org.apache.commons.lang3.builder.*;
+import org.hibernate.annotations.QueryHints;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,12 +13,13 @@ import java.io.Serializable;
 @Table(name = "code_label", uniqueConstraints = {@UniqueConstraint(columnNames = {CodeLabel.COLUMN_NAME_CODELIST,
 		CodeLabel.COLUMN_NAME_KEY})})
 @NamedQueries({
-		@NamedQuery(name = CodeLabel.FIND_BY_LIST, query = "select cl from CodeLabel cl where cl.codeList = :codeList", hints = {@QueryHint(name = "org.hibernate.cacheable", value = "true")}),
+		@NamedQuery(name = CodeLabel.FIND_BY_LIST, query = "select cl from CodeLabel cl where cl.codeList = :codeList", hints = {@QueryHint(name = QueryHints.CACHEABLE, value = "true")}),
 		@NamedQuery(name = CodeLabel.FIND_KEYS_BY_LIST, query = "select cl.key from CodeLabel cl where cl.codeList = :codeList"),
 		@NamedQuery(name = CodeLabel.FIND_ALL, query = "select cl from CodeLabel cl"),
 		@NamedQuery(name = CodeLabel.REMOVE_BY_LIST, query = "delete from CodeLabel cl where cl.codeList = :codeList"),
 		@NamedQuery(name = CodeLabel.REMOVE_ALL, query = "delete from CodeLabel cl where cl.id is not null")
 })
+@Cacheable(true)
 public class CodeLabel extends AuditedAbstractEntity implements Serializable, Comparable<CodeLabel> {
 
 	public static final String COLUMN_NAME_CODELIST = "codelist";

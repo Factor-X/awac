@@ -5,6 +5,7 @@ import javax.persistence.*;
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
+import org.hibernate.annotations.QueryHints;
 
 @Entity
 @NamedQueries({
@@ -12,7 +13,7 @@ import eu.factorx.awac.models.code.label.CodeLabel;
 				query = "select ce from CodesEquivalence ce where ce.codeKey = ce.referencedCodeKey order by ce.orderIndex"),
 		@NamedQuery(name = CodesEquivalence.FIND_SUBLIST_CODE_LABELS,
 				query = "select new eu.factorx.awac.models.code.label.CodeLabel(ce.codeList, ce.codeKey, cl.labelEn, cl.labelFr, cl.labelNl, ce.orderIndex) from CodesEquivalence ce, CodeLabel cl where ce.referencedCodeList = cl.codeList and ce.referencedCodeKey = cl.key and ce.codeList = :codeList order by ce.orderIndex",
-				hints = {@QueryHint(name = "org.hibernate.cacheable", value = "true")}),
+				hints = {@QueryHint(name = QueryHints.CACHEABLE, value = "true")}),
 		@NamedQuery(name = CodesEquivalence.FIND_BY_CODE_AND_TARGET_CODELIST,
 				query = "select eq from CodesEquivalence eq where eq.codeList = :codeList and eq.codeKey = :codeKey and eq.referencedCodeList = :referencedCodeList"),
 		@NamedQuery(name = CodesEquivalence.COUNT_SUBLIST_EQUIVALENCES,
@@ -38,9 +39,9 @@ public class CodesEquivalence extends AuditedAbstractEntity {
 
 	/**
 	 * Select all equivalences existing for given <code>codeList</code> parameter, and returns the list of linked {@link CodeLabel}s.
-	 * 
+	 *
 	 * @param codeList: a {@link CodeList}
-	 * 
+	 *
 	 */
 	public static final String FIND_SUBLIST_CODE_LABELS = "CodesEquivalence.findCodeLabelsBySublist";
 

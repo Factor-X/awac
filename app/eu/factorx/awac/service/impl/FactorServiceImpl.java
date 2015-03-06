@@ -5,6 +5,7 @@ import eu.factorx.awac.models.knowledge.FactorValue;
 import eu.factorx.awac.models.knowledge.UnitCategory;
 import eu.factorx.awac.service.FactorService;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.QueryHints;
 import org.springframework.stereotype.Component;
 import play.Logger;
 import play.db.jpa.JPA;
@@ -23,6 +24,7 @@ public class FactorServiceImpl extends AbstractJPAPersistenceServiceImpl<Factor>
             .setParameter("activityType", searchParameter.getActivityType())
             .setParameter("unitIn", searchParameter.getUnitIn())
             .setParameter("unitOut", searchParameter.getUnitOut())
+			.setHint(QueryHints.CACHEABLE, Boolean.TRUE)
             .getResultList();
 
         if (resultList.isEmpty()) {
@@ -49,6 +51,7 @@ public class FactorServiceImpl extends AbstractJPAPersistenceServiceImpl<Factor>
         return JPA.em()
             .createQuery("select e from Factor e where e.key = :key", Factor.class)
             .setParameter("key", key)
+			.setHint(QueryHints.CACHEABLE, Boolean.TRUE)
             .getSingleResult();
     }
 
@@ -56,15 +59,16 @@ public class FactorServiceImpl extends AbstractJPAPersistenceServiceImpl<Factor>
     public Factor findByIndicatorCategoryActivityTypeActivitySourceAndUnitCategory(String indicatorCategory, String activityType, String activitySource, UnitCategory unitCategory) {
         return JPA.em()
             .createQuery("" +
-                "select e from Factor e " +
-                "where e.indicatorCategory.key = :ic " +
-                "and e.activityType.key = :t " +
-                "and e.activitySource.key = :s " +
-                "and e.unitIn.category.id = :uc", Factor.class)
+				"select e from Factor e " +
+				"where e.indicatorCategory.key = :ic " +
+				"and e.activityType.key = :t " +
+				"and e.activitySource.key = :s " +
+				"and e.unitIn.category.id = :uc", Factor.class)
             .setParameter("ic", indicatorCategory)
             .setParameter("t",  activityType)
             .setParameter("s",  activitySource)
             .setParameter("uc", unitCategory.getId())
+			.setHint(QueryHints.CACHEABLE, Boolean.TRUE)
             .getSingleResult();
     }
 

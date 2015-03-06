@@ -1,18 +1,20 @@
 package eu.factorx.awac.service.impl;
 
-import java.lang.reflect.ParameterizedType;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.persistence.Query;
-
-import org.springframework.stereotype.Repository;
-
-import play.db.jpa.JPA;
 import eu.factorx.awac.models.AbstractEntity;
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.service.PersistenceService;
+import org.hibernate.annotations.QueryHints;
+import org.springframework.stereotype.Repository;
+import play.db.jpa.JPA;
+
+import javax.annotation.PostConstruct;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.lang.reflect.ParameterizedType;
+import java.util.Iterator;
+import java.util.List;
 
 @Repository
 public abstract class AbstractJPAPersistenceServiceImpl<E extends AbstractEntity> implements PersistenceService<E> {
@@ -75,8 +77,12 @@ public abstract class AbstractJPAPersistenceServiceImpl<E extends AbstractEntity
 
 	@Override
 	public List<E> findAll() {
-		Query query = JPA.em().createQuery(String.format("select e from %s e", entityClass.getName()));
-		return (List<E>) query.getResultList();
+		CriteriaBuilder cb = JPA.em().getCriteriaBuilder();
+		CriteriaQuery<E> cq = cb.createQuery(entityClass);
+		Root<E> rootEntry = cq.from(entityClass);
+		CriteriaQuery<E> all = cq.select(rootEntry);
+		TypedQuery<E> allQuery = JPA.em().createQuery(all).setHint(QueryHints.CACHEABLE, Boolean.TRUE);
+		return allQuery.getResultList();
 	}
 
 	@Override

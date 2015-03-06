@@ -2,6 +2,7 @@ package eu.factorx.awac.service.impl;
 
 import java.util.List;
 
+import org.hibernate.annotations.QueryHints;
 import org.springframework.stereotype.Component;
 
 import play.db.jpa.JPA;
@@ -20,6 +21,7 @@ public class ReportIndicatorServiceImpl extends AbstractJPAPersistenceServiceImp
 		return JPA.em().createQuery("select e from ReportIndicator e where e.report.code.key = :rc and e.indicator.code.key = :ic", ReportIndicator.class)
 			.setParameter("rc", reportCode)
 			.setParameter("ic", indicator)
+			.setHint(QueryHints.CACHEABLE, Boolean.TRUE)
 			.getSingleResult();
 	}
 }

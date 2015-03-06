@@ -1,24 +1,26 @@
 package eu.factorx.awac.models.knowledge;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.*;
-
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import eu.factorx.awac.models.AuditedAbstractEntity;
 import eu.factorx.awac.models.code.type.ActivitySourceCode;
 import eu.factorx.awac.models.code.type.ActivityTypeCode;
 import eu.factorx.awac.models.code.type.IndicatorCategoryCode;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "factor")
 @NamedQueries({
-		@NamedQuery(name = Factor.FIND_BY_PARAMETERS, query = "select f from Factor f where f.indicatorCategory = :indicatorCategory and f.activitySource = :activitySource and f.activityType = :activityType and f.unitIn = :unitIn and f.unitOut = :unitOut and f.values is not empty"),
-		@NamedQuery(name = Factor.REMOVE_ALL, query = "delete from Factor f where f.id is not null")
+	@NamedQuery(
+		name = Factor.FIND_BY_PARAMETERS,
+		query = "select f from Factor f where f.indicatorCategory = :indicatorCategory and f.activitySource = :activitySource and f.activityType = :activityType and f.unitIn = :unitIn and f.unitOut = :unitOut and f.values is not empty"
+	),
+	@NamedQuery(name = Factor.REMOVE_ALL, query = "delete from Factor f where f.id is not null")
 })
+@Cacheable(true)
 public class Factor extends AuditedAbstractEntity {
 
 	/**
@@ -29,10 +31,9 @@ public class Factor extends AuditedAbstractEntity {
 	 * @param unitOut : a {@link Unit}
 	 */
 	public static final String FIND_BY_PARAMETERS = "Factor.findByParameters";
-	private static final long serialVersionUID = 1L;
 	public static final String REMOVE_ALL = "Factor.removeAll";
-
-	@Column(unique=true)
+	private static final long serialVersionUID = 1L;
+	@Column(unique = true)
 	private String key;
 
 	@Embedded
@@ -53,7 +54,7 @@ public class Factor extends AuditedAbstractEntity {
 	private String institution;
 
 	@OneToMany(mappedBy = "factor", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER, orphanRemoval = true)
-	@OnDelete(action=OnDeleteAction.CASCADE)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<FactorValue> values = new ArrayList<>();
 
 	protected Factor() {
@@ -61,7 +62,7 @@ public class Factor extends AuditedAbstractEntity {
 	}
 
 	public Factor(String key, IndicatorCategoryCode indicatorCategory, ActivityTypeCode activityType,
-	              ActivitySourceCode activitySource, Unit unitIn, Unit unitOut, String institution) {
+				  ActivitySourceCode activitySource, Unit unitIn, Unit unitOut, String institution) {
 		super();
 		this.key = key;
 		this.indicatorCategory = indicatorCategory;
@@ -72,7 +73,7 @@ public class Factor extends AuditedAbstractEntity {
 		this.institution = institution;
 	}
 
-	
+
 	public String getKey() {
 		return key;
 	}
@@ -146,8 +147,8 @@ public class Factor extends AuditedAbstractEntity {
 	@Override
 	public String toString() {
 		return "Factor [key=" + key + ", indicatorCategory=" + indicatorCategory + ", activityType=" + activityType + ", activitySource="
-				+ activitySource + ", unitIn=" + unitIn + ", unitOut=" + unitOut + ", institution=" + institution + ", values=" + values
-				+ "]";
+			+ activitySource + ", unitIn=" + unitIn + ", unitOut=" + unitOut + ", institution=" + institution + ", values=" + values
+			+ "]";
 	}
-	
+
 }

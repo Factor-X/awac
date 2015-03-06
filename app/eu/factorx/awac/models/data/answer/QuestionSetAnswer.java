@@ -53,7 +53,7 @@ public class QuestionSetAnswer extends AuditedAbstractEntity implements Comparab
 	@Embedded
 	private AuditInfo auditInfo;
 
-	@OneToOne(mappedBy = "questionSetAnswer")
+	@OneToOne(mappedBy = "questionSetAnswer", fetch = FetchType.LAZY)
 	private Verification verification;
 
 

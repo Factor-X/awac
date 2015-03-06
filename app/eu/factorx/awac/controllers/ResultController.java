@@ -1,6 +1,9 @@
 package eu.factorx.awac.controllers;
 
-import eu.factorx.awac.dto.awac.get.*;
+import eu.factorx.awac.dto.awac.get.PromiseDTO;
+import eu.factorx.awac.dto.awac.get.ReportDTO;
+import eu.factorx.awac.dto.awac.get.ReportLogEntryDTO;
+import eu.factorx.awac.dto.awac.get.ResultsDTO;
 import eu.factorx.awac.dto.awac.post.GetReportParametersDTO;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Scope;
@@ -22,8 +25,6 @@ import eu.factorx.awac.util.document.messages.XLSDocumentMessage;
 import eu.factorx.awac.util.document.service.DocumentService;
 import jxl.read.biff.BiffException;
 import jxl.write.WriteException;
-import org.apache.commons.codec.binary.Base64;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Controller;
@@ -170,7 +171,6 @@ public class ResultController extends AbstractController {
 	//
 
 
-
 	private Result getComparedReport(Period period, Period comparedPeriod, List<Scope> scopes) throws BiffException, IOException, WriteException {
 		ResultsDTO resultsDTO = new ResultsDTO();
 
@@ -263,13 +263,16 @@ public class ResultController extends AbstractController {
 	}
 
 	private Result getSimpleReport(Period period, List<Scope> scopes) throws BiffException, IOException, WriteException {
+
 		ResultsDTO resultsDTO = new ResultsDTO();
 
 		// 1. Compute the ReportResult
 		InterfaceTypeCode interfaceCode = scopes.get(0).getOrganization().getInterfaceCode();
 		boolean isSmallCalculator = isSmallCalculator(interfaceCode);
 		AwacCalculator awacCalculator = awacCalculatorService.findByCode(interfaceCode);
+
 		ReportResultCollection allReportResults = reportResultService.getReportResults(awacCalculator, scopes, period);
+
 		List<ReportLogEntry> logEntries = allReportResults.getLogEntries();
 
 		// 2. Populate the DTO
@@ -279,8 +282,10 @@ public class ResultController extends AbstractController {
 			// 2.1. Aggregate report
 			ReportResultAggregation reportResultAggregation = reportResultService.aggregate(reportResult);
 
+
 			// 2.2. Each ReportResult is converted to a ResultDTO
 			resultsDTO.getReportDTOs().put(reportKey, conversionService.convert(reportResultAggregation, ReportDTO.class));
+
 
 			// 2.3. Each ReportResult is rendered to a SVG string - DONUT
 			if (isSmallCalculator) {
@@ -320,6 +325,7 @@ public class ResultController extends AbstractController {
 				dtoLogEntries.add(reportLogEntryDTO);
 			}
 		}
+
 
 		// 4. PUSH !!!
 		return ok(resultsDTO);
