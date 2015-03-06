@@ -8,13 +8,13 @@ alter table account add column  lastname character varying(255);
 alter table account add column  default_language character varying(2) NOT NULL DEFAULT 'FR'::character varying;
 
 -- second : transfert data
-update account  as a
-set a.firstname = p.firstname,
-  a.lastname = p.lastname,
-  a.email = p.email,
-  a.default_language = p.default_language
-from person as p
-where p.id = person_id;
+update account
+set firstname = person.firstname,
+  lastname = person.lastname,
+  email = person.email,
+  default_language = person.default_language
+from person
+where person.id = person_id;
 
 -- drop person_id column from account
 alter table account drop column person_id;
