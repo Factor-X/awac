@@ -391,7 +391,7 @@ public class AdminController extends AbstractController {
             return forbidden();
         }
 
-        LanguageCode lang = securedController.getCurrentUser().getPerson().getDefaultLanguage();
+        LanguageCode lang = securedController.getCurrentUser().getDefaultLanguage();
         byte[] content = factorsExcelGeneratorService.generateExcel(lang);
 
         DownloadFileDTO downloadFileDTO = new DownloadFileDTO();

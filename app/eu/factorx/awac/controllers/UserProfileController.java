@@ -56,11 +56,21 @@ public class UserProfileController extends AbstractController {
             throw new MyrmexRuntimeException(BusinessErrorType.INVALID_IDENTIFIER_ALREADY_USED);
         }
 
+		//control email
+		if(currentUser.getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)){
+			for (Account accountToTest : accountService.findByEmail(anonymousPersonDTO.getEmail())) {
+				if(accountToTest.getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
+					!accountToTest.getId().equals(currentUser.getId())){
+					throw new MyrmexRuntimeException(BusinessErrorType.EMAIL_ALREADY_USED);
+				}
+			}
+		}
+
         currentUser.setIdentifier(anonymousPersonDTO.getIdentifier());
         currentUser.setPassword(anonymousPersonDTO.getPassword());
-        currentUser.getPerson().setEmail(anonymousPersonDTO.getEmail());
-        currentUser.getPerson().setLastname(anonymousPersonDTO.getLastName());
-        currentUser.getPerson().setFirstname(anonymousPersonDTO.getFirstName());
+        currentUser.setEmail(anonymousPersonDTO.getEmail());
+        currentUser.setLastname(anonymousPersonDTO.getLastName());
+        currentUser.setFirstname(anonymousPersonDTO.getFirstName());
 
         accountService.saveOrUpdate(currentUser);
 
@@ -82,8 +92,8 @@ public class UserProfileController extends AbstractController {
             throw new MyrmexFatalException("Security issue: sent data does not match authenticated user data!");
         }
 
-        currentUser.getPerson().setLastname(personDTO.getLastName());
-        currentUser.getPerson().setFirstname(personDTO.getFirstName());
+        currentUser.setLastname(personDTO.getLastName());
+        currentUser.setFirstname(personDTO.getFirstName());
         accountService.saveOrUpdate(currentUser);
 
         return ok(new ReturnDTO());
@@ -99,7 +109,17 @@ public class UserProfileController extends AbstractController {
             return unauthorized(new ExceptionsDTO(BusinessErrorType.INVALID_PASSWORD));
         }
 
-        currentUser.getPerson().setEmail(emailChangeDTO.getNewEmail().toLowerCase());
+		//control email
+		if(currentUser.getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)){
+			for (Account account : accountService.findByEmail(emailChangeDTO.getNewEmail())) {
+				if(account.getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION) &&
+					!account.getId().equals(currentUser.getId())){
+					throw new MyrmexRuntimeException(BusinessErrorType.EMAIL_ALREADY_USED);
+				}
+			}
+		}
+
+		currentUser.setEmail(emailChangeDTO.getNewEmail().toLowerCase());
         accountService.saveOrUpdate(currentUser);
 
         return ok(new ReturnDTO());

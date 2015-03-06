@@ -5,7 +5,6 @@ import eu.factorx.awac.dto.awac.post.EmailInvitationDTO;
 import eu.factorx.awac.dto.awac.post.RegisterInvitationDTO;
 import eu.factorx.awac.dto.awac.shared.ResultMessageDTO;
 import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
@@ -41,9 +40,6 @@ public class InvitationController extends AbstractController {
     private AccountService accountService;
 
     @Autowired
-    private PersonService personService;
-
-    @Autowired
     private VelocityGeneratorService velocityGeneratorService;
 
     @Autowired
@@ -62,6 +58,16 @@ public class InvitationController extends AbstractController {
         if(securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.ADMIN)){
             throw new MyrmexRuntimeException(BusinessErrorType.WRONG_INTERFACE_FOR_USER);
         }
+
+		//control email
+		if(securedController.getCurrentUser().getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)){
+
+			for (Account account : accountService.findByEmail(dto.getInvitationEmail())) {
+				if(account.getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)){
+					throw new MyrmexRuntimeException(BusinessErrorType.EMAIL_ALREADY_USED);
+				}
+			}
+		}
 
         //Logger.info("Host Organization Invitation Name: " + dto.getOrganizationName());
         Logger.info("Guest Email Invitation : " + dto.getInvitationEmail());
@@ -85,8 +91,8 @@ public class InvitationController extends AbstractController {
 
         // retrieve traductions
         HashMap<String, CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
-        String subject = traductions.get("INVITATION_EMAIL_SUBJECT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
-        String content = traductions.get("INVITATION_EMAIL_CONTENT").getLabel(securedController.getCurrentUser().getPerson().getDefaultLanguage());
+        String subject = traductions.get("INVITATION_EMAIL_SUBJECT").getLabel(securedController.getCurrentUser().getDefaultLanguage());
+        String content = traductions.get("INVITATION_EMAIL_CONTENT").getLabel(securedController.getCurrentUser().getDefaultLanguage());
 
         content = content.replace("${organization}",securedController.getCurrentUser().getOrganization().getName());
         content = content.replace("${link}",link);
@@ -125,17 +131,22 @@ public class InvitationController extends AbstractController {
             throw new MyrmexRuntimeException(BusinessErrorType.INVITATION_NOT_VALID);
         }
 
-		// control email: if a person with same email already exist, throw exception
-		if (personService.getByEmail(dto.getPerson().getEmail()) != null) {
-			throw new MyrmexRuntimeException(BusinessErrorType.EMAIL_ALREADY_USED);
+
+		//if this is the verification interface AND
+		// there is an account with the same email address AND
+		// this account is also a verification account,
+		//there is an error
+		if(invitation.getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)){
+
+			for (Account account : accountService.findByEmail(dto.getPerson().getEmail())) {
+				if(account.getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)){
+					throw new MyrmexRuntimeException(BusinessErrorType.EMAIL_ALREADY_USED);
+				}
+			}
 		}
 
-        // create person
-        Person person = new Person(dto.getPerson().getLastName(), dto.getPerson().getFirstName(), dto.getPerson().getEmail());
-        personService.saveOrUpdate(person);
-
         // create account
-        Account account = new Account(invitation.getOrganization(), person, dto.getPerson().getIdentifier(), dto.getPassword());
+        Account account = new Account(invitation.getOrganization(), dto.getPerson().getLastName(), dto.getPerson().getFirstName(), dto.getPerson().getEmail(), dto.getPerson().getIdentifier(), dto.getPassword());
         account = accountService.saveOrUpdate(account);
 
         // delete invitation
@@ -143,8 +154,8 @@ public class InvitationController extends AbstractController {
 
         // retrieve traductions
         HashMap<String, CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
-        String subject = traductions.get("REGISTER_EMAIL_SUBJECT").getLabel(account.getPerson().getDefaultLanguage());
-        String content = traductions.get("REGISTER_EMAIL_CONTENT").getLabel(account.getPerson().getDefaultLanguage());
+        String subject = traductions.get("REGISTER_EMAIL_SUBJECT").getLabel(account.getDefaultLanguage());
+        String content = traductions.get("REGISTER_EMAIL_CONTENT").getLabel(account.getDefaultLanguage());
 
 
         Logger.info("registerInvitation->interfaceTypeCode:" + invitation.getOrganization().getInterfaceCode());

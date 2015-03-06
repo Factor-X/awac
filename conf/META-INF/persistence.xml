@@ -13,7 +13,6 @@
         <class>eu.factorx.awac.models.TechnicalSegment</class>
         <class>eu.factorx.awac.models.account.Account</class>
         <class>eu.factorx.awac.models.account.Address</class>
-        <class>eu.factorx.awac.models.account.Person</class>
         <class>eu.factorx.awac.models.account.SystemAdministrator</class>
         <class>eu.factorx.awac.models.association.AccountSiteAssociation</class>
         <class>eu.factorx.awac.models.association.AccountProductAssociation</class>
@@ -156,7 +155,6 @@
         <class>eu.factorx.awac.models.TechnicalSegment</class>
         <class>eu.factorx.awac.models.account.Account</class>
         <class>eu.factorx.awac.models.account.Address</class>
-        <class>eu.factorx.awac.models.account.Person</class>
         <class>eu.factorx.awac.models.account.SystemAdministrator</class>
         <class>eu.factorx.awac.models.association.AccountSiteAssociation</class>
         <class>eu.factorx.awac.models.association.AccountProductAssociation</class>

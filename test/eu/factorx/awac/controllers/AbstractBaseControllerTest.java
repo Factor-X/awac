@@ -16,6 +16,8 @@ import scala.Option;
 
 import javax.persistence.EntityManager;
 
+import java.util.Random;
+
 import static java.lang.Thread.sleep;
 import static play.test.Helpers.contentAsBytes;
 
@@ -82,4 +84,9 @@ public abstract class AbstractBaseControllerTest implements ApplicationContextAw
 	public EntityManager getEntityManager() {
 		return (em);
 	}
+
+
+
+
+
 }

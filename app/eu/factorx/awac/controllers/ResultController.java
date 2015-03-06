@@ -115,7 +115,7 @@ public class ResultController extends AbstractController {
 		//control scope
 		controlScope(scopes);
 
-		LanguageCode lang = securedController.getCurrentUser().getPerson().getDefaultLanguage();
+		LanguageCode lang = securedController.getCurrentUser().getDefaultLanguage();
 		InterfaceTypeCode interfaceCode = securedController.getCurrentUser().getOrganization().getInterfaceCode();
 
 		final XLSDocumentMessage xlsDocumentMessage = new XLSDocumentMessage();
@@ -148,7 +148,7 @@ public class ResultController extends AbstractController {
 
 		controlScope(scopes);
 
-		LanguageCode lang = securedController.getCurrentUser().getPerson().getDefaultLanguage();
+		LanguageCode lang = securedController.getCurrentUser().getDefaultLanguage();
 		InterfaceTypeCode interfaceCode = securedController.getCurrentUser().getOrganization().getInterfaceCode();
 
 		final PDFDocumentMessage PDFDocumentMessage = new PDFDocumentMessage();

@@ -11,23 +11,7 @@
 
 package eu.factorx.awac.controllers;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import eu.factorx.awac.common.Constants;
-import eu.factorx.awac.models.association.AccountProductAssociation;
-import eu.factorx.awac.models.business.Product;
-import eu.factorx.awac.models.code.type.ScopeTypeCode;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
-
-import play.Application;
-import play.Logger;
-import play.api.mvc.SimpleResult;
-import play.db.jpa.Transactional;
-import play.mvc.Http;
-import play.mvc.Result;
 import eu.factorx.awac.dto.awac.get.LoginResultDTO;
 import eu.factorx.awac.dto.awac.shared.ReturnDTO;
 import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
@@ -36,26 +20,33 @@ import eu.factorx.awac.dto.myrmex.post.ConnectionFormDTO;
 import eu.factorx.awac.dto.myrmex.post.ForgotPasswordDTO;
 import eu.factorx.awac.dto.myrmex.post.TestAuthenticateDTO;
 import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.account.Person;
-import eu.factorx.awac.models.association.AccountSiteAssociation;
+import eu.factorx.awac.models.association.AccountProductAssociation;
 import eu.factorx.awac.models.business.Organization;
-import eu.factorx.awac.models.business.Site;
+import eu.factorx.awac.models.business.Product;
 import eu.factorx.awac.models.code.CodeList;
 import eu.factorx.awac.models.code.label.CodeLabel;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import eu.factorx.awac.models.code.type.ScopeTypeCode;
 import eu.factorx.awac.service.*;
 import eu.factorx.awac.util.BusinessErrorType;
 import eu.factorx.awac.util.KeyGenerator;
 import eu.factorx.awac.util.MyrmexRuntimeException;
 import eu.factorx.awac.util.email.messages.EmailMessage;
 import eu.factorx.awac.util.email.service.EmailService;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
+import play.Logger;
+import play.db.jpa.Transactional;
+import play.mvc.Http;
+import play.mvc.Result;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 @org.springframework.stereotype.Controller
 public class AuthenticationController extends AbstractController {
-
-	@Autowired
-	private PersonService personService;
 
 	@Autowired
 	private AccountService accountService;
@@ -146,7 +137,7 @@ public class AuthenticationController extends AbstractController {
 				Logger.info("Anonymous login with cookie for :" + interfaceTypeCode.getKey());
 				account = accountService.findByIdentifier(cookie.value());
                 String anonymousUserName = Constants.ANONYMOUS.USERNAME + interfaceTypeCode.getKey();
-				if (! account.getPerson().getFirstname().equals(anonymousUserName) ) {
+				if (! account.getFirstname().equals(anonymousUserName) ) {
 					Logger.info("Not an anonymous user login try");
 					throw new MyrmexRuntimeException(BusinessErrorType.LOGIN_PASSWORD_PAIR_NOT_FOUND);
 				}
@@ -163,17 +154,13 @@ public class AuthenticationController extends AbstractController {
 				String password = Long.toString(System.nanoTime());
 				String email = identifier + Constants.ANONYMOUS.EMAILDOMAIN;
 
-
-				Person person = new Person(lastName, firstName, email);
-				personService.saveOrUpdate(person);
-
                 //InterfaceTypeCode interfaceTypeCode =InterfaceTypeCode.getByKey(connectionFormDTO.getInterfaceName());
 
 				Organization org = new Organization("YourOrg" + lastName, interfaceTypeCode);
 				organizationService.saveOrUpdate(org);
 
 				//create account
-				account = new Account(org, person, identifier, password);
+				account = new Account(org, lastName, firstName, email, identifier, password);
 				account.setIsAdmin(true);
 
 				//save account
@@ -288,8 +275,8 @@ public class AuthenticationController extends AbstractController {
 
 		// retrieve traductions
 		HashMap<String, CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
-		String title = traductions.get("RESET_PASSWORD_EMAIL_SUBJECT").getLabel(account.getPerson().getDefaultLanguage());
-        String content = traductions.get("RESET_PASSWORD_EMAIL_CONTENT").getLabel(account.getPerson().getDefaultLanguage());
+		String title = traductions.get("RESET_PASSWORD_EMAIL_SUBJECT").getLabel(account.getDefaultLanguage());
+        String content = traductions.get("RESET_PASSWORD_EMAIL_CONTENT").getLabel(account.getDefaultLanguage());
 
 
         Map values = new HashMap<String, Object>();
@@ -303,7 +290,7 @@ public class AuthenticationController extends AbstractController {
 		String velocityContent = velocityGeneratorService.generate(velocityGeneratorService.getTemplateNameByMethodName(), values);
 
 		// send email for invitation
-		EmailMessage email = new EmailMessage(account.getPerson().getEmail(), title, velocityContent);
+		EmailMessage email = new EmailMessage(account.getEmail(), title, velocityContent);
 		emailService.send(email);
 
 		//save new password

@@ -2,7 +2,7 @@
  *
  * Instant Play Framework
  * AWAC
- *                       
+ *
  *
  * Copyright (c) 2014 Factor-X.
  * Author Gaston Hollands
@@ -94,14 +94,8 @@ public class SecuredController extends Security.Authenticator {
 
         //if the login and the password are ok, refresh the session
         Context.current().session().clear();
-        Logger.warn("je stock l'identifier " + account.getIdentifier() + " à la sssions");
-        try {
-            throw new Exception();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         Context.current().session().put(SecuredController.SESSION_IDENTIFIER_STORE, account.getIdentifier());
-        Context.current().session().put(SecuredController.SESSION_DEFAULT_LANGUAGE_STORE, account.getPerson().getDefaultLanguage().getKey());
+        Context.current().session().put(SecuredController.SESSION_DEFAULT_LANGUAGE_STORE, account.getDefaultLanguage().getKey());
     }
 
     public void logout() {

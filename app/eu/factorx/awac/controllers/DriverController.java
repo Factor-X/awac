@@ -23,6 +23,9 @@ import play.db.jpa.Transactional;
 import play.mvc.Result;
 import play.mvc.Security;
 
+import java.util.Collection;
+import java.util.Collections;
+
 
 @org.springframework.stereotype.Controller
 public class DriverController extends AbstractController {
@@ -109,6 +112,9 @@ public class DriverController extends AbstractController {
         for (Driver driver : driverService.findAll()) {
             resultList.add(conversionService.convert(driver, DriverDTO.class));
         }
+
+		Collections.sort(resultList.getList());
+
         return ok(resultList);
     }
 

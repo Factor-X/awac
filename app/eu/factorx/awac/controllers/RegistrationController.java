@@ -6,7 +6,6 @@ import eu.factorx.awac.dto.myrmex.get.ExceptionsDTO;
 import eu.factorx.awac.dto.myrmex.get.PersonDTO;
 import eu.factorx.awac.dto.verification.post.VerificationRegistrationDTO;
 import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.association.AccountProductAssociation;
 import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Organization;
@@ -38,8 +37,6 @@ import java.util.Map;
 @org.springframework.stereotype.Controller
 public class RegistrationController extends AbstractController {
 
-	@Autowired
-	private PersonService personService;
 	@Autowired
 	private AccountService accountService;
 	@Autowired
@@ -249,6 +246,8 @@ public class RegistrationController extends AbstractController {
 		//create ConnectionFormDTO
 		LoginResultDTO resultDto = conversionService.convert(account, LoginResultDTO.class);
 
+		Logger.warn("resultDto:"+resultDto);
+
 		return ok(resultDto);
 	}
 
@@ -353,8 +352,8 @@ public class RegistrationController extends AbstractController {
 		// email purpose
 		// retrieve traductions
 		HashMap<String, CodeLabel> traductions = codeLabelService.findCodeLabelsByList(CodeList.TRANSLATIONS_EMAIL_MESSAGE);
-		String subject = traductions.get("REGISTER_EMAIL_SUBJECT").getLabel(account.getPerson().getDefaultLanguage());
-        String content = traductions.get("REGISTER_EMAIL_CONTENT").getLabel(account.getPerson().getDefaultLanguage());
+		String subject = traductions.get("REGISTER_EMAIL_SUBJECT").getLabel(account.getDefaultLanguage());
+        String content = traductions.get("REGISTER_EMAIL_CONTENT").getLabel(account.getDefaultLanguage());
 
 		Logger.info("handleEmailSubmission->interfaceTypeCode:" + interfaceType);
 		String awacInterfaceTypeFragment;
@@ -399,7 +398,7 @@ public class RegistrationController extends AbstractController {
 		String velocityContent = velocityGeneratorService.generate("registerInvitation.vm", values);
 
 		// send confirmation email
-		EmailMessage email = new EmailMessage(account.getPerson().getEmail(), subject, velocityContent);
+		EmailMessage email = new EmailMessage(account.getEmail(), subject, velocityContent);
 		emailService.send(email);
 	}
 
@@ -413,18 +412,20 @@ public class RegistrationController extends AbstractController {
 		}
 
 		//control email
-		Person person = personService.getByEmail(personDTO.getEmail());
-
-		// if person doesn't already exist, create it
-		if (person == null) {
-			person = new Person(personDTO.getLastName(), personDTO.getFirstName(), personDTO.getEmail());
-			personService.saveOrUpdate(person);
-		} else {
-			throw new MyrmexException(BusinessErrorType.EMAIL_ALREADY_USED);
+		//if this is the verification interface AND
+		// there is an account with the same email address AND
+		// this account is also a verification account,
+		//there is an error
+		if(organization.getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)){
+			for (Account accountToTest : accountService.findByEmail(personDTO.getEmail())) {
+				if(accountToTest.getOrganization().getInterfaceCode().equals(InterfaceTypeCode.VERIFICATION)){
+					throw new MyrmexRuntimeException(BusinessErrorType.EMAIL_ALREADY_USED);
+				}
+			}
 		}
 
 		//create account
-		Account administrator = new Account(organization, person, personDTO.getIdentifier(), password);
+		Account administrator = new Account(organization, personDTO.getLastName(), personDTO.getFirstName(), personDTO.getEmail(), personDTO.getIdentifier(), password);
 		administrator.setIsAdmin(true);
 
 		//save account

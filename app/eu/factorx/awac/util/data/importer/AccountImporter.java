@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import play.Logger;
 import play.db.jpa.JPA;
 import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Site;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
@@ -35,9 +34,6 @@ public class AccountImporter extends WorkbookDataImporter {
 	@Autowired
 	private ScopeService scopeService;
 
-	@Autowired
-	private PersonService personService;
-	
 	public AccountImporter() {
 		super();
 	}
@@ -110,11 +106,8 @@ public class AccountImporter extends WorkbookDataImporter {
 			try {
 				accountEntity = (Account) JPA.em().createQuery("select o from Account o where o.identifier = :login").setParameter("login", login).getSingleResult();
 			} catch (NoResultException ex) {
-				Person person = new Person(lastname, firstname,email);
 
-				personService.saveOrUpdate(person);
-
-				accountEntity = new Account(organizationEntity, person, login, password);
+				accountEntity = new Account(organizationEntity, lastname, firstname,email, login, password);
 				accountService.saveOrUpdate(accountEntity);
 				Logger.info("Created user " + login + " for organization " + org);
 			}

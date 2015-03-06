@@ -16,7 +16,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import play.Logger;
 import eu.factorx.awac.models.AbstractBaseModelTest;
 import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.association.AccountSiteAssociation;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.business.Site;
@@ -37,9 +36,6 @@ public class AccountSiteAssociationServiceTest extends AbstractBaseModelTest {
 	private AccountService accountService;
 
 	@Autowired
-	private PersonService personService;
-
-	@Autowired
 	private SiteService siteService;
 
 	@Autowired
@@ -55,17 +51,12 @@ public class AccountSiteAssociationServiceTest extends AbstractBaseModelTest {
 		Organization org = new Organization ("testing", InterfaceTypeCode.ENTERPRISE);
 		organizationService.saveOrUpdate(org);
 
-		Person person = new Person ("gaston","hollands","gaston.hollands@factorx.eu");
-		personService.saveOrUpdate(person);
-
-		Account ac = new Account(org,person,"gho","passwd");
+		Account ac = new Account(org,"gaston","hollands","gaston.hollands@factorx.eu","gho","passwd");
 		ac.setActive(false);
 		accountService.saveOrUpdate(ac);
 
-		Person person2 = new Person ("gaston2","hollands2","gaston2.hollands@factorx.eu");
-		personService.saveOrUpdate(person2);
 
-		Account ac2 = new Account(org,person2,"gho2","passwd2");
+		Account ac2 = new Account(org,"gaston2","hollands2","gaston2.hollands@factorx.eu","gho2","passwd2");
 		ac2.setActive(false);
 		accountService.saveOrUpdate(ac2);
 

@@ -1,10 +1,9 @@
 package eu.factorx.awac.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
-import java.util.Date;
-
+import eu.factorx.awac.models.AbstractBaseModelTest;
+import eu.factorx.awac.models.account.Account;
+import eu.factorx.awac.models.business.Organization;
+import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,11 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import eu.factorx.awac.models.AbstractBaseModelTest;
-import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.account.Person;
-import eu.factorx.awac.models.business.Organization;
-import eu.factorx.awac.models.code.type.InterfaceTypeCode;
+import java.util.Date;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 @ContextConfiguration(locations = {"classpath:/components-test.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -31,12 +29,10 @@ public class AccountServiceTest extends AbstractBaseModelTest {
     public void _001_createAccount() {
 
 		Organization org = new Organization("testing", InterfaceTypeCode.ENTERPRISE);
-		Person person = new Person ("gaston","hollands","gaston.hollands@factorx.eu");
-		Account ac = new Account(org,person,"gho","passwd");
+		Account ac = new Account(org,"gaston","hollands","gaston.hollands@factorx.eu","gho","passwd");
 		ac.setActive(false);
 
 		em.persist(org);
-		em.persist(person);
         em.persist(ac);
 
 		//Logger.info("Identifier:" + ac.getIdentifier());
@@ -116,6 +112,7 @@ public class AccountServiceTest extends AbstractBaseModelTest {
 	} // end of test
 
 	// for DB cleanup
+	/* useless
 	@Test
 	public void _006_deleteAssociatedPerson() {
 
@@ -138,6 +135,7 @@ public class AccountServiceTest extends AbstractBaseModelTest {
 
 		assertNull(reload);
 	} // end of test
+	*/
 
 
 } // end of class

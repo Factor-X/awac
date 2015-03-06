@@ -8,7 +8,6 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import eu.factorx.awac.functional.GlobalHooks;
 import eu.factorx.awac.models.account.Account;
-import eu.factorx.awac.models.account.Person;
 import eu.factorx.awac.models.business.Organization;
 import eu.factorx.awac.models.code.type.InterfaceTypeCode;
 
@@ -21,13 +20,11 @@ public class AccountSteps {
 		// Express the Regexp above with the code you wish you had
 
 		Organization org = new Organization("testing", InterfaceTypeCode.ENTERPRISE);
-		Person person = new Person("gaston", "hollands", "gaston.hollands@factorx.eu");
-		Account ac = new Account(org, person, "gho", "passwd");
+		Account ac = new Account(org, "gaston", "hollands", "gaston.hollands@factorx.eu", "gho", "passwd");
 		ac.setActive(false);
 
 		GlobalHooks.em.getTransaction().begin();
 		GlobalHooks.em.persist(org);
-		GlobalHooks.em.persist(person);
 		GlobalHooks.em.persist(ac);
 		GlobalHooks.em.getTransaction().commit();
 	}
@@ -104,7 +101,7 @@ public class AccountSteps {
 
 		assertNull(reload);
 	}
-
+/*
 	@Then("^Perform delete of the person$")
 	public void Perform_delete_of_the_person() throws Throwable {
 		Person person = null;
@@ -130,4 +127,5 @@ public class AccountSteps {
 
 		assertNull(reload);
 	}
+	*/
 }

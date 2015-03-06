@@ -4,7 +4,7 @@ div
         mm-awac-section(title-code="AM150")
 
             mm-awac-question(question-code="AM151")
-            mm-awac-question(question-code="AM152", ng-condition="getAnswer('AM151').value == false", ng-aggregation="24.0*52.0")
+            mm-awac-question(question-code="AM152", ng-condition="getAnswer('AM151').value == false")
 
             mm-awac-block(ng-show="getAnswer('AM151').value == true")
                 // questions déchets

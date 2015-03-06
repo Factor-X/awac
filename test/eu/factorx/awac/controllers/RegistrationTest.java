@@ -6,6 +6,8 @@ import static play.test.Helpers.status;
 
 import java.util.List;
 
+import eu.factorx.awac.dto.awac.get.LoginResultDTO;
+import eu.factorx.awac.util.MyrmexRuntimeException;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,15 +38,15 @@ import eu.factorx.awac.service.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RegistrationTest extends AbstractNoDefaultTransactionBaseControllerTest {
 
-	private static final String email1 = "test1@test156.test";
-	private static final String email2 = "test2@test545.test";
+	private static final String email1 = "tes1@test.test";
+	private static final String email2 = "tes2@test.test";
 
-	private static final String identifier1 = "testtemt8";
-	private static final String identifier2 = "tstteskt9t";
+	//private static final String identifier1 = "testtemt8";
+	//private static final String identifier2 = "tstteskt9t";
 
-	private static final String organizationName1 = "testOrganization";
-	private static final String organizationName2 = "testOrganizationn";
-	private static final String municipalityName = "testMunicipality";
+	//private static final String organizationName1 = "testOrganization";
+	//private static final String organizationName2 = "testOrganizationn";
+	//private static final String municipalityName = "testMunicipality";
 
 
 	private static final String firstName = "firstTest";
@@ -79,6 +81,13 @@ public class RegistrationTest extends AbstractNoDefaultTransactionBaseController
 	@Test
 	public void _001_registration() {
 
+		//generate random identifier
+		String identifier1 = generateRandomString(8);
+		String identifier2 = generateRandomString(8);
+		String organizationName1 = generateRandomString(8);
+		String organizationName2 = generateRandomString(8);
+		String municipalityName = generateRandomString(8);
+
 		EnterpriseAccountCreationDTO dto = createDTO(email1, identifier1, organizationName1);
 
 		//Json node
@@ -103,6 +112,9 @@ public class RegistrationTest extends AbstractNoDefaultTransactionBaseController
 
 		//analyse result
 		Logger.info("status result: " + status(result));
+
+		//int organizationName1ID = getDTO(result, LoginResultDTO.class).get
+
 		// TODO handle scope instance to null
 //		LoginResultDTO resultDTO = getDTO(result, LoginResultDTO.class);
 //		assertEquals(resultDTO.getPerson().getEmail(), email1);
@@ -130,90 +142,52 @@ public class RegistrationTest extends AbstractNoDefaultTransactionBaseController
         //control period for the site
 		if (siteAssociationList.size()>0)
         	assertTrue(siteAssociationList.get(0).getSite().getListPeriodAvailable().size()==1);
-
+/*
 	} // end of authenticateSuccess test
 
 
-	/**
-	 * use the same identifier Name : status 404 excepted
-	 */
 	@Test
 	public void _002_registration() {
-
-		EnterpriseAccountCreationDTO dto = createDTO(email2,identifier1, organizationName2);
+*/
+		dto = createDTO(email2,identifier1, organizationName2);
 
 		//Json node
-		JsonNode node = Json.toJson(dto);
+		node = Json.toJson(dto);
 
 		// perform save
 		// Fake request
-		FakeRequest saveFakeRequest = new FakeRequest();
+		saveFakeRequest = new FakeRequest();
 		saveFakeRequest.withHeader("Content-type", "application/json");
 		saveFakeRequest.withJsonBody(node);
 
 		// Call controller action
-		Result result = callAction(
+		boolean error=false;
+		try {
+			result = callAction(
 				eu.factorx.awac.controllers.routes.ref.RegistrationController.enterpriseRegistration(),
 				saveFakeRequest
-		); // callAction
+			); // callAction
+		}
+		catch(MyrmexRuntimeException e){
+			error=true;
+		}
 
 		//analyse result
 		// expecting an HTTP 401 return code
-		assertEquals(printError(result),500, status(result));
+		assertTrue(error);//assertEquals(printError(result),500, status(result));
 
-	} // end of authenticateSuccess test
-
-
-	/**
-	 * use the same organization Name : status 404 excepted
-	 */
-	@Test
-	public void _003_registrationEnterprise() {
-
-		EnterpriseAccountCreationDTO dto = createDTO(email2,identifier2, organizationName1);
+		RegistrationDTO registrationDTO = createMunicipalityDTO(email1,identifier2, municipalityName, firstName2);
 
 		//Json node
-		JsonNode node = Json.toJson(dto);
+		node = Json.toJson(registrationDTO);
 
 		// perform save
 		// Fake request
-		FakeRequest saveFakeRequest = new FakeRequest();
+		saveFakeRequest = new FakeRequest();
 		saveFakeRequest.withHeader("Content-type", "application/json");
 		saveFakeRequest.withJsonBody(node);
 
-		// Call controller action
-		Result result = callAction(
-				eu.factorx.awac.controllers.routes.ref.RegistrationController.enterpriseRegistration(),
-				saveFakeRequest
-		); // callAction
-
-		//analyse result
-		// expecting an HTTP 401 return code
-		assertEquals(printError(result),404, status(result));
-
-	} // end of authenticateSuccess test
-
-
-
-	/**
-	 * register a municipality :
-	 * use the same email than test1. Excepted : use the person create for the test 1
-	 */
-	@Test
-	public void _004_registrationMunicipality() {
-
-		RegistrationDTO dto = createMunicipalityDTO(email1,identifier2, municipalityName, firstName2);
-
-		//Json node
-		JsonNode node = Json.toJson(dto);
-
-		// perform save
-		// Fake request
-		FakeRequest saveFakeRequest = new FakeRequest();
-		saveFakeRequest.withHeader("Content-type", "application/json");
-		saveFakeRequest.withJsonBody(node);
-
-		Result result = callAction(
+		result = callAction(
 					eu.factorx.awac.controllers.routes.ref.RegistrationController.municipalityRegistration(),
 					saveFakeRequest
 		); // callAction
@@ -227,22 +201,22 @@ public class RegistrationTest extends AbstractNoDefaultTransactionBaseController
 //		assertFalse(firstName2 == loginResultDTO.getPerson().getFirstName());
 
         //test if the account is liked with one site
-        Account account = accountService.findByIdentifier(identifier2);
+        account = accountService.findByIdentifier(identifier2);
 
         assertNotNull("The account was not created", account);
-
+/*
     } // end of authenticateSuccess test
 
 	@Test
 	public void _005_cleanTestData() {
-
+*/
 		// remove organization for test DB sanity
-		cleanData(organizationName1,identifier1);
-		cleanData(municipalityName,identifier2);
+		//cleanData(organizationName1,identifier1);
+		//cleanData(municipalityName,identifier2);
 	}
 
 
-	private void cleanData (String organisationName, String identifier) {
+	private void cleanData (long organisationId, String identifier) {
 
 		Account account = null;
 		Organization organization = null;
@@ -255,7 +229,7 @@ public class RegistrationTest extends AbstractNoDefaultTransactionBaseController
         accountSiteAssociationService.remove(associationList);
         //accountService.remove(account);
 
-        organization = organizationService.findById(FACTORX_ID);
+        organization = organizationService.findById(organisationId);
         assertNotNull(organization);
 
 //        siteList=organization.getSites();
