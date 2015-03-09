@@ -1,0 +1,11 @@
+1. rapatrier Accept en local
+./deployment.sh
+
+2. changer email et mots de passe en local
+./cmd.sh de ce répertoire-ci
+
+3. repousser le tout sur DEV !!! bien spécifier awec-dev !!!
+./deployment.sh --step4
+
+4. ressortir DEV du mode maintenance
+heroku maintenance:off --app awac-dev
