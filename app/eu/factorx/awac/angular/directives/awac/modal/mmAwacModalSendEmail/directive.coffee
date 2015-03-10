@@ -1,6 +1,6 @@
 angular
 .module('app.directives')
-.directive "mmAwacModalSendEmail", (directiveService, downloadService, translationService, messageFlash) ->
+.directive "mmAwacModalSendEmail", (directiveService, downloadService, translationService, messageFlash,$filter) ->
     restrict: "E"
 
     scope: directiveService.autoScope
@@ -14,13 +14,13 @@ angular
             title:
                 fieldTitle: "TITLE"
                 validationRegex: "^.{1,255}$"
-                validationMessage: "FIELD_VALIDATION_TOO_LENGTH"
+                validationMessage: "EMAIL_TITLE_WRONG_LENGTH"
                 focus: ->
                     return true
             content:
                 fieldTitle: "CONTENT"
                 validationRegex: /^.{1,65550}$/m
-                validationMessage: "FIELD_VALIDATION_TOO_LENGTH"
+                validationMessage: "EMAIL_CONTENT_WRONG_LENGTH"
                 fieldType:'textarea'
         }
 
