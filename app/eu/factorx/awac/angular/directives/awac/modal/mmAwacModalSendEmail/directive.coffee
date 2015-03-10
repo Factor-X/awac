@@ -19,7 +19,7 @@ angular
                     return true
             content:
                 fieldTitle: "CONTENT"
-                validationRegex: "^.{1,65550}$"
+                validationRegex: /^.{1,65550}$/m
                 validationMessage: "FIELD_VALIDATION_TOO_LENGTH"
                 fieldType:'textarea'
         }
