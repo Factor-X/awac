@@ -27,8 +27,9 @@ div.actions.advices
                             div(ng-if="!!advice.physicalMeasure", ng-bind-html="advice.physicalMeasure")
                             div(ng-if="!!advice.webSite")
                                 span(ng-bind-html="'REDUCTION_ACTION_ADVICE_MORE_INFO' | translate")
-                                span :&nbsp
-                                a(href="{{advice.webSite}}", target="blank") {{ advice.webSite }}
+                                span &nbsp;
+                                b
+                                    a(href="{{advice.webSite}}", target="blank", title="{{advice.webSite}}") {{ "REDUCTION_ACTION_ADVICE_MORE_INFO_HERE" | translateText }}
 
                 td.type
                     span.icon.action_type_icon(ng-class="{reducing: advice.typeKey == '1', better_measure: advice.typeKey == '2'}")
