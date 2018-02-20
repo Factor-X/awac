@@ -75,7 +75,7 @@ local.properties
 # PDT-specific
 .buildpath
 
-# sbteclipse plugin 
+# sbteclipse plugin
 .target
 
 # TeXlipse plugin
@@ -100,6 +100,3 @@ database_backups/
 .last_values
 
 /velocity.log
-
-
-public/javascripts/app.js
