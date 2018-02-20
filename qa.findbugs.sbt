@@ -1,4 +1,4 @@
-import de.johoop.findbugs4sbt.FindBugs._
+//import de.johoop.findbugs4sbt.FindBugs._
 
 //-----------------------------------------
 // Setup FindBugs static analysis
@@ -9,11 +9,11 @@ import de.johoop.findbugs4sbt.FindBugs._
 //      project/plugins.sbt
 //-----------------------------------------
 
-findbugsSettings
+//findbugsSettings
 
-findbugsReportType := Some(de.johoop.findbugs4sbt.ReportType.Xml)
+//findbugsReportType := Some(de.johoop.findbugs4sbt.ReportType.Xml)
 
 //findbugsReportPath := Some(crossTarget.value / "findbugs" / "findbugs.xml")
-findbugsReportPath := Some(baseDirectory.value / "target" / "findbugs" / "findbugs.xml")
+//findbugsReportPath := Some(baseDirectory.value / "target" / "findbugs" / "findbugs.xml")
 
-findbugsExcludeFilters := Some(scala.xml.XML.loadFile(baseDirectory.value / "project" / "findbugs-exclude-filters.xml"))
+//findbugsExcludeFilters := Some(scala.xml.XML.loadFile(baseDirectory.value / "project" / "findbugs-exclude-filters.xml"))
