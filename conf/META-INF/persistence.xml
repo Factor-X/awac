@@ -137,7 +137,7 @@
 
 
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5434/awac?ssl=true&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5434/awac?sslmode=require"/>
             <property name="javax.persistence.jdbc.user" value="florian"/>
             <property name="javax.persistence.jdbc.ssl" value="true"/>
             <property name="javax.persistence.jdbc.password" value="florian"/>
