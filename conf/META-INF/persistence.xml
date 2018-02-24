@@ -116,7 +116,7 @@
             <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.format_sql" value="false"/>
             <property name="hibernate.use_sql_comments" value="false"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.hbm2ddl.auto" value="validate"/>
 
             <property name="hibernate.cache.region.factory_class"
                       value="org.hibernate.cache.ehcache.EhCacheRegionFactory"/>
@@ -137,8 +137,9 @@
 
 
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5434/awac"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5434/awac?ssl=true&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory"/>
             <property name="javax.persistence.jdbc.user" value="florian"/>
+            <property name="javax.persistence.jdbc.ssl" value="true"/>
             <property name="javax.persistence.jdbc.password" value="florian"/>
 
         </properties>
